@@ -1,7 +1,7 @@
 import tempfile;
 import subprocess;
 import sys;
-cl import ".global.css";
+cl import ".index.css";
 
 walker run_jac_code {
     has source_code: str = "";
