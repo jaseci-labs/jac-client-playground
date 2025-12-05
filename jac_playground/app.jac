@@ -38,3 +38,16 @@ walker run_jac_code {
         report self.output;
     }
 }
+
+
+
+cl import from ".pages/Index" { Index}
+cl import ".global.css";
+
+cl {
+    def app() -> None {
+    return <div>
+    <Index/>
+    </div>;
+}
+}
