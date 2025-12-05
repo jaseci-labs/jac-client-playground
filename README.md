@@ -1,4 +1,4 @@
-# jac-playground
+# jac_playground
 
 ## Running Jac Code
 
@@ -13,17 +13,4 @@ To run your Jac code, use the Jac CLI:
 jac serve app.jac
 ```
 
-## TypeScript Support
-
-This project includes TypeScript support. You can create TypeScript components in the `components/` directory and import them in your Jac files.
-
-Example:
-```jac
-cl import from ".components/Button.tsx" { Button }
-```
-
-See `components/Button.tsx` for an example TypeScript component.
-
-For more information, see the [TypeScript guide](../../docs/working-with-ts.md).
-
-Happy coding with Jac and TypeScript! 🚀
+Happy coding with Jac!
