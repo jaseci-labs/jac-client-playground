@@ -1,1 +1,13 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary-100: #ffe0d4;
+  --color-primary-500: #ff5733;
+  --color-primary-900: #8b1a00;
+}
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
