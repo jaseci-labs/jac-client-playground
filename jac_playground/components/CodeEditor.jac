@@ -38,7 +38,17 @@ cl {
         let ariaLabel = props.ariaLabel or "code-editor";
 
         return (
-             <Editor
+            <div
+                role="textbox"
+                aria-label={ariaLabel}
+                contentEditable={not readOnly}
+                suppressContentEditableWarning={true}
+                onInput={lambda e:any -> None {
+                    onChange and onChange(e.target.innerText);
+                }}
+                className="w-full h-full p-4 font-mono text-sm leading-6 bg-editor text-editor-foreground outline-none overflow-auto"
+            >
+                <Editor
                     height="100%"
                     width="100%"
                     defaultLanguage="python"
@@ -52,6 +62,7 @@ cl {
                         "automaticLayout": True
                     }}
                 />
+            </div>
         );
     }
 }

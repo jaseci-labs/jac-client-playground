@@ -6,7 +6,6 @@ cl import from "lucide-react" { Loader2 }
 
 cl {
     def OutputConsole(props:dict) -> any {
-        let logs = props.output or [];
         let onClear = props.onClear;
         let className = props.className or "";
         let isLoading = props.isLoading or false;
@@ -41,9 +40,9 @@ cl {
 
                 
                 <pre
-                        className={"whitespace-pre-wrap text-sm " + ("text-red-400" if props.outIsError else "text-green-400")}>
-                            {props.output if props.output else "No output yet. Click 'Run Code' to execute your code."}
-                        </pre>
+                    className={"whitespace-pre-wrap text-sm " + ("text-red-400" if props.outIsError else "text-green-400")}>
+                    {props.logs if props.logs else "No output yet. Click 'Run Code' to execute your code."}
+                </pre>
             </div>
         );
     }

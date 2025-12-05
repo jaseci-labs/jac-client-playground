@@ -47,7 +47,7 @@
 #   );
 # }
 
-
+cl import from react { useState }
 cl import from ".TopBar" { TopBar }
 cl import from  ".CodeEditorWrapper" { CodeEditorWrapper }
 cl import from  ".Visualizer" { Visualizer }
@@ -56,20 +56,26 @@ cl import from  ".Sidebar" { Sidebar }
 
 cl {
     def PlayGroundLayout(props:dict) -> any {
-        let code = props.code;
-        let onCodeChange = props.onCodeChange;
-        let onRun = props.onRun;
+        let [code, setCode] = useState("");
+        let [logs, setLogs] = useState("");
+
+        async def onRun() -> None {
+            result = code_processor(source_code=code, mode="run") spawn root;
+            console.log("Running Jac code...", result);
+            setLogs(result.reports[0] or "");
+        }
+
         let onReset = props.onReset;
         let examples = props.examples or [];
-        let logs = props.logs or [];
         let envReady = props.envReady or false;
         let graphData = props.graphData;
+
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary">
                 <TopBar onRun={onRun} onReset={onReset} envReady={envReady} mode="run" />
                 <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3">
                     <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
-                        <CodeEditorWrapper value={code} onChange={onCodeChange}/>
+                        <CodeEditorWrapper value={code} onChange={lambda newValue:any -> None {setCode(newValue);}}/>
                     </div>
 
                     <div className="panel bg-background border border-border rounded-md overflow-hidden">

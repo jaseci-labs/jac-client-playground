@@ -71,8 +71,8 @@ walker code_processor {
     can execute with `root entry {
         if self.mode in self.mode_node_map {
             node_type = self.mode_node_map[self.mode];
-            if [root --> (`?node_type)] {
-                visit node_type;
+            if routed_nodes := [root --> (`?node_type)] {
+                visit routed_nodes[0];
             } else {
                 routed_node = root ++> node_type();
                 visit routed_node;
@@ -80,20 +80,3 @@ walker code_processor {
         }
     }
 }
-
-# with entry {
-#     code_processor(
-#         source_code="with entry { print('Hello, Jac!'); }",
-#         mode="run"
-#     ) spawn root;
-
-#     code_processor(
-#         source_code="print('Hello, Jac!'",
-#         mode="py2jac"
-#     ) spawn root;
-
-#     code_processor(
-#         source_code="with entry { print('Hello, Jac!'); }",
-#         mode="jac2py"
-#     ) spawn root;
-# }

@@ -29,11 +29,10 @@
 
 cl import from "..lib.utils" { cn }
 cl import from ".CodeEditor" { CodeEditor }
+cl import from "@monaco-editor/react" { Editor }
 
 cl {
     def CodeEditorWrapper(props:dict) -> any {
-        let value = props.value;
-        let onChange = props.onChange;
         let language = props.language or "jac";
 
         return (
@@ -45,7 +44,20 @@ cl {
                 </div>
 
                 <div className="flex-1">
-                    <CodeEditor value={value} onChange={onChange} language={language} />
+                    <Editor
+                        height="100%"
+                        width="100%"
+                        defaultLanguage="python"
+                        defaultValue="// Write your Jac code here"
+                        onChange={props.onChange}
+                        theme="vs-light"
+                        options={{
+                            "fontSize": 14,
+                            "minimap": {"enabled": False},
+                            "scrollBeyondLastLine": False,
+                            "automaticLayout": True
+                        }}
+                    />
                 </div>
             </div>
         );
