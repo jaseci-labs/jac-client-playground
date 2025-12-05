@@ -25,7 +25,7 @@ cl {
             setIsLoading(true);
             setOutIsError(false);
             console.log("Running Jac code...");
-            result = run_jac_code(source_code=code) spawn root;
+            result = code_processor(source_code=code, mode="run") spawn root;
             setOutput(result.reports[0] or "");
             setIsLoading(false);
         }

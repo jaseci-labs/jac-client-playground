@@ -10,7 +10,7 @@ cl {
                     defaultLanguage="python"
                     defaultValue="// Write your Jac code here"
                     onChange={props.onChange}
-                    theme="vs-dark"
+                    theme="vs-light"
                     options={{
                         "fontSize": 14,
                         "minimap": {"enabled": False},
