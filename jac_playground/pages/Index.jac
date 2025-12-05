@@ -1,8 +1,11 @@
 
 cl import from react { useState, useEffect }
+
 cl import from ..components.button { Button }
 cl import from ..components.code_editor { CodeEditor }
 cl import from ..components.output_pannel { OutputPanel }
+cl import from ..components.mode_selector { ModeSelector }
+
 cl import from "..hooks.useMobile" { useIsMobile }
 cl import from "..lib.utils" { cn }
 cl import from "lucide-react" { Menu }
@@ -25,6 +28,10 @@ cl {
             result = run_jac_code(source_code=code) spawn root;
             setOutput(result.reports[0] or "");
             setIsLoading(false);
+        }
+
+        async def handleModeChange(newMode: str) -> None {
+            console.log("Mode changed to: " + newMode);
         }
 
         let isMobile = useIsMobile();
@@ -50,10 +57,6 @@ cl {
                 </header>
 
                 <div className="flex-1 flex flex-col overflow-hidden">
-                    <div className="flex-1 min-h-0">
-                        <CodeEditor onChange={lambda newValue: any -> None {setCode(newValue);}} />
-                    </div>
-                    
                     <div className="h-12 flex items-center justify-center bg-muted/20 border-y">
                         <Button 
                             onClick={handleRunCode}
@@ -62,6 +65,12 @@ cl {
                         >
                             {isLoading and "Running..." or "Run Code"}
                         </Button>
+
+                        <ModeSelector onModeChange={handleModeChange}/>
+                    </div>
+
+                    <div className="flex-1 min-h-0">
+                        <CodeEditor onChange={lambda newValue: any -> None {setCode(newValue);}} />
                     </div>
                     
                     <div className="h-48 border-t">
