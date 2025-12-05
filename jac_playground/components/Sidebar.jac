@@ -9,7 +9,7 @@
 
 # export default function Sidebar({ examples, onSelectExample, version = "v1.0.0" }: SidebarProps) {
 #   return (
-#     <aside className="w-72 h-full flex flex-col bg-panel border-l border-border">
+#     <aside className="w-72 h-full flex flex-col bg-background border-l border-border">
 #       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
 #         <div className="text-sm text-text-primary font-semibold">Jaclang Examples</div>
 #         <div className="text-xs text-text-secondary">{version}</div>
@@ -34,7 +34,7 @@ cl {
         let version = props.version or "v1.0.0";
 
         return (
-            <aside className="w-72 h-full flex flex-col bg-panel border-l border-border">
+            <aside className="w-72 h-full flex flex-col bg-background border-l border-border">
                 <div className="px-4 py-3 border-b border-border flex items-center justify-between">
                     <div className="text-sm text-text-primary font-semibold">Jaclang Examples</div>
                     <div className="text-xs text-text-secondary">{version}</div>

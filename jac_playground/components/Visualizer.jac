@@ -10,9 +10,9 @@
 # export default function Visualizer({ graphData, loading, error }: VisualizerProps) {
 #   return (
 #     <div className="h-full flex flex-col">
-#       <div className="px-4 py-3 border-b border-border bg-panel text-sm text-text-secondary">Graph Visualizer</div>
+#       <div className="px-4 py-3 border-b border-border bg-background text-sm text-text-secondary">Graph Visualizer</div>
 
-#       <div className="flex-1 flex items-center justify-center bg-panel">
+#       <div className="flex-1 flex items-center justify-center bg-background">
 #         {loading ? (
 #           <div className="text-text-secondary">Loading graph…</div>
 #         ) : error ? (
@@ -41,11 +41,11 @@ cl {
 
         return (
             <div className="h-full flex flex-col">
-                <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-panel">
+                <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-background">
                     <div className="text-xs text-text-secondary">Graph Visualizer</div>
                     
                 </div>
-                <div className="flex-1 flex items-center justify-center bg-panel">
+                <div className="flex-1 flex items-center justify-center bg-background">
                 <div className="text-text-secondary text-center px-6">
                         <div className="mb-3 text-3xl">🔗</div >
                         <div>Jac Graph Visualizer</div >

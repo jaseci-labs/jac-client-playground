@@ -28,6 +28,7 @@
 #     </div>
 #   );
 # }
+cl import from "@monaco-editor/react" { Editor }
 
 cl {
     def CodeEditor(props:dict) -> any {
@@ -37,18 +38,20 @@ cl {
         let ariaLabel = props.ariaLabel or "code-editor";
 
         return (
-            <div
-                role="textbox"
-                aria-label={ariaLabel}
-                contentEditable={not readOnly}
-                suppressContentEditableWarning={true}
-                onInput={lambda e:any -> None {
-                    onChange and onChange(e.target.innerText);
-                }}
-                className="w-full h-full p-4 font-mono text-sm leading-6 bg-editor text-editor-foreground outline-none overflow-auto"
-            >
-                {value}
-            </div>
+             <Editor
+                    height="100%"
+                    width="100%"
+                    defaultLanguage="python"
+                    defaultValue="// Write your Jac code here"
+                    onChange={props.onChange}
+                    theme="vs-light"
+                    options={{
+                        "fontSize": 14,
+                        "minimap": {"enabled": False},
+                        "scrollBeyondLastLine": False,
+                        "automaticLayout": True
+                    }}
+                />
         );
     }
 }

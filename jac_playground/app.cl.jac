@@ -8,7 +8,7 @@ def app() -> None {
         
         <main>
             <PlayGroundLayout />
-            <Index />
+            # <Index />
         </main>;
     
 }

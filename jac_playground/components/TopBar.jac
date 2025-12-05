@@ -13,7 +13,7 @@ cl {
         let mode = props.mode or "jac2py";
         let onModeChange = props.onModeChange;
 
-        return <header className="w-full flex items-center gap-3 px-4 py-3 bg-panel border-b border-border">
+        return <header className="w-full flex items-center gap-3 px-4 py-3 bg-background border-b border-border">
             <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-md bg-primary text-primary-foreground flex items-center justify-center font-bold">
                     J

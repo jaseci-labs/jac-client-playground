@@ -22,6 +22,9 @@
   /* Utility */
   --color-black: #000000;
 
+  /* --color-panel: #ffffff;
+  --color-panel-foreground: #273f4f; */
+
   /* Optional states (don’t pretend your palette covers these) */
   --color-success: #4caf50;
   --color-warning: #ff9800;

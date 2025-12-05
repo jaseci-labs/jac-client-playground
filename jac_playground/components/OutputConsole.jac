@@ -1,5 +1,8 @@
 
 cl import from "..lib.utils" { cn }
+cl import from ".ui.Button" { Button }
+cl import from ".ui.IconButton" { IconButton }
+cl import from "lucide-react" { Loader2 }
 
 cl {
     def OutputConsole(props:dict) -> any {
@@ -9,12 +12,31 @@ cl {
         let isLoading = props.isLoading or false;
 
         return (
-            <div className={cn("w-full h-44 bg-output p-3 text-sm text-output-foreground border-t border-border", className)}>
+            <div className={cn("w-full h-72 bg-output p-3 text-sm text-output-foreground border-t border-border", className)}>
                 <div className="flex items-center justify-between mb-2">
                     <div className="text-xs text-text-secondary">Output</div>
-                    <div className="flex items-center gap-2">
-                        <button onClick={onClear} className="text-xs text-text-primary hover:underline">Clear</button>
-                    </div>
+                    {
+                        onClear and (
+                          <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={onClear}
+                          >
+                              Clear
+                          </Button>
+                        )
+
+                    }
+                    {
+                        isLoading and (
+                            <div className="flex items-center text-xs text-text-secondary">
+                               <IconButton>
+                                   <Loader2 className="animate-spin h-4 w-4 text-primary" />
+                               </IconButton>
+                                Running...
+                            </div>
+                        )
+                    }
                 </div>
 
                 

@@ -30,11 +30,11 @@
 #     <div className="h-screen flex flex-col bg-background text-text-primary">
 #       <TopBar onRun={onRun} onReset={onReset} envReady={envReady} />
 #       <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3">
-#         <div className="col-span-1 panel bg-panel border border-border rounded-md overflow-hidden">
+#         <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
 #           <CodeEditorWrapper value={code} onChange={onCodeChange} />
 #         </div>
 
-#         <div className="panel bg-panel border border-border rounded-md overflow-hidden">
+#         <div className="panel bg-background border border-border rounded-md overflow-hidden">
 #           <Visualizer graphData={graphData} />
 #         </div>
 
@@ -68,11 +68,11 @@ cl {
             <div className="h-screen flex flex-col bg-background text-text-primary">
                 <TopBar onRun={onRun} onReset={onReset} envReady={envReady} mode="run" />
                 <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3">
-                    <div className="col-span-1 panel bg-panel border border-border rounded-md overflow-hidden">
+                    <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
                         <CodeEditorWrapper value={code} onChange={onCodeChange}/>
                     </div>
 
-                    <div className="panel bg-panel border border-border rounded-md overflow-hidden">
+                    <div className="panel bg-background border border-border rounded-md overflow-hidden">
                         <Visualizer graphData={graphData}/>
                     </div>
 
