@@ -1,4 +1,8 @@
 import from react { useState, useEffect }
+import ".global.css";
+import from .components.button { Button }
+import from .components.code_editor { CodeEditor }
+import from .components.output_pannel { OutputPanel }
 
 def app() -> any {
     let [code, setCode] = useState("");
