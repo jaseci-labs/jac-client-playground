@@ -10,6 +10,8 @@ cl {
         let onReset = props.onReset;
         let onToggleTheme = props.onToggleTheme;
         let envReady = props.envReady or false;
+        let mode = props.mode or "jac2py";
+        let onModeChange = props.onModeChange;
 
         return <header className="w-full flex items-center gap-3 px-4 py-3 bg-panel border-b border-border">
             <div className="flex items-center gap-3">
@@ -21,28 +23,7 @@ cl {
                 </div>
             </div>
             <div className="flex items-center gap-2 ml-4">
-                # <button
-                #     onClick={onRun}
-                #     className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow-sm hover:bg-primary-600"
-                # >
-                #     <Play className="w-4 h-4" />
-                #     <span>Run</span>
-                # </button>
-
-                # <button
-                #     onClick={onReset}
-                #     className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-semibold text-text-primary border border-border"
-                # >
-                #     <RotateCcw className="w-4 h-4" />
-                #     <span>Reset</span>
-                # </button>
-
-                # <button
-                #     onClick={onToggleTheme}
-                #     className="w-9 h-9 rounded-lg flex items-center justify-center border border-border text-primary"
-                # >
-                #     <Moon className="w-4 h-4" />
-                # </button>
+                
 
                 <Button variant="primary" size="sm" onClick={onRun}>
                     <Play className="w-4 h-4" />
@@ -53,6 +34,33 @@ cl {
                     <RotateCcw className="w-4 h-4" />
                     <span>Reset</span>
                 </Button>
+
+                <div className="flex items-center border border-border rounded-md overflow-hidden">
+                <Button
+                        variant={props.mode == "run" and "primary" or "ghost"}
+                        size="sm"
+                        onClick={lambda -> None {props.onModeChange and props.onModeChange("run");}}
+                        className="rounded-none border-0"
+                    >
+                        Run
+                    </Button>
+                    <Button
+                        variant={props.mode == "jac2py" and "primary" or "ghost"}
+                        size="sm"
+                        onClick={lambda -> None {props.onModeChange and props.onModeChange("jac2py");}}
+                        className="rounded-none border-0"
+                    >
+                        jac2py
+                    </Button>
+                    <Button
+                        variant={props.mode == "py2jac" and "primary" or "ghost"}
+                        size="sm"
+                        onClick={lambda -> None {props.onModeChange and props.onModeChange("py2jac");}}
+                        className="rounded-none border-0 border-l border-border"
+                    >
+                        py2jac
+                    </Button>
+                </div>
                 <IconButton
                     icon={<Moon className="w-4 h-4" />}
                     label="Toggle Theme"
@@ -61,18 +69,7 @@ cl {
             </div>
             <div className="flex-1" />
             <div className="flex items-center gap-3">
-                # <div className="px-3 py-1 rounded-lg text-xs font-medium bg-secondary text-secondary-foreground">
-                #     Examples
-                # </div>
-                # <div
-                #     className={cn(
-                #         "px-3 py-1 rounded-lg text-xs font-medium",
-                #         envReady and "bg-primary text-primary-foreground" or "bg-surface text-text-secondary"
-                #     )}
-                # >
-                #     {envReady and "Environment Ready" or "Not Ready"}
-                # </div>
-
+               
                 <Badge variant="secondary" size="sm">
                     Examples
                 </Badge>
