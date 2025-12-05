@@ -1,11 +1,14 @@
-import from ".pages/Index" { Index }
+import from .pages.Index { Index }
 import ".global.css";
+import from .components.PlayGroundLayout { PlayGroundLayout }
 
 
 def app() -> None {
-    return (
-        <div>
-            <Index/>
-        </div>
-    );
+    return 
+        
+        <main>
+            <PlayGroundLayout />
+            <Index />
+        </main>;
+    
 }

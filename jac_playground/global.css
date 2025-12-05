@@ -1,13 +1,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-100: #ffe0d4;
-  --color-primary-500: #ff5733;
-  --color-primary-900: #8b1a00;
-}
-@layer base {
-  body {
-    @apply bg-background text-foreground;
-    font-family: 'Inter', sans-serif;
-  }
+  /* Brand */
+  --color-primary: #ff7743;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #273f4f;
+  --color-secondary-foreground: #ffffff;
+
+  /* Backgrounds */
+  --color-background: #f0eeea;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-text-primary: #273f4f;
+  --color-text-secondary: #6f7173;
+
+  /* Borders */
+  --color-border: #dadada;
+
+  /* Utility */
+  --color-black: #000000;
+
+  /* Optional states (don’t pretend your palette covers these) */
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-error: #f44336;
 }
