@@ -5,6 +5,7 @@ cl import from ..components.button { Button }
 cl import from ..components.code_editor { CodeEditor }
 cl import from ..components.output_pannel { OutputPanel }
 cl import from ..components.mode_selector { ModeSelector }
+cl import from ..components.resizable_panel { ResizablePanel }
 
 cl import from "..hooks.useMobile" { useIsMobile }
 cl import from "..lib.utils" { cn }
@@ -74,13 +75,16 @@ cl {
                     </div>
                     
                     <div className="h-48 border-t">
-                        <OutputPanel 
-                            isLoading={isLoading} 
-                            onClear={lambda e: any -> None {setOutput("");}} 
-                            output={output} 
-                            outIsError={outIsError} 
-                        />
+                        <ResizablePanel isHorizontal={true}>
+                            <OutputPanel 
+                                isLoading={isLoading} 
+                                onClear={lambda e: any -> None {setOutput("");}} 
+                                output={output} 
+                                outIsError={outIsError} 
+                            />
+                        </ResizablePanel>
                     </div>
+
                 </div>
             </div>
         );
