@@ -10,9 +10,9 @@
 # export default function Visualizer({ graphData, loading, error }: VisualizerProps) {
 #   return (
 #     <div className="h-full flex flex-col">
-#       <div className="px-4 py-3 border-b border-border bg-background text-sm text-text-secondary">Graph Visualizer</div>
+#       <div className="px-4 py-3 border-b border-border bg-panel text-sm text-text-secondary">Graph Visualizer</div>
 
-#       <div className="flex-1 flex items-center justify-center bg-background">
+#       <div className="flex-1 flex items-center justify-center bg-panel">
 #         {loading ? (
 #           <div className="text-text-secondary">Loading graph…</div>
 #         ) : error ? (
@@ -31,7 +31,7 @@
 #   );
 # }
 
-
+cl import from "lucide-react" { CirCu }
 
 cl {
     def Visualizer(props:dict) -> any {
@@ -41,13 +41,15 @@ cl {
 
         return (
             <div className="h-full flex flex-col">
-                <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-background">
+                <div className="px-4 py-3 border-b border-border bg-panel text-sm text-text-secondary">Graph Visualizer</div>
+                <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-panel">
                     <div className="text-xs text-text-secondary">Graph Visualizer</div>
-                    
+                    <div className="flex-1" />
+                    <div className="text-xs text-text-secondary">Jac</div>
                 </div>
-                <div className="flex-1 flex items-center justify-center bg-background">
+                <div className="flex-1 flex items-center justify-center bg-panel">
                 <div className="text-text-secondary text-center px-6">
-                        <div className="mb-3 text-3xl">🔗</div >
+                        <div className="mb-3 text-3xl"><GraphIcon/></div >
                         <div>Jac Graph Visualizer</div >
                         <div className="text-sm text-text-secondary mt-2">Execute your Jac code to see the graph visualization.</div >
                     </div > 
