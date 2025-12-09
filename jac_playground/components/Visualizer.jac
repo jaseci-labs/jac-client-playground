@@ -31,7 +31,7 @@
 #   );
 # }
 
-cl import from "lucide-react" { CirCu }
+cl import from "lucide-react" { GraphIcon }
 
 cl {
     def Visualizer(props:dict) -> any {
