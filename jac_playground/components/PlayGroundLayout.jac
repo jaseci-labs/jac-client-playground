@@ -53,6 +53,7 @@ cl import from  ".CodeEditorWrapper" { CodeEditorWrapper }
 cl import from  ".Visualizer" { Visualizer }
 cl import from  ".OutputConsole" { OutputConsole }
 cl import from  ".Sidebar" { Sidebar }
+cl import from ".resizable_panel" { ResizablePanel }
 
 cl {
     def PlayGroundLayout(props:dict) -> any {
@@ -73,19 +74,31 @@ cl {
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary">
                 <TopBar onRun={onRun} onReset={onReset} envReady={envReady} mode="run" />
-                <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3">
-                    <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
-                        <CodeEditorWrapper value={code} onChange={lambda newValue:any -> None {setCode(newValue);}}/>
-                    </div>
+                
+                <div className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3 min-h-0">
+                        <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
+                            <CodeEditorWrapper value={code} onChange={lambda newValue:any -> None {setCode(newValue);}}/>
+                        </div>
 
-                    <div className="panel bg-background border border-border rounded-md overflow-hidden">
-                        <Visualizer graphData={graphData}/>
-                    </div>
+                        <div className="panel bg-background border border-border rounded-md overflow-hidden">
+                            <Visualizer graphData={graphData}/>
+                        </div>
 
-                    <Sidebar examples={examples} onSelectExample={lambda id:any -> None {console.log("select", id);}}/>
-                    <div className="col-span-3 mt-0">
-                        <OutputConsole logs={logs} onClear={lambda -> None {console.log("clear logs");}}/>
+                        <Sidebar examples={examples} onSelectExample={lambda id:any -> None {console.log("select", id);}}/>
                     </div>
+                    
+                    <ResizablePanel 
+                        isHorizontal={true} 
+                        initialSize={25}
+                        minSize={10} 
+                        maxSize={60}
+                        className="border-t border-border"
+                    >
+                        <div className="h-full px-3 pb-3">
+                            <OutputConsole logs={logs} onClear={lambda -> None {setLogs("");}}/>
+                        </div>
+                    </ResizablePanel>
                 </div>
             </div>
         );

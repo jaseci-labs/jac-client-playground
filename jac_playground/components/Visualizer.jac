@@ -31,7 +31,7 @@
 #   );
 # }
 
-cl import from "lucide-react" { GraphIcon }
+cl import from "lucide-react" { Waypoints }
 
 cl {
     def Visualizer(props:dict) -> any {
@@ -48,8 +48,8 @@ cl {
                     <div className="text-xs text-text-secondary">Jac</div>
                 </div>
                 <div className="flex-1 flex items-center justify-center bg-panel">
-                <div className="text-text-secondary text-center px-6">
-                        <div className="mb-3 text-3xl"><GraphIcon/></div >
+                <div className="text-text-secondary text-center px-6 flex flex-col items-center justify-center">
+                        <div className="mb-3 text-3xl text-center"><Waypoints/></div >
                         <div>Jac Graph Visualizer</div >
                         <div className="text-sm text-text-secondary mt-2">Execute your Jac code to see the graph visualization.</div >
                     </div > 
