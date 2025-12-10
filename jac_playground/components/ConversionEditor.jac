@@ -15,11 +15,16 @@ cl {
         
         return (
             <div className={cn("h-full w-full grid grid-cols-2 gap-3", className)}>
-                <Panel title={inputTitle} subtitle={inputLanguage} className="h-full">
+                <Panel 
+                    title={inputTitle} 
+                    className="h-full"
+                    showActions={true}
+                    codeValue={inputValue}
+                >
                     <Editor
                         height="100%"
                         width="100%"
-                        language={inputLanguage}
+                        language={inputLanguage == "jac" and "python" or inputLanguage}
                         value={inputValue}
                         onChange={onInputChange}
                         theme="vs-light"
@@ -33,11 +38,16 @@ cl {
                     />
                 </Panel>
                 
-                <Panel title={outputTitle} subtitle={outputLanguage} className="h-full">
+                <Panel 
+                    title={outputTitle} 
+                    className="h-full"
+                    showActions={true}
+                    codeValue={outputValue}
+                >
                     <Editor
                         height="100%"
                         width="100%"
-                        language={outputLanguage}
+                        language={outputLanguage == "jac" and "python" or outputLanguage}
                         value={outputValue}
                         theme="vs-light"
                         options={{
