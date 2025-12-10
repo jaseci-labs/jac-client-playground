@@ -82,12 +82,12 @@ cl {
             setIsConverting(true);
             if mode == "jac2py" {
                 setLogs("Converting Jac to Python...");
-                # result = code_processor(source_code=jacCode, mode="jac2py") spawn root;
+                result = code_processor(source_code=jacCode, mode="jac2py") spawn root;
                 setOutputCode(result.reports[0] or "// Conversion result");
                 setLogs("Conversion complete.");
             } else {
                 setLogs("Converting Python to Jac...");
-                # result = code_processor(source_code=pythonCode, mode="py2jac") spawn root;
+                result = code_processor(source_code=pythonCode, mode="py2jac") spawn root;
                 setOutputCode(result.reports[0] or "// Conversion result");
                 setLogs("Conversion complete.");
             }
