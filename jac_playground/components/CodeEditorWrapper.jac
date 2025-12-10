@@ -28,34 +28,41 @@
 # }
 
 cl import from "..lib.utils" { cn }
-cl import from ".CodeEditor" { CodeEditor }
 cl import from "@monaco-editor/react" { Editor }
 
 cl {
     def CodeEditorWrapper(props:dict) -> any {
-        let language = props.language or "jac";
+        let language = props.language or "python";
+        let value = props.value or "";
+        let showHeader = props.showHeader;
+        # Default showHeader to true if not explicitly set to false
+        let shouldShowHeader = showHeader != false;
 
         return (
             <div className="flex flex-col h-full">
-                <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-background">
-                    <div className="text-xs text-text-secondary">Editor</div>
-                    <div className="flex-1" />
-                    <div className="text-xs text-text-secondary">Jac</div>
-                </div>
+                {shouldShowHeader and (
+                    <div className="flex items-center gap-2 px-3 py-2 border-b border-border bg-background">
+                        <div className="text-xs text-text-secondary">Editor</div>
+                        <div className="flex-1" />
+                        <div className="text-xs text-text-secondary">{language}</div>
+                    </div>
+                )}
 
                 <div className="flex-1">
                     <Editor
                         height="100%"
                         width="100%"
-                        defaultLanguage="python"
-                        defaultValue="// Write your Jac code here"
+                        language={language}
+                        value={value}
+                        defaultValue="// Write your code here"
                         onChange={props.onChange}
                         theme="vs-light"
                         options={{
                             "fontSize": 14,
-                            "minimap": {"enabled": False},
-                            "scrollBeyondLastLine": False,
-                            "automaticLayout": True
+                            "minimap": {"enabled": false},
+                            "scrollBeyondLastLine": false,
+                            "automaticLayout": true,
+                            "padding": {"top": 12}
                         }}
                     />
                 </div>

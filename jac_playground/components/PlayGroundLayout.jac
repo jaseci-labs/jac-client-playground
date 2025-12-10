@@ -1,104 +1,182 @@
-# import React from "react";
-# import TopBar from "../TopBar/TopBar";
-# import CodeEditorWrapper from "../Editor/CodeEditorWrapper";
-# import Visualizer from "../Visualizer/Visualizer";
-# import Sidebar from "../Sidebar/Sidebar";
-# import OutputConsole from "../Output/OutputConsole";
 
-# export type PlaygroundLayoutProps = {
-#   code: string;
-#   onCodeChange?: (v: string) => void;
-#   onRun?: () => void;
-#   onReset?: () => void;
-#   examples?: { id: string; title: string; description?: string }[];
-#   logs?: string[];
-#   envReady?: boolean;
-#   graphData?: any;
-# };
-
-# export default function PlaygroundLayout({
-#   code,
-#   onCodeChange,
-#   onRun,
-#   onReset,
-#   examples = [],
-#   logs = [],
-#   envReady = false,
-#   graphData,
-# }: PlaygroundLayoutProps) {
-#   return (
-#     <div className="h-screen flex flex-col bg-background text-text-primary">
-#       <TopBar onRun={onRun} onReset={onReset} envReady={envReady} />
-#       <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3">
-#         <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
-#           <CodeEditorWrapper value={code} onChange={onCodeChange} />
-#         </div>
-
-#         <div className="panel bg-background border border-border rounded-md overflow-hidden">
-#           <Visualizer graphData={graphData} />
-#         </div>
-
-#         <Sidebar examples={examples} onSelectExample={(id) => console.log("select", id)} />
-#         <div className="col-span-3 mt-0">
-#           <OutputConsole logs={logs} onClear={() => console.log("clear logs")} />
-#         </div>
-#       </div>
-#     </div>
-#   );
-# }
 
 cl import from react { useState }
 cl import from ".TopBar" { TopBar }
-cl import from  ".CodeEditorWrapper" { CodeEditorWrapper }
-cl import from  ".Visualizer" { Visualizer }
-cl import from  ".OutputConsole" { OutputConsole }
-cl import from  ".Sidebar" { Sidebar }
+cl import from ".CodeEditorWrapper" { CodeEditorWrapper }
+cl import from ".Visualizer" { Visualizer }
+cl import from ".OutputConsole" { OutputConsole }
 cl import from ".resizable_panel" { ResizablePanel }
+cl import from ".ConversionEditor" { ConversionEditor }
+cl import from ".Controllers.context-toolbar" { ContextToolbar }
+cl import from ".ui.Panel" { Panel }
+cl import from ".Sidebar" { Sidebar }
 
 cl {
-    def PlayGroundLayout(props:dict) -> any {
-        let [code, setCode] = useState("");
+    def PlayGroundLayout(props: dict) -> any {
+        let [mode, setMode] = useState("jac");
+        let [jacCode, setJacCode] = useState("");
+        let [pythonCode, setPythonCode] = useState("");
+        let [outputCode, setOutputCode] = useState("");
         let [logs, setLogs] = useState("");
+        let [isRunning, setIsRunning] = useState(false);
+        let [isConverting, setIsConverting] = useState(false);
+        let [sidebarOpen, setSidebarOpen] = useState(true);
 
-        async def onRun() -> None {
-            result = code_processor(source_code=code, mode="run") spawn root;
-            console.log("Running Jac code...", result);
-            setLogs(result.reports[0] or "");
+        # Example Jac code snippets
+        let examples = [
+            { 
+                "id": "hello", 
+                "title": "Hello World", 
+                "category": "Basics",
+                "code": "with entry {\n    print(\"Hello, World!\");\n}"
+            },
+            { 
+                "id": "walker", 
+                "title": "Simple Walker", 
+                "category": "Walkers",
+                "code": "node Person {\n    has name: str;\n}\n\nwalker greet {\n    can say_hello with Person entry {\n        print(f\"Hello, {here.name}!\");\n    }\n}\n\nwith entry {\n    p = Person(name=\"Alice\");\n    greet() spawn p;\n}"
+            },
+            { 
+                "id": "graph", 
+                "title": "Graph Example", 
+                "category": "Graphs",
+                "code": "node City {\n    has name: str;\n}\n\nedge Road {\n    has distance: int;\n}\n\nwith entry {\n    a = City(name=\"New York\");\n    b = City(name=\"Boston\");\n    a ++> Road(distance=200) ++> b;\n    print(\"Graph created!\");\n}"
+            },
+            { 
+                "id": "ability", 
+                "title": "Node Abilities", 
+                "category": "Abilities",
+                "code": "node Counter {\n    has count: int = 0;\n    \n    can increment {\n        self.count += 1;\n        print(f\"Count: {self.count}\");\n    }\n}\n\nwith entry {\n    c = Counter();\n    c.increment();\n    c.increment();\n}"
+            }
+        ];
+
+        # Handle example selection - load code into Jac editor
+        def onSelectExample(exampleId: str) -> None {
+            for ex in examples {
+                if ex["id"] == exampleId {
+                    setJacCode(ex["code"]);
+                    setMode("jac");
+                    setLogs(f"Loaded example: {ex['title']}");
+                }
+            }
         }
 
-        let onReset = props.onReset;
-        let examples = props.examples or [];
-        let envReady = props.envReady or false;
+        # Run Jac code
+        async def onRun() -> None {
+            setIsRunning(true);
+            setLogs("Running...");
+            result = code_processor(source_code=jacCode, mode="run") spawn root;
+            console.log("Running Jac code...", result);
+            setLogs(result.reports[0] or "Execution complete.");
+            setIsRunning(false);
+        }
+
+        # Reset editor
+        def onReset() -> None {
+            setJacCode("");
+            setLogs("");
+        }
+
+        # Convert code based on mode
+        async def onConvert() -> None {
+            setIsConverting(true);
+            if mode == "jac2py" {
+                setLogs("Converting Jac to Python...");
+                # result = code_processor(source_code=jacCode, mode="jac2py") spawn root;
+                setOutputCode(result.reports[0] or "// Conversion result");
+                setLogs("Conversion complete.");
+            } else {
+                setLogs("Converting Python to Jac...");
+                # result = code_processor(source_code=pythonCode, mode="py2jac") spawn root;
+                setOutputCode(result.reports[0] or "// Conversion result");
+                setLogs("Conversion complete.");
+            }
+            setIsConverting(false);
+        }
+
+        let envReady = props.envReady or true;
         let graphData = props.graphData;
 
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary">
-                <TopBar onRun={onRun} onReset={onReset} envReady={envReady} mode="run" />
+                <TopBar 
+                    envReady={envReady} 
+                    mode={mode} 
+                    onModeChange={lambda newMode: any -> None { setMode(newMode); setLogs(""); setOutputCode(""); }}
+                />
                 
-                <div className="flex-1 flex flex-col overflow-hidden">
-                    <div className="flex-1 grid grid-cols-[1fr_520px_300px] gap-3 p-3 min-h-0">
-                        <div className="col-span-1 panel bg-background border border-border rounded-md overflow-hidden">
-                            <CodeEditorWrapper value={code} onChange={lambda newValue:any -> None {setCode(newValue);}}/>
+                <ContextToolbar 
+                    mode={mode}
+                    onRun={onRun}
+                    onReset={onReset}
+                    onConvert={onConvert}
+                    isRunning={isRunning}
+                    isConverting={isConverting}
+                />
+                
+                <div className="flex-1 flex overflow-hidden">
+                    <div className="flex-1 flex flex-col overflow-hidden">
+                        <div className="flex-1 p-3 overflow-hidden min-h-0">
+                            {mode == "jac" and (
+                                <div className="h-full grid grid-cols-2 gap-3">
+                                    <Panel title="Jac Code Editor" subtitle="jac">
+                                        <CodeEditorWrapper 
+                                            value={jacCode} 
+                                            onChange={lambda v: any -> None { setJacCode(v); }}
+                                            language="python"
+                                            showHeader={false}
+                                        />
+                                    </Panel>
+                                    
+                                    <Panel title="Graph Visualizer" subtitle="output">
+                                        <Visualizer graphData={graphData} showHeader={false} />
+                                    </Panel>
+                                </div>
+                            )}
+                            
+                            {mode == "jac2py" and (
+                                <ConversionEditor
+                                    inputTitle="Jac Input"
+                                    outputTitle="Python Output"
+                                    inputLanguage="jac"
+                                    outputLanguage="python"
+                                    inputValue={jacCode}
+                                    outputValue={outputCode}
+                                    onInputChange={lambda v: any -> None { setJacCode(v); }}
+                                />
+                            )}
+                            
+                            {mode == "py2jac" and (
+                                <ConversionEditor
+                                    inputTitle="Python Input"
+                                    outputTitle="Jac Output"
+                                    inputLanguage="python"
+                                    outputLanguage="jac"
+                                    inputValue={pythonCode}
+                                    outputValue={outputCode}
+                                    onInputChange={lambda v: any -> None { setPythonCode(v); }}
+                                />
+                            )}
                         </div>
-
-                        <div className="panel bg-background border border-border rounded-md overflow-hidden">
-                            <Visualizer graphData={graphData}/>
-                        </div>
-
-                        <Sidebar examples={examples} onSelectExample={lambda id:any -> None {console.log("select", id);}}/>
+                        
+                        <ResizablePanel 
+                            isHorizontal={true} 
+                            initialSize={20}
+                            minSize={10} 
+                            maxSize={50}
+                            className="border-t border-border"
+                        >
+                            <div className="h-full px-3 pb-3">
+                                <OutputConsole logs={logs} onClear={lambda -> None { setLogs(""); }}/>
+                            </div>
+                        </ResizablePanel>
                     </div>
                     
-                    <ResizablePanel 
-                        isHorizontal={true} 
-                        initialSize={25}
-                        minSize={10} 
-                        maxSize={60}
-                        className="border-t border-border"
-                    >
-                        <div className="h-full px-3 pb-3">
-                            <OutputConsole logs={logs} onClear={lambda -> None {setLogs("");}}/>
-                        </div>
-                    </ResizablePanel>
+                    <Sidebar 
+                        examples={examples}
+                        onSelectExample={onSelectExample}
+                        version="v1.0.0"
+                    />
                 </div>
             </div>
         );

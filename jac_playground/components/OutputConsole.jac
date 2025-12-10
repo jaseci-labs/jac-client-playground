@@ -11,7 +11,7 @@ cl {
         let isLoading = props.isLoading or false;
 
         return (
-            <div className={cn("w-full h-72 bg-output p-3 text-sm text-output-foreground ", className)}>
+            <div className={cn("w-full min-h-36 bg-output p-3 text-sm text-output-foreground ", className)}>
                 <div className="flex items-center justify-between mb-2">
                     <div className="text-xs text-text-secondary">Output</div>
                     {
