@@ -119,7 +119,7 @@ cl {
                         <div className="flex-1 p-3 overflow-hidden min-h-0">
                             {mode == "jac" and (
                                 <div className="h-full grid grid-cols-2 gap-3">
-                                    <Panel title="Jac Code Editor" subtitle="jac">
+                                    <Panel title="Jac Code Editor" subtitle="jac" showActions={false}>
                                         <CodeEditorWrapper 
                                             value={jacCode} 
                                             onChange={lambda v: any -> None { setJacCode(v); }}
@@ -128,7 +128,7 @@ cl {
                                         />
                                     </Panel>
                                     
-                                    <Panel title="Graph Visualizer" subtitle="output">
+                                    <Panel title="Graph Visualizer" subtitle="output" showActions={false}>
                                         <Visualizer graphData={graphData} showHeader={false} />
                                     </Panel>
                                 </div>
