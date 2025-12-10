@@ -12,7 +12,6 @@ cl {
         let onRun = props.onRun;
         
         let onCopy = props.onCopy;
-        let showActions = props.showActions or true;
         let codeValue = props.codeValue or "";
         
         let [copied, setCopied] = useState(false);
@@ -40,7 +39,7 @@ cl {
                     <div className="text-xs font-medium text-text-primary">{title}</div>
                     <div className="flex-1" />
                     
-                    {showActions and (
+                    {props.showActions and (
                         <div className="flex items-center gap-1">
                              <button
                                 onClick={onRun}
@@ -60,7 +59,7 @@ cl {
                         </div>
                     )}
                     
-                    {(not showActions) and subtitle and (
+                    {(not props.showActions) and subtitle and (
                         <div className="text-xs text-text-secondary">{subtitle}</div>
                     )}
                 </div>
