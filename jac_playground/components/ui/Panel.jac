@@ -10,7 +10,6 @@ cl {
         let headerClassName = props.headerClassName or "";
         let children = props.children;
         let onRun = props.onRun;
-        
         let onCopy = props.onCopy;
         let codeValue = props.codeValue or "";
         
@@ -42,7 +41,7 @@ cl {
                     {props.showActions and (
                         <div className="flex items-center gap-1">
                              <button
-                                onClick={onRun}
+                                onClick={ lambda -> None { onRun(props.title); } }
                                 className="p-1.5 rounded hover:bg-primary/10 text-text-secondary hover:text-primary transition-colors"
                                 title="Run Code"
                                 >

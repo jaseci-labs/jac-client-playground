@@ -62,11 +62,21 @@ cl {
         }
 
         # Run Jac code
-        async def onRun() -> None {
+        async def onRun(title: str = "") -> None {
+            let result = [];
             setIsRunning(true);
-            setLogs("Running...");
-            result = code_processor(source_code=jacCode, mode="run") spawn root;
-            console.log("Running Jac code...", result);
+
+            if title == "Python Input" {
+                result = code_processor(source_code=pythonCode, mode="pyrun") spawn root;
+            } elif title == "Jac Input" {
+                result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
+            } elif title == "Python Output" {
+                result = code_processor(source_code=outputCode, mode="pyrun") spawn root;
+            } elif title == "Jac Output" {
+                result = code_processor(source_code=outputCode, mode="jacrun") spawn root;
+            } else {
+                result = ["Error code Execution"];
+            }
             setLogs(result.reports[0] or "Execution complete.");
             setIsRunning(false);
         }
@@ -143,6 +153,7 @@ cl {
                                     inputValue={jacCode}
                                     outputValue={outputCode}
                                     onInputChange={lambda v: any -> None { setJacCode(v); }}
+                                    onCodeRun={onRun}
                                 />
                             )}
                             
@@ -155,6 +166,7 @@ cl {
                                     inputValue={pythonCode}
                                     outputValue={outputCode}
                                     onInputChange={lambda v: any -> None { setPythonCode(v); }}
+                                    onCodeRun={onRun}
                                 />
                             )}
                         </div>

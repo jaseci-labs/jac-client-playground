@@ -35,7 +35,12 @@ node ProcessNode {
 node RunNode(ProcessNode) {
     can execute with code_processor entry {
         print("[run] Executing Jac code...");
-        output = self.process_code(visitor.source_code, "run", ".jac");
+        if visitor.mode == "pyrun" {
+            file_type = ".py";
+        } elif visitor.mode == "jacrun" {
+            file_type = ".jac";
+        }
+        output = self.process_code(visitor.source_code, "run", file_type=file_type);
         report output;
     }
 }
@@ -58,11 +63,12 @@ node Py2JacNode(ProcessNode) {
 
 walker code_processor {
     has source_code: str = "";
-    has mode: str = "run";
+    has mode: str = "jacrun";
     has mode_node_map: dict = {
-        "run": RunNode,
+        "jacrun": RunNode,
+        "pyrun": RunNode,
         "jac2py": Jac2PyNode,
-        "py2jac": Py2JacNode
+        "py2jac": Py2JacNode,
     };
 
     obj __specs__ {

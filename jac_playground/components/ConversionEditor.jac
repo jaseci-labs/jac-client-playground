@@ -12,6 +12,7 @@ cl {
         let outputValue = props.outputValue or "";
         let onInputChange = props.onInputChange;
         let className = props.className or "";
+        let onCodeRun = props.onCodeRun;
         
         return (
             <div className={cn("h-full w-full grid grid-cols-2 gap-3", className)}>
@@ -20,6 +21,7 @@ cl {
                     className="h-full"
                     showActions={true}
                     codeValue={inputValue}
+                    onRun={onCodeRun}
                 >
                     <Editor
                         height="100%"
@@ -43,6 +45,7 @@ cl {
                     className="h-full"
                     showActions={true}
                     codeValue={outputValue}
+                    onRun={onCodeRun}
                 >
                     <Editor
                         height="100%"
