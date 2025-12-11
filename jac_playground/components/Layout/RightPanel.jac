@@ -134,18 +134,18 @@ cl {
                 
                 {activeSection == "examples" and (
                     <div className="flex-1 flex flex-col overflow-hidden">
-                        <div className="p-2 border-b border-border">
-                            <div className="relative">
-                                <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-secondary" />
-                                <input
-                                    type="text"
-                                    placeholder="Search examples..."
-                                    value={searchQuery}
-                                    onChange={lambda e: any -> None { setSearchQuery(e.target.value); }}
-                                    className="w-full pl-8 pr-3 py-1.5 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-                                />
-                            </div>
-                        </div>
+                        # <div className="p-2 border-b border-border">
+                        #     <div className="relative">
+                        #         <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-secondary" />
+                        #         <input
+                        #             type="text"
+                        #             placeholder="Search examples..."
+                        #             value={searchQuery}
+                        #             onChange={lambda e: any -> None { setSearchQuery(e.target.value); }}
+                        #             className="w-full pl-8 pr-3 py-1.5 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
+                        #         />
+                        #     </div>
+                        # </div>
                         
                         <div className="flex-1 overflow-y-auto p-2">
                             {Object.keys(categories).map(lambda cat: str -> any {
@@ -163,19 +163,34 @@ cl {
                                             <span className="ml-auto text-[10px] text-text-secondary">{categoryExamples.length}</span>
                                         </button>
                                         
-                                        <div className="ml-3 mt-1 space-y-0.5">
-                                            {categoryExamples.map(lambda ex: dict -> any {
-                                                return (
-                                                    <button
-                                                        key={ex["id"]}
-                                                        onClick={lambda -> None { onSelectExample(ex["id"]); }}
-                                                        className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-text-secondary hover:text-text-primary hover:bg-background rounded transition-all"
-                                                    >
-                                                        <FileCode size={12} />
-                                                        <span className="truncate">{ex["title"]}</span>
-                                                    </button>
-                                                );
-                                            })}
+                                        # {isExpanded and categoryExamples.length>0 and
+                                        #     (<div className="ml-3 mt-1 space-y-0.5">
+                                        #     {categoryExamples.map(lambda ex: dict -> any {
+                                        #         return (
+                                        #             <button
+                                        #                 key={ex["id"]}
+                                        #                 onClick={lambda -> None { onSelectExample(ex["id"]); }}
+                                        #                 className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-text-secondary hover:text-text-primary hover:bg-background rounded transition-all"
+                                        #             >
+                                        #                 <FileCode size={12} />
+                                        #                 <span className="truncate">{ex["title"]}</span>
+                                        #             </button>
+                                        #         );
+                                        #     })}
+                                        # </div>)}
+                                         <div className="ml-3 mt-1 space-y-0.5">
+                                                {categoryExamples.map(lambda ex: dict -> any {
+                                                    return (
+                                                        <button
+                                                            key={ex["id"]}
+                                                            onClick={lambda -> None { onSelectExample(ex["id"]); }}
+                                                            className="flex items-center gap-2 w-full px-2 py-1.5 text-xs text-text-secondary hover:text-text-primary hover:bg-background rounded transition-all"
+                                                        >
+                                                            <FileCode size={12} />
+                                                            <span className="truncate">{ex["title"]}</span>
+                                                        </button>
+                                                    );
+                                                })}
                                         </div>
                                     </div>
                                 );

@@ -9,7 +9,7 @@ cl {
         let onOpenHelp = props.onOpenHelp;
 
         return (
-            <header className="w-full h-12 flex items-center gap-4 px-4 bg-surface border-b border-border">
+            <header className="w-full h-12 flex items-center gap-4 px-4 bg-surface border-b border-border justify-between">
                 <div className="flex items-center gap-2">
                     <img src="/static/assets/jaseci.png" className="w-7 h-7" />
                     <span className="text-sm font-semibold text-text-primary">
@@ -17,19 +17,19 @@ cl {
                     </span>
                 </div>
                 
-                <div className="flex-1 flex items-center justify-center max-w-md mx-auto">
-                    <div className="relative w-full">
-                        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
-                        <input
-                            type="text"
-                            placeholder="Search commands, examples..."
-                            className="w-full pl-9 pr-3 py-1.5 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-text-secondary"
-                        />
-                        <kbd className="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] bg-surface border border-border rounded text-text-secondary">
-                            ⌘K
-                        </kbd>
-                    </div>
-                </div>
+                # <div className="flex-1 flex items-center justify-center max-w-md mx-auto">
+                #     <div className="relative w-full">
+                #         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
+                #         <input
+                #             type="text"
+                #             placeholder="Search commands, examples..."
+                #             className="w-full pl-9 pr-3 py-1.5 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-text-secondary"
+                #         />
+                #         <kbd className="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] bg-surface border border-border rounded text-text-secondary">
+                #             ⌘K
+                #         </kbd>
+                #     </div>
+                # </div>
                 
                 <div className="flex items-center gap-2">
                     <Badge

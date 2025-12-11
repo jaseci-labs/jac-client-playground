@@ -3,16 +3,13 @@ cl import from "lucide-react" {
     Play, 
     RotateCcw, 
     Bug, 
-    StepForward, 
-    StepBack, 
-    Square,
-    RefreshCw,
     Loader2,
     ArrowRightLeft,
     SplitSquareHorizontal,
     Maximize2
 }
 cl import from "...lib.utils" { cn }
+cl import from "..Controllers.debug-control" { DebugController }
 
 cl {
     def EditorToolbar(props: dict) -> any {
@@ -23,6 +20,7 @@ cl {
         let onDebug = props.onDebug;
         let onStepOver = props.onStepOver;
         let onStepInto = props.onStepInto;
+        let onStepOut = props.onStepOut;
         let onStop = props.onStop;
         let isRunning = props.isRunning or false;
         let isConverting = props.isConverting or false;
@@ -76,31 +74,15 @@ cl {
                             </button>
                             
                             {isDebugging and (
-                                <>
-                                    <button
-                                        onClick={onStepOver}
-                                        className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-text-secondary hover:bg-background transition-all"
-                                        title="Step Over"
-                                    >
-                                        <StepForward size={14} />
-                                    </button>
-                                    
-                                    <button
-                                        onClick={onStepInto}
-                                        className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-text-secondary hover:bg-background transition-all"
-                                        title="Step Into"
-                                    >
-                                        <StepBack size={14} />
-                                    </button>
-                                    
-                                    <button
-                                        onClick={onStop}
-                                        className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-red-500 hover:bg-red-500/10 transition-all"
-                                        title="Stop"
-                                    >
-                                        <Square size={14} />
-                                    </button>
-                                </>
+                                <DebugController
+                                    onPlay={onRun}
+                                    onStepOver={onStepOver}
+                                    onStepIn={onStepInto}
+                                    onStepOut={onStepOut}
+                                    onRestart={onReset}
+                                    onStop={onStop}
+                                    isRunning={isRunning}
+                                />
                             )}
                         </>
                     )}

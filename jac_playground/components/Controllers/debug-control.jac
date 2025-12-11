@@ -5,11 +5,13 @@ cl import from "lucide-react" {
     ArrowDown, 
     ArrowUp, 
     RotateCw, 
-    Square 
+    Square,
+    StepForward,
+    StepBack
 }
 
 cl {
-    def ControlButton(props: dict) -> any {
+    def DebugButton(props: dict) -> any {
         let onClick = props.onClick;
         let icon = props.icon;
         let label = props.label or "";
@@ -17,9 +19,10 @@ cl {
         let disabled = props.disabled or false;
         
         let variantClasses = {
-            "default": "text-primary hover:bg-primary/20",
-            "danger": "text-error hover:bg-error/20",
-            "warning": "text-warning hover:bg-warning/20"
+            "default": "text-text-secondary hover:bg-background hover:text-text-primary",
+            "danger": "text-red-500 hover:bg-red-500/10",
+            "warning": "text-yellow-600 hover:bg-yellow-500/10",
+            "primary": "text-primary hover:bg-primary/10"
         };
         
         return (
@@ -28,12 +31,9 @@ cl {
                 disabled={disabled}
                 title={label}
                 className={cn(
-                    "size-8 rounded-full flex items-center justify-center",
-                    " border border-border",
-                    "transition-all duration-150",
-                    "hover:scale-105 active:scale-95",
-                    "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100",
-                    variantClasses[variant]
+                    "flex items-center gap-1 px-2 py-1.5 rounded-md text-xs transition-all",
+                    "disabled:opacity-50 disabled:cursor-not-allowed",
+                    variantClasses[variant] or variantClasses["default"]
                 )}
             >
                 {icon}
@@ -52,43 +52,39 @@ cl {
         let className = props.className or "";
         
         return (
-            <div className={cn(
-                "inline-flex items-center gap-2 ",
-                
-                className
-            )}>
-                <ControlButton
-                    icon={<Play className="size-3" />}
-                    label="Run (F5)"
+            <div className={cn("inline-flex items-center gap-0.5", className)}>
+                <DebugButton
+                    icon={<Play size={14} />}
+                    label="Continue (F5)"
                     onClick={onPlay}
-                    variant="default"
+                    variant="primary"
                 />
-                <ControlButton
-                    icon={<SkipForward className="size-3" />}
+                <DebugButton
+                    icon={<StepForward size={14} />}
                     label="Step Over (F10)"
                     onClick={onStepOver}
                     variant="default"
                 />
-                <ControlButton
-                    icon={<ArrowDown className="size-3" />}
+                <DebugButton
+                    icon={<StepBack size={14} />}
                     label="Step Into (F11)"
                     onClick={onStepIn}
                     variant="default"
                 />
-                <ControlButton
-                    icon={<ArrowUp className="size-3" />}
+                <DebugButton
+                    icon={<ArrowUp size={14} />}
                     label="Step Out (Shift+F11)"
                     onClick={onStepOut}
                     variant="default"
                 />
-                <ControlButton
-                    icon={<RotateCw className="size-3" />}
+                <DebugButton
+                    icon={<RotateCw size={14} />}
                     label="Restart (Ctrl+Shift+F5)"
                     onClick={onRestart}
                     variant="warning"
                 />
-                <ControlButton
-                    icon={<Square className="size-3" />}
+                <DebugButton
+                    icon={<Square size={14} />}
                     label="Stop (Shift+F5)"
                     onClick={onStop}
                     variant="danger"

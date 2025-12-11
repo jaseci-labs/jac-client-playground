@@ -67,7 +67,8 @@ cl {
                 <div className="h-8 bg-surface border-t border-border flex items-center px-3 gap-2">
                     {tabs.map(lambda tab: dict -> any {
                         let Icon = tab["icon"];
-                        let hasBadge =True;
+                        let badgeValue = "badge" in tab and tab["badge"] or 0;
+                        let hasBadge = badgeValue > 0;
                         
                         return (
                             <button
@@ -79,7 +80,7 @@ cl {
                                 <span>{tab["label"]}</span>
                                 {hasBadge and (
                                     <span className="px-1 py-0.5 bg-red-500 text-white text-[10px] rounded-full min-w-[16px] text-center">
-                                        {tab["badge"]}
+                                        {badgeValue}
                                     </span>
                                 )}
                             </button>
