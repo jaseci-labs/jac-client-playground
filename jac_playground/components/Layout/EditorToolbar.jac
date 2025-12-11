@@ -4,9 +4,7 @@ cl import from "lucide-react" {
     RotateCcw, 
     Bug, 
     Loader2,
-    ArrowRightLeft,
-    SplitSquareHorizontal,
-    Maximize2
+    ArrowRightLeft
 }
 cl import from "...lib.utils" { cn }
 cl import from "..Controllers.debug-control" { DebugController }
@@ -25,8 +23,6 @@ cl {
         let isRunning = props.isRunning or false;
         let isConverting = props.isConverting or false;
         let isDebugging = props.isDebugging or false;
-        let viewMode = props.viewMode or "split";
-        let onViewModeChange = props.onViewModeChange;
         
         let isJacMode = mode == "jac";
         let isConversionMode = mode == "jac2py" or mode == "py2jac";
@@ -101,34 +97,6 @@ cl {
                             {isConverting and (<Loader2 size={14} className="animate-spin" />) or (<ArrowRightLeft size={14} />)}
                             <span>{isConverting and "Converting..." or "Convert"}</span>
                         </button>
-                    )}
-                </div>
-                
-                <div className="flex items-center gap-1">
-                    {isJacMode and (
-                        <>
-                            <button
-                                onClick={lambda -> None { onViewModeChange("split"); }}
-                                className={cn(
-                                    "p-1.5 rounded transition-all",
-                                    viewMode == "split" and "bg-primary/15 text-primary" or "text-text-secondary hover:bg-background"
-                                )}
-                                title="Split View"
-                            >
-                                <SplitSquareHorizontal size={16} />
-                            </button>
-                            
-                            <button
-                                onClick={lambda -> None { onViewModeChange("maximize"); }}
-                                className={cn(
-                                    "p-1.5 rounded transition-all",
-                                    viewMode == "maximize" and "bg-primary/15 text-primary" or "text-text-secondary hover:bg-background"
-                                )}
-                                title="Maximize Editor"
-                            >
-                                <Maximize2 size={16} />
-                            </button>
-                        </>
                     )}
                 </div>
             </div>
