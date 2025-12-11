@@ -88,8 +88,8 @@ cl {
                     )}
                     onMouseDown={handleMouseDown}
                 >
-                    {(not isHorizontal) and <GripVertical className="w-3 h-3 text-text-secondary bg-background" />}
-                    {isHorizontal and <GripHorizontal className="w-3 h-3 text-text-secondary bg-background" />}
+                    {(not isHorizontal) and (<GripVertical className="w-3 h-3 text-text-secondary bg-background" />)}
+                    {isHorizontal and (<GripHorizontal className="w-3 h-3 text-text-secondary bg-background" />)}
                 </div>
                 <div className="flex-1 overflow-auto pt-2">
                     {props.children}

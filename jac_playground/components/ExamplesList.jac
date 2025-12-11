@@ -52,7 +52,7 @@ cl {
                             className="w-full text-left px-3 py-2 rounded-md hover:bg-primary/10 text-text-primary border border-transparent hover:border-primary/30 transition-colors"
                         >
                             <div className="text-sm font-medium">{ex["title"]}</div>
-                            {ex["category"] and <div className="text-xs text-text-secondary mt-0.5">{ex["category"]}</div>}
+                            {ex["category"] and (<div className="text-xs text-text-secondary mt-0.5">{ex["category"]}</div>)}
                         </button>
                     );
                 })}

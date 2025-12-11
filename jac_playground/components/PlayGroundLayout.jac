@@ -1,26 +1,47 @@
 
 
 cl import from react { useState }
+cl import from "..lib.utils" { cn }
 cl import from ".TopBar" { TopBar }
 cl import from ".CodeEditorWrapper" { CodeEditorWrapper }
 cl import from ".Visualizer" { Visualizer }
-cl import from ".OutputConsole" { OutputConsole }
-cl import from ".resizable_panel" { ResizablePanel }
 cl import from ".ConversionEditor" { ConversionEditor }
-cl import from ".Controllers.context-toolbar" { ContextToolbar }
-cl import from ".ui.Panel" { Panel }
-cl import from ".Sidebar" { Sidebar }
+cl import from ".Layout.ActivityBar" { ActivityBar }
+cl import from ".Layout.WorkspaceTabs" { WorkspaceTabs }
+cl import from ".Layout.EditorToolbar" { EditorToolbar }
+cl import from ".Layout.RightPanel" { RightPanel }
+cl import from ".Layout.DockableConsole" { DockableConsole }
 
 cl {
     def PlayGroundLayout(props: dict) -> any {
+        # Core state
         let [mode, setMode] = useState("jac");
         let [jacCode, setJacCode] = useState("");
         let [pythonCode, setPythonCode] = useState("");
         let [outputCode, setOutputCode] = useState("");
+        
+        # Output state (separated for console tabs)
+        let [output, setOutput] = useState("");
+        let [errors, setErrors] = useState("");
         let [logs, setLogs] = useState("");
+        
+        # UI state
         let [isRunning, setIsRunning] = useState(false);
         let [isConverting, setIsConverting] = useState(false);
-        let [sidebarOpen, setSidebarOpen] = useState(true);
+        let [isDebugging, setIsDebugging] = useState(false);
+        let [activityBarCollapsed, setActivityBarCollapsed] = useState(false);
+        let [rightPanelOpen, setRightPanelOpen] = useState(true);
+        let [rightPanelSection, setRightPanelSection] = useState("examples");
+        let [consoleOpen, setConsoleOpen] = useState(true);
+        let [consoleHeight, setConsoleHeight] = useState(200);
+        let [viewMode, setViewMode] = useState("split");
+        
+        # Tabs for Jac mode workspace
+        let [activeTab, setActiveTab] = useState("editor");
+        let workspaceTabs = [
+            { "id": "editor", "label": "Editor", "type": "editor", "closable": false },
+            { "id": "graph", "label": "Graph", "type": "graph", "closable": false }
+        ];
 
         # Example Jac code snippets
         let examples = [
@@ -47,24 +68,47 @@ cl {
                 "title": "Node Abilities", 
                 "category": "Abilities",
                 "code": "node Counter {\n    has count: int = 0;\n    \n    can increment {\n        self.count += 1;\n        print(f\"Count: {self.count}\");\n    }\n}\n\nwith entry {\n    c = Counter();\n    c.increment();\n    c.increment();\n}"
+            },
+            { 
+                "id": "edges", 
+                "title": "Edge Traversal", 
+                "category": "Graphs",
+                "code": "node Room {\n    has name: str;\n}\n\nedge Door {}\n\nwalker Explorer {\n    can explore with Room entry {\n        print(f\"Visiting: {here.name}\");\n        visit [-->];\n    }\n}\n\nwith entry {\n    r1 = Room(name=\"Living Room\");\n    r2 = Room(name=\"Kitchen\");\n    r3 = Room(name=\"Bedroom\");\n    r1 ++> Door ++> r2 ++> Door ++> r3;\n    Explorer() spawn r1;\n}"
+            },
+            { 
+                "id": "filter", 
+                "title": "Filter Walker", 
+                "category": "Walkers",
+                "code": "node Item {\n    has name: str;\n    has price: float;\n}\n\nwalker ShowExpensive {\n    can check with Item entry {\n        if here.price > 50 {\n            print(f\"{here.name}: ${here.price}\");\n        }\n    }\n}\n\nwith entry {\n    items = [\n        Item(name=\"Book\", price=25.0),\n        Item(name=\"Laptop\", price=999.0),\n        Item(name=\"Coffee\", price=5.0)\n    ];\n    for item in items {\n        ShowExpensive() spawn item;\n    }\n}"
             }
         ];
 
-        # Handle example selection - load code into Jac editor
+        # Handle example selection
         def onSelectExample(exampleId: str) -> None {
             for ex in examples {
                 if ex["id"] == exampleId {
                     setJacCode(ex["code"]);
                     setMode("jac");
-                    setLogs(f"Loaded example: {ex['title']}");
+                    setActiveTab("editor");
+                    setLogs(f"✓ Loaded example: {ex['title']}");
                 }
             }
+        }
+
+        # Handle mode change
+        def handleModeChange(newMode: str) -> None {
+            setMode(newMode);
+            setOutput("");
+            setErrors("");
+            setOutputCode("");
         }
 
         # Run Jac code
         async def onRun(title: str = "") -> None {
             let result = [];
             setIsRunning(true);
+            setOutput("");
+            setErrors("");
 
             if title == "Python Input" {
                 result = code_processor(source_code=pythonCode, mode="pyrun") spawn root;
@@ -77,31 +121,42 @@ cl {
             } else {
                 result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
             }
-            setLogs(result.reports[0] or "Execution complete.");
+            
+            setOutput(result.reports[0] or "Execution complete.");
             setIsRunning(false);
         }
 
         # Reset editor
         def onReset() -> None {
             setJacCode("");
+            setOutput("");
+            setErrors("");
             setLogs("");
         }
 
         # Convert code based on mode
         async def onConvert() -> None {
             setIsConverting(true);
+            setOutput("");
+            
             if mode == "jac2py" {
                 setLogs("Converting Jac to Python...");
                 result = code_processor(source_code=jacCode, mode="jac2py") spawn root;
-                setOutputCode(result.reports[0] or "// Conversion result");
-                setLogs("Conversion complete.");
+                setOutputCode(result.reports[0] or "# Conversion result");
+                setLogs("✓ Conversion complete.");
             } else {
                 setLogs("Converting Python to Jac...");
                 result = code_processor(source_code=pythonCode, mode="py2jac") spawn root;
-                setOutputCode(result.reports[0] or "// Conversion result");
-                setLogs("Conversion complete.");
+                setOutputCode(result.reports[0] or "# Conversion result");
+                setLogs("✓ Conversion complete.");
             }
             setIsConverting(false);
+        }
+
+        # Debug handlers
+        def onDebug() -> None {
+            setIsDebugging( not isDebugging);
+            setLogs(isDebugging and "Debug mode disabled." or "Debug mode enabled. Set breakpoints in the editor.");
         }
 
         let envReady = props.envReady or true;
@@ -109,86 +164,135 @@ cl {
 
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary">
-                <TopBar 
-                    envReady={envReady} 
-                    mode={mode} 
-                    onModeChange={lambda newMode: any -> None { setMode(newMode); setLogs(""); setOutputCode(""); }}
-                />
-                
-                <ContextToolbar 
-                    mode={mode}
-                    onRun={onRun}
-                    onReset={onReset}
-                    onConvert={onConvert}
-                    isRunning={isRunning}
-                    isConverting={isConverting}
-                />
+                <TopBar envReady={envReady} />
                 
                 <div className="flex-1 flex overflow-hidden">
+                    <ActivityBar
+                        mode={mode}
+                        onModeChange={handleModeChange}
+                        collapsed={activityBarCollapsed}
+                        onToggleCollapse={lambda -> None { setActivityBarCollapsed(not activityBarCollapsed); }}
+                    />
+                    
                     <div className="flex-1 flex flex-col overflow-hidden">
-                        <div className="flex-1 p-3 overflow-hidden min-h-0">
-                            {mode == "jac" and (
-                                <div className="h-full grid grid-cols-2 gap-3">
-                                    <Panel title="Jac Code Editor" subtitle="jac" showActions={false}>
-                                        <CodeEditorWrapper 
-                                            value={jacCode} 
-                                            onChange={lambda v: any -> None { setJacCode(v); }}
-                                            language="python"
-                                            showHeader={false}
+                        {mode == "jac" and (
+                            <WorkspaceTabs
+                                tabs={workspaceTabs}
+                                activeTab={activeTab}
+                                onTabChange={setActiveTab}
+                                onTabClose={lambda id: str -> None { }}
+                            />
+                        )}
+                        
+                        <EditorToolbar
+                            mode={mode}
+                            onRun={onRun}
+                            onReset={onReset}
+                            onConvert={onConvert}
+                            onDebug={onDebug}
+                            isRunning={isRunning}
+                            isConverting={isConverting}
+                            isDebugging={isDebugging}
+                            viewMode={viewMode}
+                            onViewModeChange={setViewMode}
+                        />
+                        
+                        <div className="flex-1 flex overflow-hidden">
+                            <div className="flex-1 overflow-hidden">
+                                {mode == "jac" and (
+                                    <div className="h-full p-3">
+                                        {viewMode == "split" and (
+                                            <div className="h-full grid grid-cols-2 gap-3">
+                                                <div className={cn(
+                                                    "h-full rounded-lg border border-border overflow-hidden bg-surface",
+                                                    activeTab == "editor" and "" or "hidden"
+                                                )}>
+                                                    <CodeEditorWrapper 
+                                                        value={jacCode} 
+                                                        onChange={lambda v: any -> None { setJacCode(v); }}
+                                                        language="python"
+                                                        showHeader={false}
+                                                    />
+                                                </div>
+                                                
+                                                <div className="h-full rounded-lg border border-border overflow-hidden bg-surface">
+                                                    <Visualizer graphData={graphData} showHeader={false} />
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        {viewMode == "maximize" and (
+                                            <div className="h-full rounded-lg border border-border overflow-hidden bg-surface">
+                                                {activeTab == "editor" and (
+                                                    <CodeEditorWrapper 
+                                                        value={jacCode} 
+                                                        onChange={lambda v: any -> None { setJacCode(v); }}
+                                                        language="python"
+                                                        showHeader={false}
+                                                    />
+                                                )}
+                                                {activeTab == "graph" and (
+                                                    <Visualizer graphData={graphData} showHeader={false} />
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                                
+                                {mode == "jac2py" and (
+                                    <div className="h-full p-3">
+                                        <ConversionEditor
+                                            inputTitle="Jac Input"
+                                            outputTitle="Python Output"
+                                            inputLanguage="jac"
+                                            outputLanguage="python"
+                                            inputValue={jacCode}
+                                            outputValue={outputCode}
+                                            onInputChange={lambda v: any -> None { setJacCode(v); }}
+                                            onConvert={onConvert}
                                         />
-                                    </Panel>
-                                    
-                                    <Panel title="Graph Visualizer" subtitle="output" showActions={false}>
-                                        <Visualizer graphData={graphData} showHeader={false} />
-                                    </Panel>
-                                </div>
-                            )}
+                                    </div>
+                                )}
+                                
+                                {mode == "py2jac" and (
+                                    <div className="h-full p-3">
+                                        <ConversionEditor
+                                            inputTitle="Python Input"
+                                            outputTitle="Jac Output"
+                                            inputLanguage="python"
+                                            outputLanguage="jac"
+                                            inputValue={pythonCode}
+                                            outputValue={outputCode}
+                                            onInputChange={lambda v: any -> None { setPythonCode(v); }}
+                                            onConvert={onConvert}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                             
-                            {mode == "jac2py" and (
-                                <ConversionEditor
-                                    inputTitle="Jac Input"
-                                    outputTitle="Python Output"
-                                    inputLanguage="jac"
-                                    outputLanguage="python"
-                                    inputValue={jacCode}
-                                    outputValue={outputCode}
-                                    onInputChange={lambda v: any -> None { setJacCode(v); }}
-                                    onCodeRun={onRun}
-                                />
-                            )}
-                            
-                            {mode == "py2jac" and (
-                                <ConversionEditor
-                                    inputTitle="Python Input"
-                                    outputTitle="Jac Output"
-                                    inputLanguage="python"
-                                    outputLanguage="jac"
-                                    inputValue={pythonCode}
-                                    outputValue={outputCode}
-                                    onInputChange={lambda v: any -> None { setPythonCode(v); }}
-                                    onCodeRun={onRun}
-                                />
-                            )}
+                            <RightPanel
+                                isOpen={rightPanelOpen}
+                                onToggle={lambda -> None { setRightPanelOpen(not rightPanelOpen); }}
+                                examples={examples}
+                                onSelectExample={onSelectExample}
+                                activeSection={rightPanelSection}
+                                onSectionChange={setRightPanelSection}
+                            />
                         </div>
                         
-                        <ResizablePanel 
-                            isHorizontal={true} 
-                            initialSize={20}
-                            minSize={10} 
-                            maxSize={50}
-                            className="border-t border-border"
-                        >
-                            <div className="h-full px-3 pb-3">
-                                <OutputConsole logs={logs} onClear={lambda -> None { setLogs(""); }}/>
-                            </div>
-                        </ResizablePanel>
+                        <DockableConsole
+                            isOpen={consoleOpen}
+                            onToggle={lambda -> None { setConsoleOpen(not consoleOpen); }}
+                            height={consoleHeight}
+                            onHeightChange={setConsoleHeight}
+                            output={output}
+                            errors={errors}
+                            logs={logs}
+                            onClearOutput={lambda -> None { setOutput(""); }}
+                            onClearErrors={lambda -> None { setErrors(""); }}
+                            onClearLogs={lambda -> None { setLogs(""); }}
+                        />
                     </div>
-                    
-                    <Sidebar 
-                        examples={examples}
-                        onSelectExample={onSelectExample}
-                        version="v1.0.0"
-                    />
                 </div>
             </div>
         );

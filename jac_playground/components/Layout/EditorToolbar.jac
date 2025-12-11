@@ -1,0 +1,155 @@
+cl import from react { useState }
+cl import from "lucide-react" { 
+    Play, 
+    RotateCcw, 
+    Bug, 
+    StepForward, 
+    StepBack, 
+    Square,
+    RefreshCw,
+    Loader2,
+    ArrowRightLeft,
+    SplitSquareHorizontal,
+    Maximize2
+}
+cl import from "...lib.utils" { cn }
+
+cl {
+    def EditorToolbar(props: dict) -> any {
+        let mode = props.mode or "jac";
+        let onRun = props.onRun;
+        let onReset = props.onReset;
+        let onConvert = props.onConvert;
+        let onDebug = props.onDebug;
+        let onStepOver = props.onStepOver;
+        let onStepInto = props.onStepInto;
+        let onStop = props.onStop;
+        let isRunning = props.isRunning or false;
+        let isConverting = props.isConverting or false;
+        let isDebugging = props.isDebugging or false;
+        let viewMode = props.viewMode or "split";
+        let onViewModeChange = props.onViewModeChange;
+        
+        let isJacMode = mode == "jac";
+        let isConversionMode = mode == "jac2py" or mode == "py2jac";
+        
+        return (
+            <div className="flex items-center justify-between h-10 px-3 bg-surface/50 border-b border-border">
+                <div className="flex items-center gap-1">
+                    {isJacMode and (
+                        <>
+                            <button
+                                onClick={onRun}
+                                disabled={isRunning}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                                    isRunning 
+                                        and "bg-primary/20 text-primary cursor-wait" 
+                                        or "bg-primary text-white hover:bg-primary/90"
+                                )}
+                            >
+                                {isRunning and (<Loader2 size={14} className="animate-spin" />) or (<Play size={14} />)}
+                                <span>{isRunning and "Running..." or "Run"}</span>
+                            </button>
+                            
+                            <button
+                                onClick={onReset}
+                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-text-secondary hover:bg-background transition-all"
+                            >
+                                <RotateCcw size={14} />
+                                <span>Reset</span>
+                            </button>
+                            
+                            <div className="w-px h-5 bg-border mx-2" />
+                            
+                            <button
+                                onClick={onDebug}
+                                className={cn(
+                                    "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
+                                    isDebugging 
+                                        and "bg-yellow-500/20 text-yellow-600" 
+                                        or "text-text-secondary hover:bg-background"
+                                )}
+                            >
+                                <Bug size={14} />
+                                <span>Debug</span>
+                            </button>
+                            
+                            {isDebugging and (
+                                <>
+                                    <button
+                                        onClick={onStepOver}
+                                        className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-text-secondary hover:bg-background transition-all"
+                                        title="Step Over"
+                                    >
+                                        <StepForward size={14} />
+                                    </button>
+                                    
+                                    <button
+                                        onClick={onStepInto}
+                                        className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-text-secondary hover:bg-background transition-all"
+                                        title="Step Into"
+                                    >
+                                        <StepBack size={14} />
+                                    </button>
+                                    
+                                    <button
+                                        onClick={onStop}
+                                        className="flex items-center gap-1 px-2 py-1.5 rounded-md text-xs text-red-500 hover:bg-red-500/10 transition-all"
+                                        title="Stop"
+                                    >
+                                        <Square size={14} />
+                                    </button>
+                                </>
+                            )}
+                        </>
+                    )}
+                    
+                    {isConversionMode and (
+                        <button
+                            onClick={onConvert}
+                            disabled={isConverting}
+                            className={cn(
+                                "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
+                                isConverting 
+                                    and "bg-primary/20 text-primary cursor-wait" 
+                                    or "bg-primary text-white hover:bg-primary/90"
+                            )}
+                        >
+                            {isConverting and (<Loader2 size={14} className="animate-spin" />) or (<ArrowRightLeft size={14} />)}
+                            <span>{isConverting and "Converting..." or "Convert"}</span>
+                        </button>
+                    )}
+                </div>
+                
+                <div className="flex items-center gap-1">
+                    {isJacMode and (
+                        <>
+                            <button
+                                onClick={lambda -> None { onViewModeChange("split"); }}
+                                className={cn(
+                                    "p-1.5 rounded transition-all",
+                                    viewMode == "split" and "bg-primary/15 text-primary" or "text-text-secondary hover:bg-background"
+                                )}
+                                title="Split View"
+                            >
+                                <SplitSquareHorizontal size={16} />
+                            </button>
+                            
+                            <button
+                                onClick={lambda -> None { onViewModeChange("maximize"); }}
+                                className={cn(
+                                    "p-1.5 rounded transition-all",
+                                    viewMode == "maximize" and "bg-primary/15 text-primary" or "text-text-secondary hover:bg-background"
+                                )}
+                                title="Maximize Editor"
+                            >
+                                <Maximize2 size={16} />
+                            </button>
+                        </>
+                    )}
+                </div>
+            </div>
+        );
+    }
+}
