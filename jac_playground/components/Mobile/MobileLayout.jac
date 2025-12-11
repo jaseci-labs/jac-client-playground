@@ -66,9 +66,21 @@ cl {
             setActivePanel("code");
         }
         
+        def handleNavigateToOutput() -> None {
+            setActivePanel("output");
+        }
+        
         def handleSelectExample(exampleId: str) -> None {
             onSelectExample(exampleId);
             setActivePanel("code");
+        }
+        
+        # Wrap onRun to auto-navigate to output panel after execution
+        async def handleRun(title: str = "") -> None {
+            # Navigate to output panel immediately so user sees "Running..."
+            setActivePanel("output");
+            # Then execute the run
+            await onRun(title);
         }
         
         return (
@@ -101,6 +113,8 @@ cl {
                         codeValue={codeValue}
                         onCodeChange={onCodeChange}
                         outputCode={outputCode}
+                        onRun={handleRun}
+                        isRunning={isRunning}
                         graphData={graphData}
                         output={output}
                         errors={errors}
@@ -119,7 +133,7 @@ cl {
                     <MobileDebugController
                         isDebugging={isDebugging}
                         onToggleDebug={onDebug}
-                        onPlay={onRun}
+                        onPlay={handleRun}
                         onStepOver={onStepOver}
                         onStepIn={onStepInto}
                         onStepOut={onStepOut}
@@ -132,7 +146,7 @@ cl {
                 <MobileFAB
                     mode={mode}
                     activePanel={activePanel}
-                    onRun={onRun}
+                    onRun={handleRun}
                     onConvert={onConvert}
                     isRunning={isRunning}
                     isConverting={isConverting}

@@ -12,6 +12,8 @@ cl {
         let codeValue = props.codeValue or "";
         let onCodeChange = props.onCodeChange;
         let outputCode = props.outputCode or "";
+        let onRun = props.onRun;
+        let isRunning = props.isRunning or false;
         
         # Graph panel props
         let graphData = props.graphData;
@@ -36,6 +38,8 @@ cl {
                     value={codeValue}
                     onChange={onCodeChange}
                     outputValue={outputCode}
+                    onRun={onRun}
+                    isRunning={isRunning}
                 />
             );
         }
