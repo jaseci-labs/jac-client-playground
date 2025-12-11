@@ -1,4 +1,3 @@
-cl import from react { useState }
 cl import from "...lib.utils" { cn }
 cl import from ".MobileBottomNav" { MobileBottomNav }
 cl import from ".MobileFAB" { MobileFAB }
@@ -7,8 +6,9 @@ cl import from ".MobileDebugController" { MobileDebugController }
 cl import from ".MobileModeSwitcher" { MobileModeSwitcher }
 
 cl {
+    
     def MobileLayout(props: dict) -> any {
-        # Core state from parent
+        # Mode
         let mode = props.mode or "jac";
         let onModeChange = props.onModeChange;
         
@@ -16,8 +16,10 @@ cl {
         let jacCode = props.jacCode or "";
         let pythonCode = props.pythonCode or "";
         let outputCode = props.outputCode or "";
+        let codeValue = props.codeValue or (mode == "py2jac" and pythonCode or jacCode);
         let onJacCodeChange = props.onJacCodeChange;
         let onPythonCodeChange = props.onPythonCodeChange;
+        let onCodeChange = mode == "py2jac" and onPythonCodeChange or onJacCodeChange;
         
         # Output state
         let output = props.output or "";
@@ -34,14 +36,14 @@ cl {
         let examples = props.examples or [];
         let onSelectExample = props.onSelectExample;
         
-        # Actions
+        # Execution
         let onRun = props.onRun;
         let onConvert = props.onConvert;
         let onReset = props.onReset;
         let isRunning = props.isRunning or false;
         let isConverting = props.isConverting or false;
         
-        # Debug props
+        # Debug
         let onDebug = props.onDebug;
         let isDebugging = props.isDebugging or false;
         let onStepOver = props.onStepOver;
@@ -49,39 +51,17 @@ cl {
         let onStepOut = props.onStepOut;
         let onStop = props.onStop;
         
-        # Environment status
+        # Environment
         let envReady = props.envReady or true;
         
-        # Mobile-specific state
-        let [activePanel, setActivePanel] = useState("code");
+        # Mobile UI state (from hook)
+        let activePanel = props.activePanel or "code";
+        let onPanelChange = props.onPanelChange;
+        let problemsBadge = props.problemsBadge or 0;
         
-        # Determine which code value to use based on mode
-        let codeValue = mode == "py2jac" and pythonCode or jacCode;
-        let onCodeChange = mode == "py2jac" and onPythonCodeChange or onJacCodeChange;
-        
-        # Calculate badges for bottom nav
-        let problemsBadge = errors != "" and errors.split("\n").length or 0;
-        
-        def handleNavigateToCode() -> None {
-            setActivePanel("code");
-        }
-        
-        def handleNavigateToOutput() -> None {
-            setActivePanel("output");
-        }
-        
-        def handleSelectExample(exampleId: str) -> None {
-            onSelectExample(exampleId);
-            setActivePanel("code");
-        }
-        
-        # Wrap onRun to auto-navigate to output panel after execution
-        async def handleRun(title: str = "") -> None {
-            # Navigate to output panel immediately so user sees "Running..."
-            setActivePanel("output");
-            # Then execute the run
-            await onRun(title);
-        }
+        # Navigation handlers (from hook)
+        let onNavigateToCode = props.onNavigateToCode;
+        let onNavigateToOutput = props.onNavigateToOutput;
         
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary overflow-hidden">
@@ -113,7 +93,7 @@ cl {
                         codeValue={codeValue}
                         onCodeChange={onCodeChange}
                         outputCode={outputCode}
-                        onRun={handleRun}
+                        onRun={onRun}
                         isRunning={isRunning}
                         graphData={graphData}
                         output={output}
@@ -123,9 +103,9 @@ cl {
                         onClearErrors={onClearErrors}
                         onClearLogs={onClearLogs}
                         examples={examples}
-                        onSelectExample={handleSelectExample}
+                        onSelectExample={onSelectExample}
                         onModeChange={onModeChange}
-                        onNavigateToCode={handleNavigateToCode}
+                        onNavigateToCode={onNavigateToCode}
                     />
                 </main>
                 
@@ -133,7 +113,7 @@ cl {
                     <MobileDebugController
                         isDebugging={isDebugging}
                         onToggleDebug={onDebug}
-                        onPlay={handleRun}
+                        onPlay={onRun}
                         onStepOver={onStepOver}
                         onStepIn={onStepInto}
                         onStepOut={onStepOut}
@@ -146,7 +126,7 @@ cl {
                 <MobileFAB
                     mode={mode}
                     activePanel={activePanel}
-                    onRun={handleRun}
+                    onRun={onRun}
                     onConvert={onConvert}
                     isRunning={isRunning}
                     isConverting={isConverting}
@@ -154,7 +134,7 @@ cl {
                 
                 <MobileBottomNav
                     activePanel={activePanel}
-                    onChange={setActivePanel}
+                    onChange={onPanelChange}
                     problemsBadge={problemsBadge}
                 />
             </div>
