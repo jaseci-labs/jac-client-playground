@@ -1,0 +1,60 @@
+cl import from "lucide-react" { Play, ArrowRightLeft, Loader2 }
+cl import from "...lib.utils" { cn }
+
+cl {
+    def MobileFAB(props: dict) -> any {
+        let mode = props.mode or "jac";
+        let activePanel = props.activePanel or "code";
+        let onRun = props.onRun;
+        let onConvert = props.onConvert;
+        let isRunning = props.isRunning or false;
+        let isConverting = props.isConverting or false;
+        
+        # Only show FAB on code panel or mode panel (where actions are needed)
+        let shouldShow = activePanel == "code" or activePanel == "mode";
+        if not shouldShow {
+            return None;
+        }
+        
+        let isJacMode = mode == "jac";
+        let isConversionMode = mode == "jac2py" or mode == "py2jac";
+        let isLoading = isRunning or isConverting;
+        
+        def handlePress() -> None {
+            if isLoading {
+                return None;
+            }
+            if isJacMode and onRun {
+                onRun();
+            } elif isConversionMode and onConvert {
+                onConvert();
+            }
+        }
+        
+        let Icon = isJacMode and Play or ArrowRightLeft;
+        let label = isJacMode and "Run Code" or "Convert";
+        
+        return (
+            <button
+                onClick={handlePress}
+                disabled={isLoading}
+                className={cn(
+                    "fixed bottom-20 right-4 w-14 h-14 rounded-full shadow-lg",
+                    "flex items-center justify-center z-[1000]",
+                    "transition-all duration-200 active:scale-95",
+                    isLoading and "bg-primary/70 cursor-wait" or "bg-primary hover:bg-primary/90",
+                    "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                )}
+                aria-label={label}
+                aria-pressed={isLoading}
+            >
+                {isLoading and (
+                    <Loader2 className="w-6 h-6 text-white animate-spin" />
+                )}
+                {(not isLoading) and (
+                    <Icon className="w-6 h-6 text-white" />
+                )}
+            </button>
+        );
+    }
+}

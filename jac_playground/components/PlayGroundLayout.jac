@@ -2,6 +2,7 @@
 
 cl import from react { useState }
 cl import from "..lib.utils" { cn }
+cl import from "..hooks.useMobile" { useIsMobile }
 cl import from ".TopBar" { TopBar }
 cl import from ".JacWorkspace" { JacWorkspace }
 cl import from ".ConversionEditor" { ConversionEditor }
@@ -9,6 +10,7 @@ cl import from ".Layout.ActivityBar" { ActivityBar }
 cl import from ".Layout.EditorToolbar" { EditorToolbar }
 cl import from ".Layout.RightPanel" { RightPanel }
 cl import from ".Layout.DockableConsole" { DockableConsole }
+cl import from ".Mobile.MobileLayout" { MobileLayout }
 
 cl {
     def PlayGroundLayout(props: dict) -> any {
@@ -151,7 +153,43 @@ cl {
 
         let envReady = props.envReady or true;
         let graphData = props.graphData;
-
+        
+        # Check if mobile viewport
+        let isMobile = useIsMobile();
+        
+        # Render mobile layout for mobile devices
+        if isMobile {
+            return (
+                <MobileLayout
+                    mode={mode}
+                    onModeChange={handleModeChange}
+                    jacCode={jacCode}
+                    pythonCode={pythonCode}
+                    outputCode={outputCode}
+                    onJacCodeChange={lambda v: any -> None { setJacCode(v); }}
+                    onPythonCodeChange={lambda v: any -> None { setPythonCode(v); }}
+                    output={output}
+                    errors={errors}
+                    logs={logs}
+                    onClearOutput={lambda -> None { setOutput(""); }}
+                    onClearErrors={lambda -> None { setErrors(""); }}
+                    onClearLogs={lambda -> None { setLogs(""); }}
+                    graphData={graphData}
+                    examples={examples}
+                    onSelectExample={onSelectExample}
+                    onRun={onRun}
+                    onConvert={onConvert}
+                    isRunning={isRunning}
+                    isConverting={isConverting}
+                    isDebugging={isDebugging}
+                    onDebug={onDebug}
+                    onReset={onReset}
+                    envReady={envReady}
+                />
+            );
+        }
+        
+        # Desktop layout
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary">
                 <TopBar envReady={envReady} />
