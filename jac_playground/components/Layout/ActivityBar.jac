@@ -39,14 +39,14 @@ cl {
             }
         ];
         
-        let bottomItems = [
-            { 
-                "id": "settings", 
-                "icon": Settings, 
-                "label": "Settings",
-                "description": "Playground settings"
-            }
-        ];
+        # let bottomItems = [
+        #     { 
+        #         "id": "settings", 
+        #         "icon": Settings, 
+        #         "label": "Settings",
+        #         "description": "Playground settings"
+        #     }
+        # ];
         
         return (
             <div className={cn(
@@ -92,24 +92,24 @@ cl {
                 </div>
                 
                 <div className="border-t border-border py-2">
-                    {bottomItems.map(lambda item: dict -> any {
-                        let Icon = item["icon"];
+                    # {bottomItems.map(lambda item: dict -> any {
+                    #     let Icon = item["icon"];
                         
-                        return (
-                            <button
-                                key={item["id"]}
-                                className="flex items-center gap-3 px-3 py-2.5 mx-1 rounded-md text-text-secondary hover:bg-primary/10 transition-all"
-                                title={item["description"]}
-                            >
-                                <Icon size={18} />
-                                {not collapsed and (
-                                    <span className="text-sm font-medium">
-                                        {item["label"]}
-                                    </span>
-                                )}
-                            </button>
-                        );
-                    })}
+                    #     return (
+                    #         <button
+                    #             key={item["id"]}
+                    #             className="flex items-center gap-3 px-3 py-2.5 mx-1 rounded-md text-text-secondary hover:bg-primary/10 transition-all"
+                    #             title={item["description"]}
+                    #         >
+                    #             <Icon size={18} />
+                    #             {not collapsed and (
+                    #                 <span className="text-sm font-medium">
+                    #                     {item["label"]}
+                    #                 </span>
+                    #             )}
+                    #         </button>
+                    #     );
+                    # })}
                     
                     <button
                         onClick={onToggleCollapse}

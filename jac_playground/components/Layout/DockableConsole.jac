@@ -6,7 +6,7 @@ cl import from "lucide-react" {
     ChevronUp, 
     ChevronDown,
     X,
-    Trash2,
+    Eraser,
     Maximize2,
     Minimize2
 }
@@ -150,7 +150,7 @@ cl {
                                 className="p-1 text-text-secondary hover:text-text-primary transition-colors"
                                 title="Clear"
                             >
-                                <Trash2 size={12} />
+                                <Eraser size={12} />
                             </button>
                         )}
                         

@@ -58,13 +58,13 @@ cl {
                         <HelpCircle size={16} />
                     </button>
                     
-                    <button
-                        onClick={onOpenSettings}
-                        className="p-1.5 text-text-secondary hover:text-text-primary hover:bg-background rounded transition-colors"
-                        title="Settings"
-                    >
-                        <Settings size={16} />
-                    </button>
+                    # <button
+                    #     onClick={onOpenSettings}
+                    #     className="p-1.5 text-text-secondary hover:text-text-primary hover:bg-background rounded transition-colors"
+                    #     title="Settings"
+                    # >
+                    #     <Settings size={16} />
+                    # </button>
                 </div>
             </header>
         );
