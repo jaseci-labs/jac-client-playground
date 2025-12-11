@@ -249,7 +249,7 @@ cl {
                                             inputValue={jacCode}
                                             outputValue={outputCode}
                                             onInputChange={lambda v: any -> None { setJacCode(v); }}
-                                            onConvert={onConvert}
+                                            onCodeRun={onRun}
                                         />
                                     </div>
                                 )}
@@ -264,7 +264,7 @@ cl {
                                             inputValue={pythonCode}
                                             outputValue={outputCode}
                                             onInputChange={lambda v: any -> None { setPythonCode(v); }}
-                                            onConvert={onConvert}
+                                            onCodeRun={onRun}
                                         />
                                     </div>
                                 )}
