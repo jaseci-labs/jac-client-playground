@@ -1,11 +1,9 @@
 
 
 cl import from react { useState }
-cl import from "lucide-react" { Maximize2, Minimize2 }
 cl import from "..lib.utils" { cn }
 cl import from ".TopBar" { TopBar }
-cl import from ".CodeEditorWrapper" { CodeEditorWrapper }
-cl import from ".Visualizer" { Visualizer }
+cl import from ".JacWorkspace" { JacWorkspace }
 cl import from ".ConversionEditor" { ConversionEditor }
 cl import from ".Layout.ActivityBar" { ActivityBar }
 cl import from ".Layout.EditorToolbar" { EditorToolbar }
@@ -34,9 +32,6 @@ cl {
         let [rightPanelSection, setRightPanelSection] = useState("examples");
         let [consoleOpen, setConsoleOpen] = useState(true);
         let [consoleHeight, setConsoleHeight] = useState(200);
-        
-        # Panel maximize state for Jac mode (null = split view, "editor" = editor full, "graph" = graph full)
-        let [maximizedPanel, setMaximizedPanel] = useState("editor");
 
         # Example Jac code snippets
         let examples = [
@@ -185,62 +180,11 @@ cl {
                             <div className="flex-1 overflow-hidden">
                                 {mode == "jac" and (
                                     <div className="h-full p-3">
-                                        <div className="h-full flex gap-3">
-                                            {( maximizedPanel == "editor") and (
-                                                <div className={cn(
-                                                    "h-full rounded-lg border border-border overflow-hidden bg-surface flex flex-col",
-                                                    maximizedPanel == "editor" and "flex-1" or "w-1/2"
-                                                )}>
-                                                    <div className="h-8 px-3 flex items-center justify-between border-b border-border bg-surface-hover">
-                                                        <span className="text-xs font-medium text-text-secondary">Editor</span>
-                                                        <button
-                                                            onClick={lambda -> None { setMaximizedPanel("graph"); }}
-                                                            className="p-1 hover:bg-surface rounded text-text-secondary hover:text-text-primary"
-                                                        >
-                                                            {maximizedPanel == "editor" and (
-                                                                <Minimize2 className="w-3.5 h-3.5" />
-                                                            )}
-                                                            {maximizedPanel != "editor" and (
-                                                                <Maximize2 className="w-3.5 h-3.5" />
-                                                            )}
-                                                        </button>
-                                                    </div>
-                                                    <div className="flex-1 overflow-hidden">
-                                                        <CodeEditorWrapper 
-                                                            value={jacCode} 
-                                                            onChange={lambda v: any -> None { setJacCode(v); }}
-                                                            language="python"
-                                                            showHeader={false}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            )}
-                                            
-                                            {( maximizedPanel == "graph") and (
-                                                <div className={cn(
-                                                    "h-full rounded-lg border border-border overflow-hidden bg-surface flex flex-col",
-                                                    maximizedPanel == "graph" and "flex-1" or "w-1/2"
-                                                )}>
-                                                    <div className="h-8 px-3 flex items-center justify-between border-b border-border bg-surface-hover">
-                                                        <span className="text-xs font-medium text-text-secondary">Graph Visualizer</span>
-                                                        <button
-                                                            onClick={lambda -> None { setMaximizedPanel("editor"); }}
-                                                            className="p-1 hover:bg-surface rounded text-text-secondary hover:text-text-primary"
-                                                        >
-                                                            {maximizedPanel == "graph" and (
-                                                                <Minimize2 className="w-3.5 h-3.5" />
-                                                            )}
-                                                            {maximizedPanel != "graph" and (
-                                                                <Maximize2 className="w-3.5 h-3.5" />
-                                                            )}
-                                                        </button>
-                                                    </div>
-                                                    <div className="flex-1 overflow-hidden">
-                                                        <Visualizer graphData={graphData} showHeader={false} />
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
+                                        <JacWorkspace
+                                            value={jacCode}
+                                            onChange={lambda v: any -> None { setJacCode(v); }}
+                                            graphData={graphData}
+                                        />
                                     </div>
                                 )}
                                 
