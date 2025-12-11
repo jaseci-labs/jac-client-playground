@@ -2,7 +2,7 @@
 cl import from react { useState, useEffect }
 
 cl import from ..components.button { Button }
-cl import from ..components.code_editor { CodeEditor }
+cl import from ..components.CodeEditor { CodeEditor }
 cl import from ..components.output_pannel { OutputPanel }
 cl import from ..components.mode_selector { ModeSelector }
 cl import from ..components.resizable_panel { ResizablePanel }
