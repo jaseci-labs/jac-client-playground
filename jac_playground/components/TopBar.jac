@@ -12,9 +12,7 @@ cl {
 
         return <header className="w-full flex items-center gap-4 px-4 py-3 bg-background border-b border-border">
             <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-md bg-primary text-primary-foreground flex items-center justify-center font-bold text-lg">
-                    J
-                </div>
+                <img src="/static/assets/jaseci.png" className="w-8 h-8 mr-2" />
                 <div className="text-sm font-semibold text-text-primary">
                     Jac Playground
                 </div>
