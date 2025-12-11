@@ -1,6 +1,6 @@
 
 
-cl import from react { useState }
+cl import from react { useState, useEffect }
 cl import from "..lib.utils" { cn }
 cl import from "..hooks.useMobile" { useIsMobile }
 cl import from ".TopBar" { TopBar }
@@ -24,6 +24,7 @@ cl {
         let [output, setOutput] = useState("");
         let [errors, setErrors] = useState("");
         let [logs, setLogs] = useState("");
+        let [examples, setExamples] = useState([]);
         
         # UI state
         let [isRunning, setIsRunning] = useState(false);
@@ -35,45 +36,13 @@ cl {
         let [consoleOpen, setConsoleOpen] = useState(true);
         let [consoleHeight, setConsoleHeight] = useState(200);
 
-        # Example Jac code snippets
-        let examples = [
-            { 
-                "id": "hello", 
-                "title": "Hello World", 
-                "category": "Basics",
-                "code": "with entry {\n    print(\"Hello, World!\");\n}"
-            },
-            { 
-                "id": "walker", 
-                "title": "Simple Walker", 
-                "category": "Walkers",
-                "code": "node Person {\n    has name: str;\n}\n\nwalker greet {\n    can say_hello with Person entry {\n        print(f\"Hello, {here.name}!\");\n    }\n}\n\nwith entry {\n    p = Person(name=\"Alice\");\n    greet() spawn p;\n}"
-            },
-            { 
-                "id": "graph", 
-                "title": "Graph Example", 
-                "category": "Graphs",
-                "code": "node City {\n    has name: str;\n}\n\nedge Road {\n    has distance: int;\n}\n\nwith entry {\n    a = City(name=\"New York\");\n    b = City(name=\"Boston\");\n    a ++> Road(distance=200) ++> b;\n    print(\"Graph created!\");\n}"
-            },
-            { 
-                "id": "ability", 
-                "title": "Node Abilities", 
-                "category": "Abilities",
-                "code": "node Counter {\n    has count: int = 0;\n    \n    can increment {\n        self.count += 1;\n        print(f\"Count: {self.count}\");\n    }\n}\n\nwith entry {\n    c = Counter();\n    c.increment();\n    c.increment();\n}"
-            },
-            { 
-                "id": "edges", 
-                "title": "Edge Traversal", 
-                "category": "Graphs",
-                "code": "node Room {\n    has name: str;\n}\n\nedge Door {}\n\nwalker Explorer {\n    can explore with Room entry {\n        print(f\"Visiting: {here.name}\");\n        visit [-->];\n    }\n}\n\nwith entry {\n    r1 = Room(name=\"Living Room\");\n    r2 = Room(name=\"Kitchen\");\n    r3 = Room(name=\"Bedroom\");\n    r1 ++> Door ++> r2 ++> Door ++> r3;\n    Explorer() spawn r1;\n}"
-            },
-            { 
-                "id": "filter", 
-                "title": "Filter Walker", 
-                "category": "Walkers",
-                "code": "node Item {\n    has name: str;\n    has price: float;\n}\n\nwalker ShowExpensive {\n    can check with Item entry {\n        if here.price > 50 {\n            print(f\"{here.name}: ${here.price}\");\n        }\n    }\n}\n\nwith entry {\n    items = [\n        Item(name=\"Book\", price=25.0),\n        Item(name=\"Laptop\", price=999.0),\n        Item(name=\"Coffee\", price=5.0)\n    ];\n    for item in items {\n        ShowExpensive() spawn item;\n    }\n}"
+        useEffect(lambda -> None {
+            async def loadExamples() -> None {
+                loaded_examples = load_example_list() spawn root;
+                setExamples(loaded_examples.reports[0] or []);
             }
-        ];
+            loadExamples();
+        }, []);
 
         # Handle example selection
         def onSelectExample(exampleId: str) -> None {
