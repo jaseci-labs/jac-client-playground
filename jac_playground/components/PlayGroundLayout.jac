@@ -75,7 +75,7 @@ cl {
             } elif title == "Jac Output" {
                 result = code_processor(source_code=outputCode, mode="jacrun") spawn root;
             } else {
-                result = ["Error code Execution"];
+                result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
             }
             setLogs(result.reports[0] or "Execution complete.");
             setIsRunning(false);
