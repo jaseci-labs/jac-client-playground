@@ -70,7 +70,7 @@ cl {
                                     className="p-1.5 hover:bg-surface rounded text-text-secondary hover:text-text-primary transition-colors"
                                     title={copied and "Copied!" or "Copy Code"}
                                 >
-                                    {copied and (<Check className="w-3.5 h-3.5 text-green-500" />)}
+                                    {copied and (<Check className="w-3.5 h-3.5 text-success" />)}
                                     {(not copied) and (<Copy className="w-3.5 h-3.5" />)}
                                 </button>
                             </>

@@ -1,10 +1,13 @@
 cl import from "..lib.utils" { cn }
 cl import from "lucide-react" { Search, Settings, User, HelpCircle, Github }
 cl import from ".ui.Badge" { Badge }
+cl import from ".ui.ThemeToggle" { ThemeToggle }
 
 cl {
     def TopBar(props:dict) -> any {
         let envReady = props.envReady or true;
+        let theme = props.theme or "light";
+        let onToggleTheme = props.onToggleTheme;
         let onOpenSettings = props.onOpenSettings;
         let onOpenHelp = props.onOpenHelp;
 
@@ -57,6 +60,12 @@ cl {
                     >
                         <HelpCircle size={16} />
                     </button>
+                    
+                    <ThemeToggle 
+                        theme={theme} 
+                        onToggleTheme={onToggleTheme}
+                        className="p-1.5"
+                    />
                     
                     # <button
                     #     onClick={onOpenSettings}

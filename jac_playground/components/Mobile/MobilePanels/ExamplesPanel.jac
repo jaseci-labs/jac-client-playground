@@ -140,7 +140,7 @@ cl {
                                 </button>
                                 <button
                                     onClick={handleInsert}
-                                    className="flex-1 py-3 rounded-lg bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+                                    className="flex-1 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
                                 >
                                     <Plus className="w-4 h-4" />
                                     Insert Code

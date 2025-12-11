@@ -79,7 +79,7 @@ cl {
                                 className="p-2 rounded-md text-text-secondary hover:bg-background transition-colors"
                                 aria-label={copiedInput and "Copied!" or "Copy code"}
                             >
-                                {copiedInput and (<Check className="w-4 h-4 text-green-500" />)}
+                                {copiedInput and (<Check className="w-4 h-4 text-success" />)}
                                 {(not copiedInput) and (<Copy className="w-4 h-4" />)}
                             </button>
                         </div>
@@ -92,7 +92,7 @@ cl {
                             language={editorLanguage}
                             value={value}
                             onChange={onChange}
-                            theme="vs-light"
+                            theme={props.editorTheme or "vs-light"}
                             options={{
                                 "fontSize": 14,
                                 "minimap": {"enabled": false},
@@ -143,7 +143,7 @@ cl {
                                 className="p-2 rounded-md text-text-secondary hover:bg-background transition-colors"
                                 aria-label={copiedInput and "Copied!" or "Copy code"}
                             >
-                                {copiedInput and (<Check className="w-4 h-4 text-green-500" />)}
+                                {copiedInput and (<Check className="w-4 h-4 text-success" />)}
                                 {(not copiedInput) and (<Copy className="w-4 h-4" />)}
                             </button>
                         </div>
@@ -156,7 +156,7 @@ cl {
                             language={editorLanguage}
                             value={value}
                             onChange={onChange}
-                            theme="vs-light"
+                            theme={props.editorTheme or "vs-light"}
                             options={{
                                 "fontSize": 14,
                                 "minimap": {"enabled": false},
@@ -203,7 +203,7 @@ cl {
                                 aria-label={copiedOutput and "Copied!" or "Copy code"}
                                 disabled={not hasOutput}
                             >
-                                {copiedOutput and (<Check className="w-4 h-4 text-green-500" />)}
+                                {copiedOutput and (<Check className="w-4 h-4 text-success" />)}
                                 {(not copiedOutput) and (<Copy className={cn("w-4 h-4", (not hasOutput) and "opacity-30")} />)}
                             </button>
                         </div>
@@ -216,7 +216,7 @@ cl {
                                 width="100%"
                                 language={isJac2Py and "python" or "python"}
                                 value={outputValue}
-                                theme="vs-light"
+                                theme={props.editorTheme or "vs-light"}
                                 options={{
                                     "fontSize": 14,
                                     "minimap": {"enabled": false},

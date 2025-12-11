@@ -47,7 +47,7 @@ cl {
                             <div className="relative">
                                 <Icon className="w-5 h-5" />
                                 {hasBadge and (
-                                    <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
+                                    <span className="absolute -top-1 -right-1 min-w-[16px] h-4 px-1 bg-error text-error-foreground text-[10px] rounded-full flex items-center justify-center">
                                         {badge > 99 and "99+" or badge}
                                     </span>
                                 )}

@@ -11,6 +11,7 @@
   /* Backgrounds */
   --color-background: #f0eeea;
   --color-surface: #ffffff;
+  --color-surface-hover: #f5f5f5;
 
   /* Text */
   --color-text-primary: #273f4f;
@@ -22,11 +23,48 @@
   /* Utility */
   --color-black: #000000;
 
-  /* --color-panel: #ffffff;
-  --color-panel-foreground: #273f4f; */
+  /* Console/Terminal */
+  --color-console: #1e1e1e;
+  --color-console-text: #d4d4d4;
 
-  /* Optional states (don’t pretend your palette covers these) */
+  /* Semantic Colors */
   --color-success: #4caf50;
+  --color-success-foreground: #ffffff;
   --color-warning: #ff9800;
+  --color-warning-foreground: #000000;
   --color-error: #f44336;
+  --color-error-foreground: #ffffff;
+}
+
+/* Dark Mode */
+.dark {
+  --color-primary: #ff8a5c;
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: #4a6b7c;
+  --color-secondary-foreground: #ffffff;
+
+  /* Backgrounds */
+  --color-background: #1a1a1a;
+  --color-surface: #252525;
+  --color-surface-hover: #2d2d2d;
+
+  /* Text */
+  --color-text-primary: #e5e5e5;
+  --color-text-secondary: #a0a0a0;
+
+  /* Borders */
+  --color-border: #3d3d3d;
+
+  /* Console/Terminal */
+  --color-console: #0d0d0d;
+  --color-console-text: #d4d4d4;
+
+  /* Semantic Colors - slightly brighter for dark mode */
+  --color-success: #66bb6a;
+  --color-success-foreground: #000000;
+  --color-warning: #ffb74d;
+  --color-warning-foreground: #000000;
+  --color-error: #ef5350;
+  --color-error-foreground: #ffffff;
 }

@@ -113,20 +113,20 @@ cl {
                             
                             <button
                                 onClick={onRestart}
-                                className="flex flex-col items-center gap-1 p-2 rounded-lg bg-yellow-500/10 hover:bg-yellow-500/20 transition-colors"
+                                className="flex flex-col items-center gap-1 p-2 rounded-lg bg-warning/10 hover:bg-warning/20 transition-colors"
                                 aria-label="Restart"
                             >
-                                <RotateCw className="w-5 h-5 text-yellow-600" />
-                                <span className="text-[10px] text-yellow-600 font-medium">Restart</span>
+                                <RotateCw className="w-5 h-5 text-warning" />
+                                <span className="text-[10px] text-warning font-medium">Restart</span>
                             </button>
                             
                             <button
                                 onClick={onStop}
-                                className="flex flex-col items-center gap-1 p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition-colors"
+                                className="flex flex-col items-center gap-1 p-2 rounded-lg bg-error/10 hover:bg-error/20 transition-colors"
                                 aria-label="Stop"
                             >
-                                <Square className="w-5 h-5 text-red-500" />
-                                <span className="text-[10px] text-red-500 font-medium">Stop</span>
+                                <Square className="w-5 h-5 text-error" />
+                                <span className="text-[10px] text-error font-medium">Stop</span>
                             </button>
                         </div>
                         
@@ -142,10 +142,10 @@ cl {
                 {(not isExpanded) and (
                     <button
                         onClick={lambda -> None { setIsExpanded(true); }}
-                        className="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center"
+                        className="w-10 h-10 rounded-xl bg-warning/20 flex items-center justify-center"
                         aria-label="Expand Debug Controls"
                     >
-                        <Bug className="w-5 h-5 text-yellow-600" />
+                        <Bug className="w-5 h-5 text-warning" />
                     </button>
                 )}
             </div>

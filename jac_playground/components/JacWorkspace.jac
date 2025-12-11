@@ -59,7 +59,7 @@ cl {
                                     language="python"
                                     value={value}
                                     onChange={onChange}
-                                    theme="vs-light"
+                                    theme={props.editorTheme or "vs-light"}
                                     options={{
                                         "fontSize": 14,
                                         "minimap": {"enabled": false},

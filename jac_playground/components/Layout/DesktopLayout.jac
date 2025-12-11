@@ -10,6 +10,11 @@ cl import from ".DockableConsole" { DockableConsole }
 cl {
     
     def DesktopLayout(props: dict) -> any {
+        # Theme
+        let theme = props.theme or "light";
+        let editorTheme = props.editorTheme or "vs-light";
+        let onToggleTheme = props.onToggleTheme;
+        
         # Mode
         let mode = props.mode or "jac";
         let onModeChange = props.onModeChange;
@@ -60,7 +65,11 @@ cl {
         
         return (
             <div className="h-screen flex flex-col bg-background text-text-primary">
-                <TopBar envReady={envReady} />
+                <TopBar 
+                    envReady={envReady}
+                    theme={theme}
+                    onToggleTheme={onToggleTheme}
+                />
                 
                 <div className="flex-1 flex overflow-hidden">
                     <ActivityBar
@@ -90,6 +99,7 @@ cl {
                                             value={jacCode}
                                             onChange={onJacCodeChange}
                                             graphData={graphData}
+                                            editorTheme={editorTheme}
                                         />
                                     </div>
                                 )}
@@ -105,6 +115,7 @@ cl {
                                             outputValue={outputCode}
                                             onInputChange={onJacCodeChange}
                                             onCodeRun={onRun}
+                                            editorTheme={editorTheme}
                                         />
                                     </div>
                                 )}
@@ -120,6 +131,7 @@ cl {
                                             outputValue={outputCode}
                                             onInputChange={onPythonCodeChange}
                                             onCodeRun={onRun}
+                                            editorTheme={editorTheme}
                                         />
                                     </div>
                                 )}

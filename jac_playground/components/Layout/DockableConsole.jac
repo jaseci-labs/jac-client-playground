@@ -79,7 +79,7 @@ cl {
                                 <Icon size={12} />
                                 <span>{tab["label"]}</span>
                                 {hasBadge and (
-                                    <span className="px-1 py-0.5 bg-red-500 text-white text-[10px] rounded-full min-w-[16px] text-center">
+                                    <span className="px-1 py-0.5 bg-error text-error-foreground text-[10px] rounded-full min-w-[16px] text-center">
                                         {badgeValue}
                                     </span>
                                 )}
@@ -134,7 +134,7 @@ cl {
                                     <Icon size={12} />
                                     <span>{tab["label"]}</span>
                                     {hasBadge and (
-                                        <span className="px-1 py-0.5 bg-red-500 text-white text-[10px] rounded-full min-w-[14px] text-center">
+                                        <span className="px-1 py-0.5 bg-error text-error-foreground text-[10px] rounded-full min-w-[14px] text-center">
                                             {tab["badge"]}
                                         </span>
                                     )}

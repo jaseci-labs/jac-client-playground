@@ -39,7 +39,7 @@ cl {
                                     "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
                                     isRunning 
                                         and "bg-primary/20 text-primary cursor-wait" 
-                                        or "bg-primary text-white hover:bg-primary/90"
+                                        or "bg-primary text-primary-foreground hover:bg-primary/90"
                                 )}
                             >
                                 {isRunning and (<Loader2 size={14} className="animate-spin" />) or (<Play size={14} />)}
@@ -61,7 +61,7 @@ cl {
                                 className={cn(
                                     "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
                                     isDebugging 
-                                        and "bg-yellow-500/20 text-yellow-600" 
+                                        and "bg-warning/20 text-warning" 
                                         or "text-text-secondary hover:bg-background"
                                 )}
                             >
@@ -91,7 +91,7 @@ cl {
                                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
                                 isConverting 
                                     and "bg-primary/20 text-primary cursor-wait" 
-                                    or "bg-primary text-white hover:bg-primary/90"
+                                    or "bg-primary text-primary-foreground hover:bg-primary/90"
                             )}
                         >
                             {isConverting and (<Loader2 size={14} className="animate-spin" />) or (<ArrowRightLeft size={14} />)}

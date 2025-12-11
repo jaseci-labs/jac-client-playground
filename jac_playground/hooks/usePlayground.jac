@@ -7,6 +7,9 @@ cl {
         # CORE STATE
         # ===========================================
         
+        # Theme state
+        let [theme, setTheme] = useState("light");
+        
         # Mode state
         let [mode, setMode] = useState("jac");
         
@@ -49,6 +52,9 @@ cl {
         # Determine which code value to use based on mode
         let codeValue = mode == "py2jac" and pythonCode or jacCode;
         
+        # Calculate Monaco editor theme based on app theme
+        let editorTheme = theme == "dark" and "vs-dark" or "vs-light";
+        
         # Calculate badges for problems
         let problemsBadge = errors != "" and errors.split("\n").length or 0;
         
@@ -65,6 +71,15 @@ cl {
             loadExamples();
         }, []);
         
+        # Apply theme class to document
+        useEffect(lambda -> None {
+            if theme == "dark" {
+                document.documentElement.classList.add("dark");
+            } else {
+                document.documentElement.classList.remove("dark");
+            }
+        }, [theme]);
+        
         # ===========================================
         # HANDLERS - Business Logic
         # ===========================================
@@ -75,6 +90,11 @@ cl {
             setOutput("");
             setErrors("");
             setOutputCode("");
+        }
+        
+        # Handle theme toggle
+        def handleToggleTheme() -> None {
+            setTheme(theme == "dark" and "light" or "dark");
         }
         
         # Handle example selection
@@ -208,6 +228,11 @@ cl {
         # ===========================================
         
         return {
+            # Theme
+            "theme": theme,
+            "editorTheme": editorTheme,
+            "onToggleTheme": handleToggleTheme,
+            
             # Mode
             "mode": mode,
             "onModeChange": handleModeChange,

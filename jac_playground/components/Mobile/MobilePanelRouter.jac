@@ -7,6 +7,7 @@ cl {
     def MobilePanelRouter(props: dict) -> any {
         let activePanel = props.activePanel or "code";
         let mode = props.mode or "jac";
+        let editorTheme = props.editorTheme or "vs-light";
         
         # Code panel props
         let codeValue = props.codeValue or "";
@@ -40,6 +41,7 @@ cl {
                     outputValue={outputCode}
                     onRun={onRun}
                     isRunning={isRunning}
+                    editorTheme={editorTheme}
                 />
             );
         }

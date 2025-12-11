@@ -20,8 +20,8 @@ cl {
         
         let variantClasses = {
             "default": "text-text-secondary hover:bg-background hover:text-text-primary",
-            "danger": "text-red-500 hover:bg-red-500/10",
-            "warning": "text-yellow-600 hover:bg-yellow-500/10",
+            "danger": "text-error hover:bg-error/10",
+            "warning": "text-warning hover:bg-warning/10",
             "primary": "text-primary hover:bg-primary/10"
         };
         

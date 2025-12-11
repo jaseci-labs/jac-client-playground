@@ -69,9 +69,9 @@ cl {
         let variantClasses = 
             variant == "primary" and "bg-primary text-primary-foreground" or
             variant == "secondary" and "bg-secondary text-secondary-foreground" or
-            variant == "success" and "bg-success text-white" or
-            variant == "warning" and "bg-warning text-black" or
-            variant == "error" and "bg-error text-white" or
+            variant == "success" and "bg-success text-success-foreground" or
+            variant == "warning" and "bg-warning text-warning-foreground" or
+            variant == "error" and "bg-error text-error-foreground" or
             "bg-surface text-text-secondary border border-border";
 
         return (

@@ -46,7 +46,7 @@ cl {
                                     <Icon className="w-3.5 h-3.5" />
                                     <span>{tab["label"]}</span>
                                     {hasBadge and (
-                                        <span className="px-1.5 py-0.5 bg-red-500 text-white text-[10px] rounded-full min-w-[18px] text-center">
+                                        <span className="px-1.5 py-0.5 bg-error text-error-foreground text-[10px] rounded-full min-w-[18px] text-center">
                                             {badge}
                                         </span>
                                     )}
@@ -67,13 +67,13 @@ cl {
                 </div>
                 
                 <div 
-                    className="flex-1 overflow-auto p-3 bg-[#1e1e1e] font-mono text-sm"
+                    className="flex-1 overflow-auto p-3 bg-console font-mono text-sm"
                     role="tabpanel"
                 >
                     {activeTabData and activeTabData["content"] and (
                         <pre className={cn(
                             "whitespace-pre-wrap break-words",
-                            activeTab == "problems" and "text-red-400" or "text-green-400"
+                            activeTab == "problems" and "text-error" or "text-console-text"
                         )}>
                             {activeTabData["content"]}
                         </pre>
@@ -81,7 +81,7 @@ cl {
                     
                     {activeTabData and (not activeTabData["content"]) and (
                         <div className="h-full flex items-center justify-center">
-                            <p className="text-gray-500 text-center">
+                            <p className="text-text-secondary text-center">
                                 {activeTab == "output" and "No output yet. Run your code to see results."}
                                 {activeTab == "problems" and "No problems detected."}
                                 {activeTab == "logs" and "No logs available."}

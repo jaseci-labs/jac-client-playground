@@ -49,10 +49,10 @@ cl {
                 aria-pressed={isLoading}
             >
                 {isLoading and (
-                    <Loader2 className="w-6 h-6 text-white animate-spin" />
+                    <Loader2 className="w-6 h-6 text-primary-foreground animate-spin" />
                 )}
                 {(not isLoading) and (
-                    <Icon className="w-6 h-6 text-white" />
+                    <Icon className="w-6 h-6 text-primary-foreground" />
                 )}
             </button>
         );

@@ -29,7 +29,7 @@ cl {
                         language={inputLanguage == "jac" and "python" or inputLanguage}
                         value={inputValue}
                         onChange={onInputChange}
-                        theme="vs-light"
+                        theme={props.editorTheme or "vs-light"}
                         options={{
                             "fontSize": 14,
                             "minimap": {"enabled": false},
@@ -52,7 +52,7 @@ cl {
                         width="100%"
                         language={outputLanguage == "jac" and "python" or outputLanguage}
                         value={outputValue}
-                        theme="vs-light"
+                        theme={props.editorTheme or "vs-light"}
                         options={{
                             "fontSize": 14,
                             "minimap": {"enabled": false},

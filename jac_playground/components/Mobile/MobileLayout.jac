@@ -4,10 +4,16 @@ cl import from ".MobileFAB" { MobileFAB }
 cl import from ".MobilePanelRouter" { MobilePanelRouter }
 cl import from ".MobileDebugController" { MobileDebugController }
 cl import from ".MobileModeSwitcher" { MobileModeSwitcher }
+cl import from "..ui.ThemeToggle" { ThemeToggle }
 
 cl {
     
     def MobileLayout(props: dict) -> any {
+        # Theme
+        let theme = props.theme or "light";
+        let editorTheme = props.editorTheme or "vs-light";
+        let onToggleTheme = props.onToggleTheme;
+        
         # Mode
         let mode = props.mode or "jac";
         let onModeChange = props.onModeChange;
@@ -77,9 +83,15 @@ cl {
                             onModeChange={onModeChange}
                         />
                         
+                        <ThemeToggle
+                            theme={theme}
+                            onToggleTheme={onToggleTheme}
+                            className="p-1.5"
+                        />
+                        
                         <div className={cn(
                             "px-2 py-0.5 rounded-full text-xs font-medium",
-                            envReady and "bg-green-500/15 text-green-600" or "bg-gray-200 text-gray-600"
+                            envReady and "bg-success/15 text-success" or "bg-border text-text-secondary"
                         )}>
                             {envReady and "Ready" or "..."}
                         </div>
@@ -106,6 +118,7 @@ cl {
                         onSelectExample={onSelectExample}
                         onModeChange={onModeChange}
                         onNavigateToCode={onNavigateToCode}
+                        editorTheme={editorTheme}
                     />
                 </main>
                 

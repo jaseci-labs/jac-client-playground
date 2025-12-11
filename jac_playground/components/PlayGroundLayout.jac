@@ -16,6 +16,9 @@ cl {
         if isMobile {
             return (
                 <MobileLayout
+                    theme={playground.theme}
+                    editorTheme={playground.editorTheme}
+                    onToggleTheme={playground.onToggleTheme}
                     mode={playground.mode}
                     onModeChange={playground.onModeChange}
                     jacCode={playground.jacCode}
@@ -53,6 +56,9 @@ cl {
         # Desktop layout
         return (
             <DesktopLayout
+                theme={playground.theme}
+                editorTheme={playground.editorTheme}
+                onToggleTheme={playground.onToggleTheme}
                 mode={playground.mode}
                 onModeChange={playground.onModeChange}
                 jacCode={playground.jacCode}
