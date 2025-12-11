@@ -4,11 +4,9 @@ import from .components.PlayGroundLayout { PlayGroundLayout }
 
 
 def app() -> None {
-    return 
-        
+    return (
         <main>
             <PlayGroundLayout />
-            # <Index />
-        </main>;
-    
+        </main>
+    );
 }

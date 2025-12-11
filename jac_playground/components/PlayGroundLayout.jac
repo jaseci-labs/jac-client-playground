@@ -50,7 +50,6 @@ cl {
                 if ex["id"] == exampleId {
                     setJacCode(ex["code"]);
                     setMode("jac");
-                    setActiveTab("editor");
                     setLogs(f"✓ Loaded example: {ex['title']}");
                 }
             }
