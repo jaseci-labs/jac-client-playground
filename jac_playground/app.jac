@@ -130,7 +130,7 @@ walker load_graph {
 
     can load with `root entry {
         with tempfile.NamedTemporaryFile(suffix=".jac", delete=False) as f {
-            f.write(code.encode("utf-8"));
+            f.write(self.source_code.encode("utf-8"));
             temp_path = f.name;
         }
         run(temp_path);
