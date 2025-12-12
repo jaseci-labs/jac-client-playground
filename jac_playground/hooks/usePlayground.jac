@@ -62,6 +62,17 @@ cl {
         # EFFECTS
         # ===========================================
         
+        # Inject viewport meta tag for proper mobile rendering
+        useEffect(lambda -> None {
+            let existingViewport = document.querySelector("meta[name='viewport']");
+            if not existingViewport {
+                let meta = document.createElement("meta");
+                meta.name = "viewport";
+                meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+                document.head.appendChild(meta);
+            }
+        }, []);
+        
         # Load examples on mount
         useEffect(lambda -> None {
             async def loadExamples() -> None {
@@ -86,6 +97,14 @@ cl {
         
         # Handle mode change
         def handleModeChange(newMode: str) -> None {
+            # Clear conversion inputs when switching between conversion modes
+            # This prevents stale data from showing in the wrong input field
+            if newMode == "py2jac" {
+                setOutputCode("");
+                setJacCode("");
+                setPythonCode("");  # Clear Python input when entering py2jac
+            } 
+            
             setMode(newMode);
             setOutput("");
             setErrors("");

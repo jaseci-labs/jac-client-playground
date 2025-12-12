@@ -1,5 +1,5 @@
 cl import from react { useState }
-cl import from "lucide-react" { FileCode, FileOutput, Play, Copy, Check, Loader2 }
+cl import from "lucide-react" { FileCode, FileOutput, Play, Copy, Check, Loader2, Maximize2, Minimize2 }
 cl import from "....lib.utils" { cn }
 cl import from "@monaco-editor/react" { Editor }
 
@@ -15,6 +15,7 @@ cl {
         
         let [copiedInput, setCopiedInput] = useState(false);
         let [copiedOutput, setCopiedOutput] = useState(false);
+        let [expandedPanel, setExpandedPanel] = useState("none");  # "none" | "input" | "output"
         
         # Determine what to show based on mode
         let isJacMode = mode == "jac";
@@ -61,6 +62,15 @@ cl {
                     onRun("Jac Output");
                 }
             }
+        }
+        
+        # Toggle expand for input/output panels
+        def toggleExpandInput() -> None {
+            setExpandedPanel(expandedPanel == "input" and "none" or "input");
+        }
+        
+        def toggleExpandOutput() -> None {
+            setExpandedPanel(expandedPanel == "output" and "none" or "output");
         }
         
         # For Jac mode - full height editor (no run button, FAB handles it)
@@ -118,10 +128,20 @@ cl {
             );
         }
         
-        # For conversion modes - 50/50 split layout
+        # For conversion modes - expandable split layout
+        let inputExpanded = expandedPanel == "input";
+        let outputExpanded = expandedPanel == "output";
+        let inputCollapsed = expandedPanel == "output";
+        let outputCollapsed = expandedPanel == "input";
+        
         return (
             <div className={cn("h-full flex flex-col bg-background", className)}>
-                <div className="flex-1 flex flex-col min-h-0">
+                <div className={cn(
+                    "flex flex-col min-h-0 transition-all duration-300",
+                    inputExpanded and "flex-1" or "",
+                    inputCollapsed and "flex-none" or "",
+                    expandedPanel == "none" and "flex-1" or ""
+                )}>
                     <div className="h-11 px-3 flex items-center justify-between border-b border-border bg-surface">
                         <div className="flex items-center gap-2">
                             <FileCode className="w-4 h-4 text-primary" />
@@ -129,6 +149,14 @@ cl {
                         </div>
                         
                         <div className="flex items-center gap-1">
+                            <button
+                                onClick={toggleExpandInput}
+                                className="p-2 rounded-md text-text-secondary hover:bg-background transition-colors"
+                                aria-label={inputExpanded and "Collapse input" or "Expand input"}
+                            >
+                                {inputExpanded and (<Minimize2 className="w-4 h-4" />)}
+                                {(not inputExpanded) and (<Maximize2 className="w-4 h-4" />)}
+                            </button>
                             <button
                                 onClick={handleRunInput}
                                 disabled={isRunning or not value}
@@ -149,38 +177,45 @@ cl {
                         </div>
                     </div>
                     
-                    <div className="flex-1 overflow-hidden">
-                        <Editor
-                            height="100%"
-                            width="100%"
-                            language={editorLanguage}
-                            value={value}
-                            onChange={onChange}
-                            theme={props.editorTheme or "vs-light"}
-                            options={{
-                                "fontSize": 14,
-                                "minimap": {"enabled": false},
-                                "scrollBeyondLastLine": false,
-                                "automaticLayout": true,
-                                "padding": {"top": 12, "bottom": 12},
-                                "lineNumbers": "on",
-                                "wordWrap": "on",
-                                "folding": false,
-                                "glyphMargin": false,
-                                "lineDecorationsWidth": 0,
-                                "lineNumbersMinChars": 3,
-                                "renderLineHighlight": "none",
-                                "scrollbar": {
-                                    "vertical": "auto",
-                                    "horizontal": "hidden",
-                                    "verticalScrollbarSize": 8
-                                }
-                            }}
-                        />
-                    </div>
+                    {(not inputCollapsed) and (
+                        <div className="flex-1 overflow-hidden">
+                            <Editor
+                                height="100%"
+                                width="100%"
+                                language={editorLanguage}
+                                value={value}
+                                onChange={onChange}
+                                theme={props.editorTheme or "vs-light"}
+                                options={{
+                                    "fontSize": 14,
+                                    "minimap": {"enabled": false},
+                                    "scrollBeyondLastLine": false,
+                                    "automaticLayout": true,
+                                    "padding": {"top": 12, "bottom": 12},
+                                    "lineNumbers": "on",
+                                    "wordWrap": "on",
+                                    "folding": false,
+                                    "glyphMargin": false,
+                                    "lineDecorationsWidth": 0,
+                                    "lineNumbersMinChars": 3,
+                                    "renderLineHighlight": "none",
+                                    "scrollbar": {
+                                        "vertical": "auto",
+                                        "horizontal": "hidden",
+                                        "verticalScrollbarSize": 8
+                                    }
+                                }}
+                            />
+                        </div>
+                    )}
                 </div>
                 
-                <div className="flex-1 flex flex-col min-h-0 border-t-2 border-border">
+                <div className={cn(
+                    "flex flex-col min-h-0 transition-all duration-300",
+                    outputExpanded and "flex-1" or "",
+                    outputCollapsed and "flex-none" or "",
+                    expandedPanel == "none" and "flex-1" or ""
+                )}>
                     <div className="h-11 px-3 flex items-center justify-between border-b border-border bg-surface">
                         <div className="flex items-center gap-2">
                             <FileOutput className="w-4 h-4 text-primary" />
@@ -188,6 +223,14 @@ cl {
                         </div>
                         
                         <div className="flex items-center gap-1">
+                            <button
+                                onClick={toggleExpandOutput}
+                                className="p-2 rounded-md text-text-secondary hover:bg-background transition-colors"
+                                aria-label={outputExpanded and "Collapse output" or "Expand output"}
+                            >
+                                {outputExpanded and (<Minimize2 className="w-4 h-4" />)}
+                                {(not outputExpanded) and (<Maximize2 className="w-4 h-4" />)}
+                            </button>
                             <button
                                 onClick={handleRunOutput}
                                 disabled={isRunning or not hasOutput}
@@ -209,44 +252,46 @@ cl {
                         </div>
                     </div>
                     
-                    <div className="flex-1 overflow-hidden">
-                        {hasOutput and (
-                            <Editor
-                                height="100%"
-                                width="100%"
-                                language={isJac2Py and "python" or "python"}
-                                value={outputValue}
-                                theme={props.editorTheme or "vs-light"}
-                                options={{
-                                    "fontSize": 14,
-                                    "minimap": {"enabled": false},
-                                    "scrollBeyondLastLine": false,
-                                    "automaticLayout": true,
-                                    "readOnly": true,
-                                    "padding": {"top": 12, "bottom": 60},
-                                    "lineNumbers": "on",
-                                    "wordWrap": "on",
-                                    "folding": false,
-                                    "glyphMargin": false,
-                                    "lineDecorationsWidth": 0,
-                                    "lineNumbersMinChars": 3,
-                                    "renderLineHighlight": "none",
-                                    "scrollbar": {
-                                        "vertical": "auto",
-                                        "horizontal": "hidden",
-                                        "verticalScrollbarSize": 8
-                                    }
-                                }}
-                            />
-                        )}
-                        {(not hasOutput) and (
-                            <div className="h-full flex items-center justify-center">
-                                <p className="text-sm text-text-secondary">
-                                    Tap Convert to see output
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                    {(not outputCollapsed) and (
+                        <div className="flex-1 overflow-hidden">
+                            {hasOutput and (
+                                <Editor
+                                    height="100%"
+                                    width="100%"
+                                    language={isJac2Py and "python" or "python"}
+                                    value={outputValue}
+                                    theme={props.editorTheme or "vs-light"}
+                                    options={{
+                                        "fontSize": 14,
+                                        "minimap": {"enabled": false},
+                                        "scrollBeyondLastLine": false,
+                                        "automaticLayout": true,
+                                        "readOnly": true,
+                                        "padding": {"top": 12, "bottom": 60},
+                                        "lineNumbers": "on",
+                                        "wordWrap": "on",
+                                        "folding": false,
+                                        "glyphMargin": false,
+                                        "lineDecorationsWidth": 0,
+                                        "lineNumbersMinChars": 3,
+                                        "renderLineHighlight": "none",
+                                        "scrollbar": {
+                                            "vertical": "auto",
+                                            "horizontal": "hidden",
+                                            "verticalScrollbarSize": 8
+                                        }
+                                    }}
+                                />
+                            )}
+                            {(not hasOutput) and (
+                                <div className="h-full flex items-center justify-center">
+                                    <p className="text-sm text-text-secondary">
+                                        Tap Convert to see output
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         );
