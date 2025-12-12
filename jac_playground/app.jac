@@ -1,7 +1,11 @@
 import tempfile;
 import subprocess;
 import sys;
+import os;
+
 import from pathlib { Path }
+import from jaclang.cli.cli { run }
+import from jaclang.runtimelib.builtin { printgraph }
 
 node ProcessNode {
     def process_code(source_code: str, mode: str, file_type: str) -> str {
@@ -120,3 +124,21 @@ walker load_example_list {
         report self.examples_list;
     }
 }   
+
+walker load_graph {
+    has source_code: str = "";
+
+    can load with `root entry {
+        with tempfile.NamedTemporaryFile(suffix=".jac", delete=False) as f {
+            f.write(code.encode("utf-8"));
+            temp_path = f.name;
+        }
+        run(temp_path);
+        graph = printgraph(
+            file = temp_path,
+            format = "json"
+        );
+        os.remove(temp_path);
+        report graph;
+    }
+}
