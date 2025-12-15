@@ -8,6 +8,7 @@ cl {
         let activePanel = props.activePanel or "code";
         let mode = props.mode or "jac";
         let editorTheme = props.editorTheme or "vs-light";
+        let isDarkMode = props.isDarkMode or false;
         
         # Code panel props
         let codeValue = props.codeValue or "";
@@ -48,7 +49,7 @@ cl {
         
         if activePanel == "graph" {
             return (
-                <GraphPanel graphData={graphData} />
+                <GraphPanel graphData={graphData} isDarkMode={isDarkMode} />
             );
         }
         

@@ -1,19 +1,18 @@
 cl import from react { useState, Suspense, lazy }
 cl import from "lucide-react" { Waypoints, ZoomIn, ZoomOut, Maximize2, Loader2 }
 cl import from "....lib.utils" { cn }
-
-# Lazy load the Visualizer component for performance
-# let LazyVisualizer = lazy(lambda -> any { return import("...Visualizer"); });
+cl import from "...Visualizer" { Visualizer }
 
 cl {
     def GraphPanel(props: dict) -> any {
         let graphData = props.graphData;
         let className = props.className or "";
+        let isDarkMode = props.isDarkMode or false;
         
         let [zoom, setZoom] = useState(1);
         let [isFullscreen, setIsFullscreen] = useState(false);
         
-        let hasGraph = graphData and Object.keys(graphData).length > 0;
+        let hasGraph = graphData and graphData.nodes and graphData.nodes.length > 0;
         
         def handleZoomIn() -> None {
             setZoom(Math.min(zoom + 0.25, 3));
@@ -71,20 +70,11 @@ cl {
                 
                 <div className="flex-1 overflow-hidden relative">
                     {hasGraph and (
-                        <div 
-                            className="absolute inset-0 overflow-auto touch-pan-x touch-pan-y"
-                            style={{ "transform": f"scale({zoom})", "transformOrigin": "center center" }}
-                        >
-                            # Graph visualization would go here
-                            # For now showing placeholder that indicates graph exists
-                            <div className="w-full h-full flex items-center justify-center">
-                                <div className="text-center">
-                                    <Waypoints className="w-12 h-12 text-primary mx-auto mb-3" />
-                                    <p className="text-sm text-text-primary font-medium">Graph Data Available</p>
-                                    <p className="text-xs text-text-secondary mt-1">Pinch to zoom, drag to pan</p>
-                                </div>
-                            </div>
-                        </div>
+                        <Visualizer 
+                            graphData={graphData} 
+                            showHeader={false} 
+                            isDarkMode={isDarkMode}
+                        />
                     )}
                     
                     {(not hasGraph) and (

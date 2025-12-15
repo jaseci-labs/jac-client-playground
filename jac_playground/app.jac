@@ -76,9 +76,7 @@ walker code_processor {
         "py2jac": Py2JacNode,
     };
 
-    obj __specs__ {
-        static has auth: bool = False;
-    }
+    
     can execute with `root entry {
         if self.mode in self.mode_node_map {
             node_type = self.mode_node_map[self.mode];
@@ -129,16 +127,35 @@ walker load_graph {
     has source_code: str = "";
 
     can load with `root entry {
-        with tempfile.NamedTemporaryFile(suffix=".jac", delete=False) as f {
-            f.write(self.source_code.encode("utf-8"));
-            temp_path = f.name;
+
+        # report "start report";
+
+        # with tempfile.NamedTemporaryFile(suffix=".jac", delete=False) as f {
+        #     f.write(self.source_code.encode("utf-8"));
+        #     temp_path = f.name;
+        # }
+        # with open("test_file.jac", "w") as f {
+        #     f.write(self.source_code);
+        # }
+        # temp_path = "test_file.jac";
+        # run(temp_path);
+
+        # graph =  printgraph( 
+        #     file = temp_path,
+        #     format = "json"
+        # );
+        # os.remove(temp_path);
+
+        import json;
+
+        # Read graph from json file
+        with open("graph_output.json", "r") as f {
+            graph_data = json.load(f);
         }
-        run(temp_path);
-        graph = printgraph(
-            file = temp_path,
-            format = "json"
-        );
-        os.remove(temp_path);
-        report graph;
+        
+        print(graph_data);
+        report graph_data;
+
     }
 }
+

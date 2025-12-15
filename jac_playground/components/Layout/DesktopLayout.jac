@@ -100,6 +100,7 @@ cl {
                                             onChange={onJacCodeChange}
                                             graphData={graphData}
                                             editorTheme={editorTheme}
+                                            isDarkMode={theme == "dark"}
                                         />
                                     </div>
                                 )}

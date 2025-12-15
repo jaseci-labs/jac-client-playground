@@ -40,10 +40,12 @@ cl {
         
         # Mobile-specific UI state
         let [activePanel, setActivePanel] = useState("code");
+
+        # Graph data state
+        let [graphData, setGraphData] = useState(None);
         
         # Props
         let envReady = props.envReady or true;
-        let graphData = props.graphData;
         
         # ===========================================
         # DERIVED VALUES
@@ -90,6 +92,9 @@ cl {
                 document.documentElement.classList.remove("dark");
             }
         }, [theme]);
+
+        
+       
         
         # ===========================================
         # HANDLERS - Business Logic
@@ -132,9 +137,11 @@ cl {
         # Run code - unified handler for all modes
         async def handleRun(title: str = "") -> None {
             let result = [];
+            let graph = [];
             setIsRunning(true);
             setOutput("");
             setErrors("");
+            setGraphData(None);
             
             # Navigate to output panel on mobile for immediate feedback
             setActivePanel("output");
@@ -143,14 +150,26 @@ cl {
                 result = code_processor(source_code=pythonCode, mode="pyrun") spawn root;
             } elif title == "Jac Input" {
                 result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
+                graph =  root spawn load_graph(source_code=jacCode);
+                graph_data = graph.reports[0];
+                if graph_data != None {
+                    setGraphData(graph_data);
+                }
+
+                
+
             } elif title == "Python Output" {
                 result = code_processor(source_code=outputCode, mode="pyrun") spawn root;
             } elif title == "Jac Output" {
                 result = code_processor(source_code=outputCode, mode="jacrun") spawn root;
             } else {
                 result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
+                graph = root spawn load_graph(source_code=jacCode);
+                graph_data = graph.reports[0];
+                if graph_data != None {
+                    setGraphData(graph_data);
+                }
             }
-            
             setOutput(result.reports[0] or "Execution complete.");
             setIsRunning(false);
         }

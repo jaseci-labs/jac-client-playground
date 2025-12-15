@@ -11,6 +11,7 @@ cl {
         let onChange = props.onChange;
         let graphData = props.graphData;
         let className = props.className or "";
+        let isDarkMode = props.isDarkMode or false;
         
         # View state: "split" | "editor" | "graph"
         let [viewMode, setViewMode] = useState("split");
@@ -104,7 +105,7 @@ cl {
                                 </div>
                             </div>
                             <div className="flex-1 overflow-hidden">
-                                <Visualizer graphData={graphData} showHeader={false} />
+                                <Visualizer graphData={graphData} showHeader={false} isDarkMode={isDarkMode} />
                             </div>
                         </div>
                     )}

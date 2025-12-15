@@ -119,6 +119,7 @@ cl {
                         onModeChange={onModeChange}
                         onNavigateToCode={onNavigateToCode}
                         editorTheme={editorTheme}
+                        isDarkMode={theme == "dark"}
                     />
                 </main>
                 
