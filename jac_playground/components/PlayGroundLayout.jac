@@ -1,5 +1,6 @@
 cl import from "..hooks.useMobile" { useIsMobile }
 cl import from "..hooks.usePlayground" { usePlayground }
+
 cl import from ".Layout.DesktopLayout" { DesktopLayout }
 cl import from ".Mobile.MobileLayout" { MobileLayout }
 
@@ -61,6 +62,7 @@ cl {
                 onToggleTheme={playground.onToggleTheme}
                 mode={playground.mode}
                 onModeChange={playground.onModeChange}
+
                 jacCode={playground.jacCode}
                 pythonCode={playground.pythonCode}
                 outputCode={playground.outputCode}
