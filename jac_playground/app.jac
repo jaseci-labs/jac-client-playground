@@ -4,7 +4,6 @@ import sys;
 import os;
 
 import from pathlib { Path }
-import from jaclang.cli.cli { run }
 import from jaclang.runtimelib.builtin { printgraph }
 
 node ProcessNode {
@@ -128,34 +127,32 @@ walker load_graph {
 
     can load with `root entry {
 
-        # report "start report";
-
-        # with tempfile.NamedTemporaryFile(suffix=".jac", delete=False) as f {
-        #     f.write(self.source_code.encode("utf-8"));
-        #     temp_path = f.name;
-        # }
-        # with open("test_file.jac", "w") as f {
-        #     f.write(self.source_code);
-        # }
-        # temp_path = "test_file.jac";
-        # run(temp_path);
-
-        # graph =  printgraph( 
-        #     file = temp_path,
-        #     format = "json"
-        # );
-        # os.remove(temp_path);
-
-        import json;
-
-        # Read graph from json file
-        with open("graph_output.json", "r") as f {
-            graph_data = json.load(f);
+        with tempfile.NamedTemporaryFile(suffix=".jac", delete=False) as f {
+            f.write(self.source_code.encode("utf-8"));
+            temp_path = f.name;
         }
-        
-        print(graph_data);
-        report graph_data;
+        with open("test_file.jac", "w") as f {
+            f.write(self.source_code);
+        }
+        temp_path = "test_file.jac";
 
+        subprocess.run(
+            ["jac", "dot", temp_path],
+            capture_output=True,
+            text=True,
+            timeout=30
+        );
+
+        dot_file_path = temp_path.replace(".jac", ".dot");
+
+        with open(dot_file_path, "r") as f {
+            dot_content = f.read();
+        }
+
+        os.remove(temp_path);
+        os.remove(dot_file_path);
+
+        report dot_content;
     }
 }
 
