@@ -1,4 +1,5 @@
 cl import from react { useState, useEffect, useCallback }
+cl import from "..lib.python_thread" { PythonThread }
 
 cl {
   
@@ -27,6 +28,7 @@ cl {
         let [examples, setExamples] = useState([]);
         
         # Execution state
+        let [pythonThread, setPythonThread] = useState(None);
         let [isRunning, setIsRunning] = useState(false);
         let [isConverting, setIsConverting] = useState(false);
         let [isDebugging, setIsDebugging] = useState(false);
@@ -93,8 +95,12 @@ cl {
             }
         }, [theme]);
 
-        
-       
+        useEffect(lambda -> None {
+            console.log("App mounted");
+            let newPythonThread = Reflect.construct(PythonThread, []);
+            setPythonThread(newPythonThread);
+        }, []);
+
         
         # ===========================================
         # HANDLERS - Business Logic
@@ -133,6 +139,55 @@ cl {
                 }
             }
         }
+
+        def runJacCodes(jac_code: str) -> None {
+            pythonThread.callbackStdout = lambda outputText: str -> None {
+                setOutput(lambda prev: str -> str {
+                    return prev + outputText;
+                });
+            };
+            pythonThread.callbackStderr = lambda errorText: str -> None {
+                setOutput(lambda prev: str -> str {
+                    return prev + errorText;
+                });
+            };
+            try {
+                pythonThread.startExecution(jac_code);
+            } except err {
+                console.error("Error starting Jac code execution:", err);
+            }
+        }
+
+        def runPythonCodes(python_code: str) -> None {
+            pythonThread.callbackStdout = lambda outputText: str -> None {
+                setOutput(lambda prev: str -> str {
+                    return prev + outputText;
+                });
+            };
+            pythonThread.callbackStderr = lambda errorText: str -> None {
+                setOutput(lambda prev: str -> str {
+                    return prev + errorText;
+                });
+            };
+            try {
+                pythonThread.startPythonExecution(python_code);
+            } except err {
+                console.error("Error starting Python code execution:", err);
+            }
+        }
+
+        def performConversion(code: str, conversionType: str) -> None {
+            pythonThread.callbackConversionResult = lambda result: str -> None {
+                setOutputCode(lambda prev: str -> str {
+                    return prev + result;
+                });
+            };
+            try {
+                pythonThread.startConversion(conversionType, code);
+            } except err {
+                console.error("Error starting code conversion:", err);
+            }
+        }
         
         # Run code - unified handler for all modes
         async def handleRun(title: str = "") -> None {
@@ -147,30 +202,16 @@ cl {
             setActivePanel("output");
 
             if title == "Python Input" {
-                result = code_processor(source_code=pythonCode, mode="pyrun") spawn root;
+                runPythonCodes(pythonCode);
             } elif title == "Jac Input" {
-                result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
-                graph =  root spawn load_graph(source_code=jacCode);
-                graph_data = graph.reports[0];
-                if graph_data != None {
-                    setGraphData(graph_data);
-                }
-
-                
-
+                runJacCodes(jacCode);
             } elif title == "Python Output" {
-                result = code_processor(source_code=outputCode, mode="pyrun") spawn root;
+                runPythonCodes(outputCode);
             } elif title == "Jac Output" {
-                result = code_processor(source_code=outputCode, mode="jacrun") spawn root;
+                runJacCodes(outputCode);
             } else {
-                result = code_processor(source_code=jacCode, mode="jacrun") spawn root;
-                graph = root spawn load_graph(source_code=jacCode);
-                graph_data = graph.reports[0];
-                if graph_data != None {
-                    setGraphData(graph_data);
-                }
+                runJacCodes(jacCode);
             }
-            setOutput(result.reports[0] or "Execution complete.");
             setIsRunning(false);
         }
         
@@ -178,16 +219,15 @@ cl {
         async def handleConvert() -> None {
             setIsConverting(true);
             setOutput("");
+            setOutputCode("");
             
             if mode == "jac2py" {
                 setLogs("Converting Jac to Python...");
-                result = code_processor(source_code=jacCode, mode="jac2py") spawn root;
-                setOutputCode(result.reports[0] or "# Conversion result");
+                performConversion(jacCode, "jac2py");
                 setLogs("✓ Conversion complete.");
             } else {
                 setLogs("Converting Python to Jac...");
-                result = code_processor(source_code=pythonCode, mode="py2jac") spawn root;
-                setOutputCode(result.reports[0] or "# Conversion result");
+                performConversion(pythonCode, "py2jac");
                 setLogs("✓ Conversion complete.");
             }
             setIsConverting(false);

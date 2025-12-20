@@ -1,4 +1,3 @@
-import from .pages.Index { Index }
 import ".global.css";
 import from .components.PlayGroundLayout { PlayGroundLayout }
 
