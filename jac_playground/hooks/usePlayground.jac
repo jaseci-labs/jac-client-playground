@@ -236,13 +236,17 @@ cl {
 
             if title == "Python Input" {
                 runPythonCodes(pythonCode);
-            } elif title == "Jac Input" {
+            }
+            elif title == "Jac Input" {
                 runJacCodes(jacCode);
-            } elif title == "Python Output" {
+            }
+            elif title == "Python Output" {
                 runPythonCodes(outputCode);
-            } elif title == "Jac Output" {
+            }
+            elif title == "Jac Output" {
                 runJacCodes(outputCode);
-            } else {
+            }
+            else {
                 runJacCodes(jacCode);
             }
             setIsRunning(false);
@@ -285,7 +289,19 @@ cl {
             } 
             elif (action == "restart") {
                 console.log("restart");
-            } 
+                editorRef.current?.clearExecutionHighlight();
+                if (isRunning) {
+                    pythonThread.terminate();
+                    Reflect.construct(Promise, [
+                        lambda resolve: any -> None {
+                            setTimeout(resolve, 1000);
+                        }
+                    ]);
+                }
+                setOutput("");
+                pythonThread.startExecution(jacCode);
+                setIsRunning(true);
+            }
             elif (action == "stop") {
                 console.log("stop");
                 pythonThread.terminate();
