@@ -245,7 +245,7 @@ with entry {
   pyodide.globals.set('CB_STDERR', callbackStderr);
 
   // Correctly instantiate the Debugger class from Pyodide
-  const dbg = pyodide.globals.get('Debugger')();
+  let dbg = pyodide.globals.get('Debugger')();
   dbg.cb_break = callbackBreak;
   dbg.cb_graph = callbackGraph;
   pyodide.globals.set('debugger', dbg);

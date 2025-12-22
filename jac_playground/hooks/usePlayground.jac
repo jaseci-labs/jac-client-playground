@@ -1,4 +1,4 @@
-cl import from react { useState, useEffect, useCallback }
+cl import from react { useState, useEffect, useCallback, useRef }
 cl import from "..lib.python_thread" { PythonThread }
 
 cl {
@@ -15,6 +15,7 @@ cl {
         let [mode, setMode] = useState("jac");
         
         # Code state
+        let editorRef = useRef(null);
         let [jacCode, setJacCode] = useState("");
         let [pythonCode, setPythonCode] = useState("");
         let [outputCode, setOutputCode] = useState("");
@@ -151,7 +152,7 @@ cl {
         def runJacCodes(jac_code: str) -> None {
             pythonThread.callbackBreakHit = lambda lineNumber: int -> None {
                 console.log(f"⚠️ Hit breakpoint at line {lineNumber}. Execution paused.");
-                # codeEditorRef.current?.highlightExecutionLine(lineNumber);
+                editorRef.current?.highlightExecutionLine(lineNumber);
             };
             pythonThread.callbackStdout = lambda outputText: str -> None {
                 setOutput(lambda prev: str -> str {
@@ -165,7 +166,8 @@ cl {
             };
             pythonThread.callbackExecEnd = lambda -> None {
                 setIsRunning(false);
-                # codeEditorRef.current?.clearExecutionLine();
+                console.log("***** Execution ended");
+                editorRef.current?.clearExecutionHighlight();
             };
             pythonThread.callbackJacGraph = lambda graph_str: any -> None {
                 let graph = JSON.parse(graph_str);
@@ -428,7 +430,9 @@ cl {
             "onNavigateToCode": handleNavigateToCode,
             "onNavigateToOutput": handleNavigateToOutput,
             "onNavigateToGraph": handleNavigateToGraph,
-            "onNavigateToExamples": handleNavigateToExamples
+            "onNavigateToExamples": handleNavigateToExamples,
+
+            "editorRef": editorRef
         };
     }
 }

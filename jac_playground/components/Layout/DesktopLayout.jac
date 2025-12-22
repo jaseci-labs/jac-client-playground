@@ -14,6 +14,7 @@ cl {
         let theme = props.theme or "light";
         let editorTheme = props.editorTheme or "vs-light";
         let onToggleTheme = props.onToggleTheme;
+        let editorRef = props.editorRef;
         
         # Mode
         let mode = props.mode or "jac";
@@ -105,6 +106,7 @@ cl {
                                             editorTheme={editorTheme}
                                             isDarkMode={theme == "dark"}
                                             onBreakpointsChange={onBreakpointsChange}
+                                            ref={editorRef}
                                         />
                                     </div>
                                 )}

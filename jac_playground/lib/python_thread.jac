@@ -5,7 +5,6 @@ cl {
             let sharedBuffer = Reflect.construct(SharedArrayBuffer, [4 * 3]);
             self.sharedInts = Reflect.construct(Int32Array, [sharedBuffer]);
 
-            console.log("Initializing Python Worker");
             self.pythonThread = Reflect.construct(Worker, ["/static/assets/python.js"]);
             console.log("Python Worker initialized");
             

@@ -1,4 +1,4 @@
-cl import from react { useState, useRef, useCallback }
+cl import from react { useState, useRef, useCallback, forwardRef, useImperativeHandle }
 cl import from "lucide-react" { Maximize2, Minimize2, Columns2, Code2, GitGraph }
 cl import from "..lib.utils" { cn }
 cl import from ".ui.Panel" { Panel }
@@ -6,7 +6,7 @@ cl import from "@monaco-editor/react" { Editor }
 cl import from ".Visualizer" { Visualizer }
 
 cl {
-    def JacWorkspace(props: dict) -> any {
+    let: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> any {
         let value = props.value or "";
         let onChange = props.onChange;
         let graphData = props.graphData;
@@ -119,6 +119,12 @@ cl {
             executionDecorationRef.current = editor.deltaDecorations(executionDecorationRef.current, []);
         };
 
+        useImperativeHandle(ref, lambda {
+            return {
+                highlightExecutionLine: lambda line: int: highlightExecutionLine(line),
+                clearExecutionHighlight: lambda: clearExecutionHighlight()
+            };
+        });
         
         return (
             <div className={cn("h-full w-full flex flex-col", className)}>
@@ -214,5 +220,5 @@ cl {
                 </div>
             </div>
         );
-    }
+    });
 }

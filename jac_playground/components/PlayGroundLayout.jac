@@ -97,6 +97,8 @@ cl {
                 consoleHeight={playground.consoleHeight}
                 onConsoleHeightChange={playground.onConsoleHeightChange}
                 onBreakpointsChange={playground.onBreakpointsChange}
+
+                editorRef={playground.editorRef}
             />
         );
     }
