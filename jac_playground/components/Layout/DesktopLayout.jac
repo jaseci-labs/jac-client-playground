@@ -33,6 +33,7 @@ cl {
         let onClearOutput = props.onClearOutput;
         let onClearErrors = props.onClearErrors;
         let onClearLogs = props.onClearLogs;
+        let onBreakpointsChange = props.onBreakpointsChange;
         
         # Examples
         let examples = props.examples or [];
@@ -46,6 +47,7 @@ cl {
         let onConvert = props.onConvert;
         let onReset = props.onReset;
         let onDebug = props.onDebug;
+        let onhandleDebugAction = props.onhandleDebugAction;
         
         # Props
         let envReady = props.envReady or true;
@@ -86,6 +88,7 @@ cl {
                             onReset={onReset}
                             onConvert={onConvert}
                             onDebug={onDebug}
+                            onhandleDebugAction={onhandleDebugAction}
                             isRunning={isRunning}
                             isConverting={isConverting}
                             isDebugging={isDebugging}
@@ -101,6 +104,7 @@ cl {
                                             graphData={graphData}
                                             editorTheme={editorTheme}
                                             isDarkMode={theme == "dark"}
+                                            onBreakpointsChange={onBreakpointsChange}
                                         />
                                     </div>
                                 )}

@@ -84,6 +84,7 @@ cl {
                 isRunning={playground.isRunning}
                 isConverting={playground.isConverting}
                 isDebugging={playground.isDebugging}
+                onhandleDebugAction={playground.onhandleDebugAction}
                 envReady={playground.envReady}
                 activityBarCollapsed={playground.activityBarCollapsed}
                 onToggleActivityBar={playground.onToggleActivityBar}
@@ -95,6 +96,7 @@ cl {
                 onToggleConsole={playground.onToggleConsole}
                 consoleHeight={playground.consoleHeight}
                 onConsoleHeightChange={playground.onConsoleHeightChange}
+                onBreakpointsChange={playground.onBreakpointsChange}
             />
         );
     }

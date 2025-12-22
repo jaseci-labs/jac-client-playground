@@ -32,6 +32,7 @@ cl {
         let [isRunning, setIsRunning] = useState(false);
         let [isConverting, setIsConverting] = useState(false);
         let [isDebugging, setIsDebugging] = useState(false);
+        let [breakpoints, setBreakpoints] = useState([]);
         
         # Desktop-specific UI state
         let [activityBarCollapsed, setActivityBarCollapsed] = useState(false);
@@ -101,6 +102,13 @@ cl {
             setPythonThread(newPythonThread);
         }, []);
 
+        useEffect(lambda -> None {
+            if (pythonThread) {
+                console.log("Syncing breakpoints to Python thread:", breakpoints);
+                pythonThread.setBreakpoints(breakpoints);
+            }
+        }, [breakpoints, pythonThread]);
+
         
         # ===========================================
         # HANDLERS - Business Logic
@@ -141,6 +149,10 @@ cl {
         }
 
         def runJacCodes(jac_code: str) -> None {
+            pythonThread.callbackBreakHit = lambda lineNumber: int -> None {
+                console.log(f"⚠️ Hit breakpoint at line {lineNumber}. Execution paused.");
+                # codeEditorRef.current?.highlightExecutionLine(lineNumber);
+            };
             pythonThread.callbackStdout = lambda outputText: str -> None {
                 setOutput(lambda prev: str -> str {
                     return prev + outputText;
@@ -151,10 +163,29 @@ cl {
                     return prev + errorText;
                 });
             };
+            pythonThread.callbackExecEnd = lambda -> None {
+                setIsRunning(false);
+                # codeEditorRef.current?.clearExecutionLine();
+            };
+            pythonThread.callbackJacGraph = lambda graph_str: any -> None {
+                let graph = JSON.parse(graph_str);
+                setGraphData(graph);
+            };
             try {
                 pythonThread.startExecution(jac_code);
             } except err {
                 console.error("Error starting Jac code execution:", err);
+            }
+        }
+
+        def handleBreakpointsChange(breakpoints: list) -> None {
+            console.log("Breakpoints updated:", breakpoints);
+            setBreakpoints(breakpoints);
+            console.log("**** hitting this");
+            if (pythonThread) {
+                setTimeout(lambda -> None {
+                    pythonThread.setBreakpoints(breakpoints);
+                }, 100);
             }
         }
 
@@ -232,6 +263,32 @@ cl {
             }
             setIsConverting(false);
         }
+        
+        let handleDebugAction = useCallback(lambda action: str -> None {
+            if (action == "continue") {
+                console.log("continue");
+                pythonThread.continueExecution();
+            }
+            elif (action == "stepOver") {
+                console.log("stepOver");
+                pythonThread.stepOver();
+            }
+            elif (action == "stepInto") {
+                console.log("stepInto");
+                pythonThread.stepInto();
+            } 
+            elif (action == "stepOut") {
+                console.log("stepOut");
+                pythonThread.stepOut();
+            } 
+            elif (action == "restart") {
+                console.log("restart");
+            } 
+            elif (action == "stop") {
+                console.log("stop");
+                pythonThread.terminate();
+            }
+        }, [breakpoints, pythonThread, jacCode]);
         
         # Reset editor
         def handleReset() -> None {
@@ -343,6 +400,7 @@ cl {
             "onConvert": handleConvert,
             "onReset": handleReset,
             "onDebug": handleDebug,
+            "onhandleDebugAction": handleDebugAction,
             
             # Derived
             "problemsBadge": problemsBadge,
@@ -362,6 +420,7 @@ cl {
             "onToggleConsole": handleToggleConsole,
             "consoleHeight": consoleHeight,
             "onConsoleHeightChange": setConsoleHeight,
+            "onBreakpointsChange": handleBreakpointsChange,
             
             # Mobile UI state
             "activePanel": activePanel,

@@ -12,6 +12,7 @@ cl {
         let graphData = props.graphData;
         let className = props.className or "";
         let isDarkMode = props.isDarkMode or false;
+        let onBreakpointsChange = props.onBreakpointsChange;
         
         # View state: "split" | "editor" | "graph"
         let [viewMode, setViewMode] = useState("split");
@@ -51,6 +52,9 @@ cl {
                 let isExisting = prev.includes(line);
                 let newBreakpoints = prev.filter(lambda l:any -> any { return l != line; });
                 newBreakpoints = newBreakpoints if isExisting else prev.concat([line]);
+                if (onBreakpointsChange) {
+                    onBreakpointsChange(newBreakpoints);
+                }
                 updateBreakpointDecorations(newBreakpoints);
                 return newBreakpoints;
             });
@@ -104,6 +108,15 @@ cl {
             ]);
             
             editor.revealLineInCenter(line); # Auto-scroll to active line
+        };
+
+        def clearExecutionHighlight() -> None {
+            let editor = editorRef.current;
+
+            if (not editorRef.current) {
+                return;
+            };
+            executionDecorationRef.current = editor.deltaDecorations(executionDecorationRef.current, []);
         };
 
         

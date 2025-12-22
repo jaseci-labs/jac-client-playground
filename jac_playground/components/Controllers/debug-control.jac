@@ -42,7 +42,7 @@ cl {
     }
 
     def DebugController(props: dict) -> any {
-        let onPlay = props.onPlay;
+        let onContinue = props.onContinue;
         let onStepOver = props.onStepOver;
         let onStepIn = props.onStepIn;
         let onStepOut = props.onStepOut;
@@ -50,43 +50,44 @@ cl {
         let onStop = props.onStop;
         let isRunning = props.isRunning or false;
         let className = props.className or "";
+        let onhandleDebugAction = props.onhandleDebugAction;
         
         return (
             <div className={cn("inline-flex items-center gap-0.5", className)}>
                 <DebugButton
                     icon={<Play size={14} />}
                     label="Continue (F5)"
-                    onClick={onPlay}
+                    onClick={lambda -> None {onhandleDebugAction("continue");}}
                     variant="primary"
                 />
                 <DebugButton
                     icon={<StepForward size={14} />}
                     label="Step Over (F10)"
-                    onClick={onStepOver}
+                    onClick={lambda -> None {onhandleDebugAction("stepOver");}}
                     variant="default"
                 />
                 <DebugButton
                     icon={<StepBack size={14} />}
                     label="Step Into (F11)"
-                    onClick={onStepIn}
+                    onClick={lambda -> None {onhandleDebugAction("stepInto");}}
                     variant="default"
                 />
                 <DebugButton
                     icon={<ArrowUp size={14} />}
                     label="Step Out (Shift+F11)"
-                    onClick={onStepOut}
+                    onClick={lambda -> None {onhandleDebugAction("stepOut");}}
                     variant="default"
                 />
                 <DebugButton
                     icon={<RotateCw size={14} />}
                     label="Restart (Ctrl+Shift+F5)"
-                    onClick={onRestart}
+                    onClick={lambda -> None {onhandleDebugAction("restart");}}
                     variant="warning"
                 />
                 <DebugButton
                     icon={<Square size={14} />}
                     label="Stop (Shift+F5)"
-                    onClick={onStop}
+                    onClick={lambda -> None {onhandleDebugAction("stop");}}
                     variant="danger"
                 />
             </div>

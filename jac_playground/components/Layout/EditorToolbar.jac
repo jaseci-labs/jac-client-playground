@@ -16,9 +16,7 @@ cl {
         let onReset = props.onReset;
         let onConvert = props.onConvert;
         let onDebug = props.onDebug;
-        let onStepOver = props.onStepOver;
-        let onStepInto = props.onStepInto;
-        let onStepOut = props.onStepOut;
+        let onhandleDebugAction = props.onhandleDebugAction;
         let onStop = props.onStop;
         let isRunning = props.isRunning or false;
         let isConverting = props.isConverting or false;
@@ -71,12 +69,7 @@ cl {
                             
                             {isDebugging and (
                                 <DebugController
-                                    onPlay={onRun}
-                                    onStepOver={onStepOver}
-                                    onStepIn={onStepInto}
-                                    onStepOut={onStepOut}
-                                    onRestart={onReset}
-                                    onStop={onStop}
+                                    onhandleDebugAction={onhandleDebugAction}
                                     isRunning={isRunning}
                                 />
                             )}
