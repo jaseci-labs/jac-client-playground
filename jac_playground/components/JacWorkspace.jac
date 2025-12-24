@@ -4,9 +4,11 @@ cl import from "..lib.utils" { cn }
 cl import from ".ui.Panel" { Panel }
 cl import from "@monaco-editor/react" { Editor }
 cl import from ".Visualizer" { Visualizer }
+# cl import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
 
 cl {
     let: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> any {
+        let language = props.language or "python";
         let value = props.value or "";
         let onChange = props.onChange;
         let graphData = props.graphData;
@@ -22,6 +24,7 @@ cl {
 
         let editorRef = useRef(None);
         let monacoRef = useRef(None);
+        let textMateLoadedRef = useRef(False);
 
         # Track IDs of decorations to update them efficiently
         let breakpointDecorationsRef = useRef([]);
@@ -32,9 +35,27 @@ cl {
         # Ref to always access the latest toggleBreakpoint function
         let toggleBreakpointRef = useRef(None);
 
-        def handleEditorDidMount(editor:any, monaco:any) -> None {
+        let registerJacLanguage = useCallback(lambda monaco:any, editor:any -> None {
+            if (textMateLoadedRef.current) {
+                return;
+            }
+
+            try {
+                let grammarConfig = loadSyntax(monaco, editor);
+                configureTheme(monaco, grammarConfig);
+                textMateLoadedRef.current = True;
+            } except Exception as error {
+                console.error("Failed to register Jac language:", error);
+            }
+        });
+
+        async def handleEditorDidMount(editor:any, monaco:any) -> None {
             editorRef.current = editor;
             monacoRef.current = monaco;
+
+            # if (language == "jac") {
+            #     await registerJacLanguage(monaco, editor);
+            # }
 
             # Enable the left-side margin for breakpoint icons
             editor.updateOptions({ glyphMargin: true });
@@ -164,7 +185,7 @@ cl {
                                 <Editor
                                     height="100%"
                                     width="100%"
-                                    language="python"
+                                    language={language}
                                     value={value}
                                     onChange={onChange}
                                     theme={props.editorTheme or "vs-light"}

@@ -107,6 +107,7 @@ cl {
                                             isDarkMode={theme == "dark"}
                                             onBreakpointsChange={onBreakpointsChange}
                                             ref={editorRef}
+                                            language="jac"
                                         />
                                     </div>
                                 )}

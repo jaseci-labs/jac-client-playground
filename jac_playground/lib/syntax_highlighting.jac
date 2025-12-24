@@ -1,0 +1,75 @@
+cl import from "monaco-textmate" { Registry }
+cl import from "onigasm" { loadWASM }
+cl import from "monaco-editor-textmate" { wireTmGrammars }
+
+cl {
+    let ONIG_WASM_PATH = "/static/assets/onigasm.wasm";
+    let LANGUAGE_CONFIG_PATH = "/static/assets/jac-language-configuration.json";
+    let grammarConfig = {
+        "jac": "source.jac"
+    };
+
+    let wasmInitialized = false;
+    letlanguageRegistered = false;
+    let grammarLoaded = false;
+    let cachedGrammarConfig: any = null;
+
+    async def loadSyntax(monaco:any, editor:any) -> any | None {
+        if (not languageRegistered) {
+            monaco.languages.register({ id: "jac" });
+            languageRegistered = true;
+        }
+
+        if (not wasmInitialized) {
+            try {
+                await loadWASM(ONIG_WASM_PATH);
+                wasmInitialized = true;
+            } except Exception {
+                console.error("Failed to load Onigasm WASM:", Exception);
+                return;
+            }
+        }
+
+        if (not grammarLoaded) {
+            let response = await fetch("https://raw.githubusercontent.com/jaseci-labs/jac-vscode/main/syntaxes/jac.tmLanguage.json");
+            let grammerConfigRes = await fetch(LANGUAGE_CONFIG_PATH);
+            let jacGrammer = await response.json();
+            cachedGrammarConfig = await grammerConfigRes.json();
+
+            let registry = Reflect.construct(Registry, [{
+                getGrammarDefinition: lambda -> None {
+                    return {
+                        format: "json",
+                        content: JSON.stringify(jacGrammer)
+                    };
+                }
+            }]);
+
+            let grammar = Reflect.construct(Map, []);
+            grammar.set("jac", "source.jac");
+
+            await wireTmGrammars(monaco, registry, grammar, editor);
+            grammarLoaded = true;
+        }
+        return cachedGrammarConfig;
+    }
+
+    async def configureTheme(monaco:any, grammarConfig:any) -> None {
+        monaco.languages.setLanguageConfiguration("jac", grammarConfig);
+        monaco.editor.defineTheme("jac-theme", {
+            base: "vs",
+            inherit: true,
+            rules: [
+                { token: "storage.type.class.jac", foreground: "569CD6" },
+                { token: "storage.type.function.jac", foreground: "569CD6" },
+                { token: "keyword.control.flow.jac", foreground: "C678DD" },
+                { token: "entity.name.type.class.jac", foreground: "3ac9b0" },
+            ],
+            colors: {
+                "editor.foreground": "#FFFFFF",
+            },
+        });
+        monaco.editor.setTheme("jac-theme");
+        console.log("Jac language successfully registered");
+    }
+}
