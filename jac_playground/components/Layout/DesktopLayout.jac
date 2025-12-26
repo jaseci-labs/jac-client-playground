@@ -108,6 +108,7 @@ cl {
                                             onBreakpointsChange={onBreakpointsChange}
                                             ref={editorRef}
                                             language="jac"
+                                            theme={theme}
                                         />
                                     </div>
                                 )}

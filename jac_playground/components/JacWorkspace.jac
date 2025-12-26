@@ -8,6 +8,7 @@ cl import from ".Visualizer" { Visualizer }
 
 cl {
     let: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> any {
+        let theme = props.theme or "light";
         let language = props.language or "python";
         let value = props.value or "";
         let onChange = props.onChange;
@@ -122,8 +123,8 @@ cl {
                 range: Reflect.construct(monaco.Range, [line, 1, line, 1]) ,
                 options: {
                 isWholeLine: true,
-                className: 'active-execution-line', # CSS for yellow background
-                glyphMarginClassName: 'active-execution-glyph', # CSS for yellow arrow
+                className: 'active-execution-line' if theme == "light" else 'active-execution-line-dark', # CSS for yellow background
+                glyphMarginClassName: 'active-execution-glyph' if theme == "light" else 'active-execution-glyph-dark', # CSS for yellow arrow
                 },
             }
             ]);
