@@ -4,7 +4,7 @@ cl import from "..lib.utils" { cn }
 cl import from ".ui.Panel" { Panel }
 cl import from "@monaco-editor/react" { Editor }
 cl import from ".Visualizer" { Visualizer }
-# cl import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
+cl import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
 
 cl {
     let: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> any {
@@ -54,9 +54,9 @@ cl {
             editorRef.current = editor;
             monacoRef.current = monaco;
 
-            # if (language == "jac") {
-            #     await registerJacLanguage(monaco, editor);
-            # }
+            if (language == "jac") {
+                await registerJacLanguage(monaco, editor);
+            }
 
             # Enable the left-side margin for breakpoint icons
             editor.updateOptions({ glyphMargin: true });

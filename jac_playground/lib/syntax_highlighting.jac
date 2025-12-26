@@ -4,15 +4,15 @@ cl import from "monaco-editor-textmate" { wireTmGrammars }
 
 cl {
     let ONIG_WASM_PATH = "/static/assets/onigasm.wasm";
-    let LANGUAGE_CONFIG_PATH = "/static/assets/jac-language-configuration.json";
+    let LANGUAGE_CONFIG_PATH = "/static/assets/language-configuration.json";
     let grammarConfig = {
         "jac": "source.jac"
     };
 
-    let wasmInitialized = false;
-    letlanguageRegistered = false;
-    let grammarLoaded = false;
-    let cachedGrammarConfig: any = null;
+    glob wasmInitialized = false;
+    glob languageRegistered = false;
+    glob grammarLoaded = false;
+    glob cachedGrammarConfig: any = null;
 
     async def loadSyntax(monaco:any, editor:any) -> any | None {
         if (not languageRegistered) {
@@ -66,7 +66,6 @@ cl {
                 { token: "entity.name.type.class.jac", foreground: "3ac9b0" },
             ],
             colors: {
-                "editor.foreground": "#FFFFFF",
             },
         });
         monaco.editor.setTheme("jac-theme");
