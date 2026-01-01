@@ -3,7 +3,7 @@ cl import from "lucide-react" { Search, FileCode, ChevronRight, X, Eye, Plus }
 cl import from "....lib.utils" { cn }
 
 cl {
-    def ExamplesPanel(props: dict) -> any {
+    def: pub ExamplesPanel(props: dict) -> any {
         examples = props.examples or [];
         onSelectExample = props.onSelectExample;
         className = props.className or "";

@@ -3,7 +3,7 @@ cl import from "lucide-react" { Code2, Braces, FileCode, ChevronDown, X, Check }
 cl import from "...lib.utils" { cn }
 
 cl {
-    def MobileModeSwitcher(props: dict) -> any {
+    def: pub MobileModeSwitcher(props: dict) -> any {
         mode = props.mode or "jac";
         onModeChange = props.onModeChange;
         className = props.className or "";

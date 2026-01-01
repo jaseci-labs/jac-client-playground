@@ -12,7 +12,7 @@ cl import from "lucide-react" {
 cl import from "...lib.utils" { cn }
 
 cl {
-    def ActivityBar(props: dict) -> any {
+    def: pub ActivityBar(props: dict) -> any {
         mode = props.mode or "jac";
         onModeChange = props.onModeChange;
         collapsed = props.collapsed or false;

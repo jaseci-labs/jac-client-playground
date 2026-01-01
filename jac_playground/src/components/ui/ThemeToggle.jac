@@ -4,7 +4,7 @@ cl import from "...lib.utils" { cn }
 
 
 cl {
-    def ThemeToggle(props: dict) -> any {
+    def: pub ThemeToggle(props: dict) -> any {
         theme = props.theme or "light";
         onToggle = props.onToggleTheme;
         className = props.className or "";

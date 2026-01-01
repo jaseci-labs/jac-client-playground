@@ -4,7 +4,7 @@ cl import from "....lib.utils" { cn }
 cl import from "@monaco-editor/react" { Editor }
 
 cl {
-    def CodePanel(props: dict) -> any {
+    def: pub CodePanel(props: dict) -> any {
         mode = props.mode or "jac";
         value = props.value or "";
         onChange = props.onChange;

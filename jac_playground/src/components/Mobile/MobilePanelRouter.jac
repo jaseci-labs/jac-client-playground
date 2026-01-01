@@ -4,7 +4,7 @@ cl import from ".MobilePanels.OutputPanel" { OutputPanel }
 cl import from ".MobilePanels.ExamplesPanel" { ExamplesPanel }
 
 cl {
-    def MobilePanelRouter(props: dict) -> any {
+    def: pub MobilePanelRouter(props: dict) -> any {
         activePanel = props.activePanel or "code";
         mode = props.mode or "jac";
         editorTheme = props.editorTheme or "vs-light";

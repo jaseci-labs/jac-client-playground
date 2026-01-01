@@ -14,7 +14,7 @@ cl import from "lucide-react" {
 cl import from react { useState }
 
 cl {
-    def MobileDebugController(props: dict) -> any {
+    def: pub MobileDebugController(props: dict) -> any {
         onPlay = props.onPlay;
         onPause = props.onPause;
         onStepOver = props.onStepOver;

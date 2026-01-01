@@ -7,7 +7,7 @@ cl import from "lucide-react" {
 cl import from "...lib.utils" { cn }
 
 cl {
-    def MobileBottomNav(props: dict) -> any {
+    def: pub MobileBottomNav(props: dict) -> any {
         activePanel = props.activePanel or "code";
         onChange = props.onChange;
         outputBadge = props.outputBadge or 0;

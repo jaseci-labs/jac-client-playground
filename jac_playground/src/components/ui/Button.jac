@@ -2,7 +2,7 @@
 cl import from "...lib.utils" { cn }
 
 cl {
-    def Button(props:dict) -> any {
+    def: pub Button(props:dict) -> any {
         variant = props.variant or "primary";
         size = props.size or "md";
         onClick = props.onClick;

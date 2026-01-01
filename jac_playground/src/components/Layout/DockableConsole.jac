@@ -13,7 +13,7 @@ cl import from "lucide-react" {
 cl import from "...lib.utils" { cn }
 
 cl {
-    def DockableConsole(props: dict) -> any {
+    def: pub DockableConsole(props: dict) -> any {
         isOpen = props.isOpen;
         if isOpen == None {
             isOpen = true;

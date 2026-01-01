@@ -4,7 +4,7 @@ cl import from "....lib.utils" { cn }
 cl import from "...Visualizer" { Visualizer }
 
 cl {
-    def GraphPanel(props: dict) -> any {
+    def: pub GraphPanel(props: dict) -> any {
         graphData = props.graphData;
         className = props.className or "";
         isDarkMode = props.isDarkMode or false;

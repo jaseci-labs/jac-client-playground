@@ -147,7 +147,7 @@ cl def getEdgeLabel(label: str) -> str {
 }
 
 cl {
-    def Visualizer(props: dict) -> any {
+    def: pub Visualizer(props: dict) -> any {
         graphData = props.graphData;
         loading = props.loading;
         error = props.error;

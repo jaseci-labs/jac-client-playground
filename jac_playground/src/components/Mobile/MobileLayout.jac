@@ -8,7 +8,7 @@ cl import from "..ui.ThemeToggle" { ThemeToggle }
 
 cl {
     
-    def MobileLayout(props: dict) -> any {
+    def: pub MobileLayout(props: dict) -> any {
         # Theme
         theme = props.theme or "light";
         editorTheme = props.editorTheme or "vs-light";

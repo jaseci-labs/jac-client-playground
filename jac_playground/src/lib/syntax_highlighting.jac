@@ -14,7 +14,7 @@ cl {
     glob grammarLoaded = false;
     glob cachedGrammarConfig: any = null;
 
-    async def loadSyntax(monaco:any, editor:any) -> any | None {
+    async def: pub loadSyntax(monaco:any, editor:any) -> any | None {
         if (not languageRegistered) {
             monaco.languages.register({ id: "jac" });
             languageRegistered = true;
@@ -54,7 +54,7 @@ cl {
         return cachedGrammarConfig;
     }
 
-    async def configureTheme(monaco:any, grammarConfig:any) -> None {
+    async def: pub configureTheme(monaco:any, grammarConfig:any) -> None {
         monaco.languages.setLanguageConfiguration("jac", grammarConfig);
         monaco.editor.defineTheme("jac-theme", {
             base: "vs",

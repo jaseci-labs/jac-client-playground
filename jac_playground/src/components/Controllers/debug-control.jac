@@ -11,7 +11,7 @@ cl import from "lucide-react" {
 }
 
 cl {
-    def DebugButton(props: dict) -> any {
+    def: pub DebugButton(props: dict) -> any {
         onClick = props.onClick;
         icon = props.icon;
         label = props.label or "";
@@ -41,7 +41,7 @@ cl {
         );
     }
 
-    def DebugController(props: dict) -> any {
+    def: pub DebugController(props: dict) -> any {
         onContinue = props.onContinue;
         onStepOver = props.onStepOver;
         onStepIn = props.onStepIn;

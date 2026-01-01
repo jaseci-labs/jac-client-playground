@@ -2,7 +2,7 @@ cl import from "lucide-react" { Play, ArrowRightLeft, Loader2 }
 cl import from "...lib.utils" { cn }
 
 cl {
-    def MobileFAB(props: dict) -> any {
+    def: pub MobileFAB(props: dict) -> any {
         mode = props.mode or "jac";
         activePanel = props.activePanel or "code";
         onRun = props.onRun;

@@ -3,7 +3,7 @@ cl import from "..lib.python_thread" { PythonThread }
 
 cl {
   
-    def usePlayground(props: dict) -> dict {
+    def: pub usePlayground(props: dict) -> dict {
         # ===========================================
         # CORE STATE
         # ===========================================
@@ -82,8 +82,8 @@ cl {
         # Load examples on mount
         useEffect(lambda -> None {
             async def loadExamples() -> None {
-                loaded_examples = load_example_list() spawn root;
-                setExamples(loaded_examples.reports[0] or []);
+                # loaded_examples = load_example_list() spawn root;
+                # setExamples(loaded_examples.reports[0] or []);
             }
             loadExamples();
         }, []);

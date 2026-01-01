@@ -1,5 +1,5 @@
 cl {
-    obj PythonThread {
+    obj: pub PythonThread {
 
         def constructor(loadedCallback: any) {
             sharedBuffer = Reflect.construct(SharedArrayBuffer, [4 * 3]);

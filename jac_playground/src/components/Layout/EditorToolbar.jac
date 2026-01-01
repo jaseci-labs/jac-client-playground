@@ -10,7 +10,7 @@ cl import from "...lib.utils" { cn }
 cl import from "..Controllers.debug-control" { DebugController }
 
 cl {
-    def EditorToolbar(props: dict) -> any {
+    def: pub EditorToolbar(props: dict) -> any {
         mode = props.mode or "jac";
         onRun = props.onRun;
         onReset = props.onReset;

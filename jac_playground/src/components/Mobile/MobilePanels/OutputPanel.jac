@@ -3,7 +3,7 @@ cl import from "lucide-react" { Terminal, AlertCircle, FileText, Eraser }
 cl import from "....lib.utils" { cn }
 
 cl {
-    def OutputPanel(props: dict) -> any {
+    def: pub OutputPanel(props: dict) -> any {
         output = props.output or "";
         errors = props.errors or "";
         logs = props.logs or "";

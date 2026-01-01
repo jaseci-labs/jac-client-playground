@@ -6,7 +6,7 @@ cl import from ".Mobile.MobileLayout" { MobileLayout }
 
 cl {
 
-    def PlayGroundLayout(props: dict) -> any {
+    def: pub PlayGroundLayout(props: dict) -> any {
         # Single source of truth - ALL logic in one hook
         playground = usePlayground(props);
         

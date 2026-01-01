@@ -3,7 +3,7 @@ cl import from "lucide-react" { Play, Copy, Check, Code2, FileCode, FileOutput }
 cl import from react { useState }
 
 cl {
-    def Panel(props: dict) -> any {
+    def: pub Panel(props: dict) -> any {
         title = props.title or "";
         subtitle = props.subtitle or "";
         className = props.className or "";

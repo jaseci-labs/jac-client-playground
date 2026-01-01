@@ -4,7 +4,7 @@ cl import from ".ui.Badge" { Badge }
 cl import from ".ui.ThemeToggle" { ThemeToggle }
 
 cl {
-    def TopBar(props:dict) -> any {
+    def: pub TopBar(props:dict) -> any {
         envReady = props.envReady or true;
         theme = props.theme or "light";
         onToggleTheme = props.onToggleTheme;

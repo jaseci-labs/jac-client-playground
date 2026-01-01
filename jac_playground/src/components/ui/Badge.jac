@@ -1,7 +1,7 @@
 cl import from "...lib.utils" { cn }
 
 cl {
-    def Badge(props:dict) -> any {
+    def: pub Badge(props:dict) -> any {
         children = props.children;
         variant = props.variant or "neutral";
         size = props.size or "md";

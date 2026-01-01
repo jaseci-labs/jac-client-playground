@@ -9,7 +9,7 @@ cl import from ".DockableConsole" { DockableConsole }
 
 cl {
     
-    def DesktopLayout(props: dict) -> any {
+    def: pub DesktopLayout(props: dict) -> any {
         # Theme
         theme = props.theme or "light";
         editorTheme = props.editorTheme or "vs-light";

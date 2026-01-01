@@ -10,7 +10,7 @@ cl {
     glob MOBILE_BREAKPOINT = 768;
     glob TABLET_BREAKPOINT = 1024;
     
-    def useIsMobile() -> bool {
+    def: pub useIsMobile() -> bool {
         [isMobile, setIsMobile] = useState(false);
 
         useEffect(lambda -> any {
@@ -32,7 +32,7 @@ cl {
         return isMobile;
     }
     
-    def useIsTablet() -> bool {
+    def: pub useIsTablet() -> bool {
         [isTablet, setIsTablet] = useState(false);
 
         useEffect(lambda -> any {
@@ -52,7 +52,7 @@ cl {
         return isTablet;
     }
     
-    def useIsDesktop() -> bool {
+    def: pub useIsDesktop() -> bool {
         [isDesktop, setIsDesktop] = useState(true);
 
         useEffect(lambda -> any {
@@ -71,7 +71,7 @@ cl {
         return isDesktop;
     }
     
-    def useBreakpoint() -> str {
+    def: pub useBreakpoint() -> str {
         [breakpoint, setBreakpoint] = useState("desktop");
 
         useEffect(lambda -> any {

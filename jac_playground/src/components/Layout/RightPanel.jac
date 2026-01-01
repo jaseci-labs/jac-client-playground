@@ -14,7 +14,7 @@ cl import from "lucide-react" {
 cl import from "...lib.utils" { cn }
 
 cl {
-    def RightPanel(props: dict) -> any {
+    def: pub RightPanel(props: dict) -> any {
         isOpen = props.isOpen;
         if isOpen == None {
             isOpen = true;

@@ -1,7 +1,7 @@
 cl import from react { useState, useRef, useCallback }
 
 cl {
-    def useEditor() -> dict {
+    def: pub useEditor() -> dict {
 
         editorRef = useRef(None);
         monacoRef = useRef(None);

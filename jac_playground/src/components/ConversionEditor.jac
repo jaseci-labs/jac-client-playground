@@ -3,7 +3,7 @@ cl import from ".ui.Panel" { Panel }
 cl import from "@monaco-editor/react" { Editor }
 
 cl {
-    def ConversionEditor(props: dict) -> any {
+    def: pub ConversionEditor(props: dict) -> any {
         inputTitle = props.inputTitle or "Input";
         outputTitle = props.outputTitle or "Output";
         inputLanguage = props.inputLanguage or "python";
