@@ -1,4 +1,4 @@
-cl import from react { useState }
+cl import from react { useState, useMemo }
 cl import from "lucide-react" { 
     Terminal, 
     AlertCircle, 
@@ -21,7 +21,13 @@ cl {
         onToggle = props.onToggle;
         height = props.height or 200;
         onHeightChange = props.onHeightChange;
-        output = props.output or "";
+        original_output = props.output or "";
+        
+        output = useMemo(lambda -> str {
+            pattern = Reflect.construct(RegExp, ['<==START PRINT GRAPH==>.*?<==END PRINT GRAPH==>', 'gs']);
+            return original_output.replace(pattern, '');
+        }, [original_output]);
+        
         errors = props.errors or "";
         logs = props.logs or "";
         onClearOutput = props.onClearOutput;
