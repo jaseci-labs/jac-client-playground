@@ -4,11 +4,10 @@ version = "1.0.0"
 description = "Jac client application: jac-playground"
 entry-point = "src/app.jac"
 
-[plugins.client.vite]
-plugins = ["tailwindcss()"]
-lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
-
 [dependencies.npm]
+react = "^19.2.0"
+react-dom = "^19.2.0"
+react-router-dom = "^6.30.1"
 "@monaco-editor/react" = "^4.7.0"
 "@tailwindcss/vite" = "^4.1.17"
 "clsx" = "^2.1.1"
@@ -16,15 +15,27 @@ lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
 "monaco-editor" = "^0.55.1"
 "monaco-editor-textmate" = "^4.0.0"
 "monaco-textmate" = "^3.0.1"
-"react" = "^19.2.0"
-"react-dom" = "^19.2.0"
 "react-graph-vis" = "^1.0.7"
-"react-router-dom" = "^6.30.1"
 "tailwind-merge" = "^3.4.0"
 "tailwindcss" = "^4.1.17"
 "vis-data" = "^8.0.3"
 "vis-network" = "^10.0.2"
 
+[dev-dependencies.npm]
+vite = "^6.4.1"
+"@babel/cli" = "^7.28.3"
+"@babel/core" = "^7.28.5"
+"@babel/preset-env" = "^7.28.5"
+"@babel/preset-react" = "^7.28.5"
+"@vitejs/plugin-react" = "^4.2.1"
+typescript = "^5.3.3"
+"@types/react" = "^18.2.45"
+"@types/react-dom" = "^18.2.18"
+
+[plugins.client.vite]
+plugins = ["tailwindcss()"]
+lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
+
 [environments.response.headers]
-"Cross-Origin-Opener-Policy" = "same-origin"
-"Cross-Origin-Embedder-Policy" = "require-corp"
+Cross-Origin-Opener-Policy = "same-origin"
+Cross-Origin-Embedder-Policy = "require-corp"
