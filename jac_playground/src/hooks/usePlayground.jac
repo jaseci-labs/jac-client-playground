@@ -1,5 +1,6 @@
 cl import from react { useState, useEffect, useCallback, useRef }
 cl import from "..lib.python_thread" { PythonThread }
+# cl import from "..lib.utils" { load_example_list }
 
 cl {
   
@@ -48,8 +49,7 @@ cl {
         # Graph data state
         [graphData, setGraphData] = useState(None);
         
-        # Props
-        envReady = props.envReady or true;
+        [envReady, setEnvReady] = useState(props.envReady or false);
         
         # ===========================================
         # DERIVED VALUES
@@ -82,7 +82,8 @@ cl {
         # Load examples on mount
         useEffect(lambda -> None {
             async def loadExamples() -> None {
-                # loaded_examples = load_example_list() spawn root;
+                # exampleDir = path.join(process.cwd(), "examples");
+                # loaded_examples = load_example_list(exampleDir);
                 # setExamples(loaded_examples.reports[0] or []);
             }
             loadExamples();
@@ -99,7 +100,9 @@ cl {
 
         useEffect(lambda -> None {
             console.log("App mounted");
-            newPythonThread = Reflect.construct(PythonThread, []);
+            newPythonThread = Reflect.construct(PythonThread, [lambda loaded: bool -> None {
+                setEnvReady(loaded);
+            }]);
             setPythonThread(newPythonThread);
         }, []);
 

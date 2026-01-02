@@ -58,7 +58,7 @@ cl {
         onStop = props.onStop;
         
         # Environment
-        envReady = props.envReady or true;
+        envReady = props.envReady or false;
         
         # Mobile UI state (from hook)
         activePanel = props.activePanel or "code";

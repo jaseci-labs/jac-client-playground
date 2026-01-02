@@ -5,7 +5,7 @@ cl import from ".ui.ThemeToggle" { ThemeToggle }
 
 cl {
     def: pub TopBar(props:dict) -> any {
-        envReady = props.envReady or true;
+        envReady = props.envReady or false;
         theme = props.theme or "light";
         onToggleTheme = props.onToggleTheme;
         onOpenSettings = props.onOpenSettings;
@@ -36,7 +36,7 @@ cl {
                 
                 <div className="flex items-center gap-2">
                     <Badge
-                        variant={envReady and "primary" or "neutral"}
+                        variant={envReady and "success" or "warning"}
                         size="sm"
                     >
                         {envReady and "Ready" or "Loading..."}

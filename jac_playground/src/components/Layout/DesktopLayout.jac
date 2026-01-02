@@ -51,7 +51,7 @@ cl {
         onhandleDebugAction = props.onhandleDebugAction;
         
         # Props
-        envReady = props.envReady or true;
+        envReady = props.envReady or false;
         graphData = props.graphData;
         
         # Desktop UI state

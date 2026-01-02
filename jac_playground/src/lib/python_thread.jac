@@ -23,6 +23,14 @@ cl {
                 } else {
                     console.error("Failed to initialize Python environment");
                 }
+                # Notify host about environment readiness if callback provided
+                if (self.callbackLoaded != None) {
+                    try {
+                        self.callbackLoaded(data.success);
+                    } except err {
+                        console.error("callbackLoaded threw:", err);
+                    }
+                }
             } 
             elif (data.type == "stdout") {
                 if (self.callbackStdout != None) {
