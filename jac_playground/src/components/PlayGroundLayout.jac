@@ -1,3 +1,5 @@
+cl import from react { useEffect }
+
 cl import from "..hooks.useMobile" { useIsMobile }
 cl import from "..hooks.usePlayground" { usePlayground }
 
@@ -9,9 +11,14 @@ cl {
     def: pub PlayGroundLayout(props: dict) -> any {
         # Single source of truth - ALL logic in one hook
         playground = usePlayground(props);
+        examples = props.examples;
         
         # Check if mobile viewport
         isMobile = useIsMobile();
+
+        useEffect(lambda -> None {
+            playground.setExamples(props.examples);
+        }, [props.examples]);
         
         # Render appropriate layout based on viewport
         if isMobile {
@@ -35,7 +42,7 @@ cl {
                     onClearErrors={playground.onClearErrors}
                     onClearLogs={playground.onClearLogs}
                     graphData={playground.graphData}
-                    examples={playground.examples}
+                    examples={examples}
                     onSelectExample={playground.onSelectExample}
                     onRun={playground.onRun}
                     onConvert={playground.onConvert}
@@ -75,7 +82,7 @@ cl {
                 onClearErrors={playground.onClearErrors}
                 onClearLogs={playground.onClearLogs}
                 graphData={playground.graphData}
-                examples={playground.examples}
+                examples={examples}
                 onSelectExample={playground.onSelectExample}
                 onRun={playground.onRun}
                 onConvert={playground.onConvert}

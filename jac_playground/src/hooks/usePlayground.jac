@@ -1,6 +1,5 @@
 cl import from react { useState, useEffect, useCallback, useRef }
 cl import from "..lib.python_thread" { PythonThread }
-# cl import from "..lib.utils" { load_example_list }
 
 cl {
   
@@ -77,16 +76,6 @@ cl {
                 meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
                 document.head.appendChild(meta);
             }
-        }, []);
-        
-        # Load examples on mount
-        useEffect(lambda -> None {
-            async def loadExamples() -> None {
-                # exampleDir = path.join(process.cwd(), "examples");
-                # loaded_examples = load_example_list(exampleDir);
-                # setExamples(loaded_examples.reports[0] or []);
-            }
-            loadExamples();
         }, []);
         
         # Apply theme class to document
@@ -411,6 +400,7 @@ cl {
             
             # Examples
             "examples": examples,
+            "setExamples": setExamples,
             "onSelectExample": handleSelectExample,
             
             # Execution
