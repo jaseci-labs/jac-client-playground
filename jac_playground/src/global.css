@@ -103,3 +103,31 @@
   border-bottom: 6px solid transparent;
   margin-left: 5px;
 }
+
+/* Loading dots animation used in TopBar */
+.loading-dots .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  margin-left: 4px;
+  background: currentColor;
+  opacity: 0;
+  animation: dot-fade 1s infinite;
+}
+
+@keyframes dot-fade {
+  0%, 20% { opacity: 0; transform: translateY(0); }
+  40% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Tooltip bubble used in TopBar */
+.tooltip-bubble {
+  box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-dots .dot { animation: none; }
+  .tooltip-bubble { transition: none; }
+}

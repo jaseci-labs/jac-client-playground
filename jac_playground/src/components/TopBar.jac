@@ -1,10 +1,13 @@
+cl import from "react" { useState }
 cl import from "..lib.utils" { cn }
-cl import from "lucide-react" { Search, Settings, User, HelpCircle, Github }
+cl import from "lucide-react" { Search, Settings, User, HelpCircle, Github, Loader2, Check, X }
 cl import from ".ui.Badge" { Badge }
 cl import from ".ui.ThemeToggle" { ThemeToggle }
 
 cl {
     def: pub TopBar(props:dict) -> any {
+        [tooltipDismissed, setTooltipDismissed] = useState(false);
+        
         envReady = props.envReady or false;
         theme = props.theme or "light";
         onToggleTheme = props.onToggleTheme;
@@ -20,27 +23,43 @@ cl {
                     </span>
                 </div>
                 
-                # <div className="flex-1 flex items-center justify-center max-w-md mx-auto">
-                #     <div className="relative w-full">
-                #         <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-secondary" />
-                #         <input
-                #             type="text"
-                #             placeholder="Search commands, examples..."
-                #             className="w-full pl-9 pr-3 py-1.5 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-text-secondary"
-                #         />
-                #         <kbd className="absolute right-2 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[10px] bg-surface border border-border rounded text-text-secondary">
-                #             ⌘K
-                #         </kbd>
-                #     </div>
-                # </div>
-                
                 <div className="flex items-center gap-2">
-                    <Badge
-                        variant={envReady and "success" or "warning"}
-                        size="sm"
-                    >
-                        {envReady and "Ready" or "Loading..."}
-                    </Badge>
+                    <div className="relative" aria-live="polite">
+                        <Badge
+                            variant={envReady and "success" or "warning"}
+                            size="sm"
+                        >
+                            {envReady and (
+                                <span className="flex items-center gap-2">
+                                    <Check className="w-4 h-4 text-success-foreground" />
+                                    <span>Ready</span>
+                                </span>
+                            ) or (
+                                <span className="flex items-center gap-2">
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span className="flex items-center">
+                                        Loading
+                                        <span className="loading-dots inline-flex items-center ml-1">
+                                            <span style={ { "animationDelay": "0s" } } className="dot" />
+                                            <span style={ { "animationDelay": "0.15s" } } className="dot" />
+                                            <span style={ { "animationDelay": "0.3s" } } className="dot" />
+                                        </span>
+                                    </span>
+                                </span>
+                            )}
+                        </Badge>
+
+                        { (not envReady and not tooltipDismissed) and (
+                            <div className={cn(
+                                "absolute top-full mt-2 right-0 w-64 text-xs bg-surface border border-border text-text-primary p-2 rounded shadow-sm tooltip-bubble z-50 pointer-events-auto"
+                            )}>
+                                <button onClick={lambda -> None { setTooltipDismissed(true); }} className="absolute -top-2 -right-2 p-1.5 bg-surface rounded-full hover:bg-surface-hover text-text-secondary">
+                                    <X className="w-3.5 h-3.5" />
+                                </button>
+                                Please wait — the environment is initializing. This may take a few seconds.
+                            </div>
+                        ) }
+                    </div>
                     
                     <div className="w-px h-5 bg-border mx-1" />
                     
@@ -66,14 +85,6 @@ cl {
                         onToggleTheme={onToggleTheme}
                         className="p-1.5"
                     />
-                    
-                    # <button
-                    #     onClick={onOpenSettings}
-                    #     className="p-1.5 text-text-secondary hover:text-text-primary hover:bg-background rounded transition-colors"
-                    #     title="Settings"
-                    # >
-                    #     <Settings size={16} />
-                    # </button>
                 </div>
             </header>
         );
