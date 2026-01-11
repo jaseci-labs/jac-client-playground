@@ -29,3 +29,9 @@ Start coding in Jac right away: -->
 Jac is a domain-specific language designed for AI workflows, enabling seamless execution of intelligent agents and computational graphs.
 
 For more details, visit the **<a href="https://www.jac-lang.org/" target="_blank" rel="noopener noreferrer">Jac Language Documentation</a>**.
+
+Local playground setup
+
+To run the included playground locally, follow the instructions in the playground README:
+
+- See [jac_playground/README.md](jac_playground/README.md) for step-by-step local setup and run commands.
