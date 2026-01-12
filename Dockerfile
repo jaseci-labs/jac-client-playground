@@ -42,6 +42,12 @@ RUN pip install -e /tmp/jaseci/jac
 # The jac-client plugin uses .jac files that need jac's auto-import mechanism
 RUN pip install -e /tmp/jaseci/jac-client
 
+# Install jac plugins explicitly
+RUN jac install
+
+# Verify plugins are loaded
+RUN jac plugins
+
 # Install additional Python dependencies
 RUN pip install --no-cache-dir python-dotenv
 
