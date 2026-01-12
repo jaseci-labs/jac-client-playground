@@ -54,7 +54,12 @@ ENV PORT=8000
 ENV HOST=0.0.0.0
 ENV DEBUG=false
 ENV LOG_LEVEL=info
-EN
+ENV PYTHONUNBUFFERED=1
+
+# Create non-root user for security
+RUN useradd -m -u 1000 appuser \
+    && chown -R appuser:appuser /app
+
 USER appuser
 
 # Expose port
