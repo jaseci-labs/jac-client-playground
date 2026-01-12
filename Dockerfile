@@ -29,18 +29,8 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && rm -rf /var/lib/apt/lists/* \
     && node -v && npm -v
 
-# Clone jaseci repository and initialize submodules
-RUN git clone https://github.com/jaseci-labs/jaseci.git /tmp/jaseci \
-    && cd /tmp/jaseci \
-    && git submodule update --init --recursive
-
-# Install jac in editable mode (required for .jac files with .impl.jac to work properly)
-# jaclang itself has .jac files that need their implementation files accessible
-RUN pip install -e /tmp/jaseci/jac
-
-# Install jac-client in editable mode to support .jac file compilation
-# The jac-client plugin uses .jac files that need jac's auto-import mechanism
-RUN pip install -e /tmp/jaseci/jac-client
+# Install jaclang and jac-client from PyPI
+RUN pip install --no-cache-dir jaclang jac-client
 
 # Install additional Python dependencies
 RUN pip install --no-cache-dir python-dotenv
@@ -64,12 +54,7 @@ ENV PORT=8000
 ENV HOST=0.0.0.0
 ENV DEBUG=false
 ENV LOG_LEVEL=info
-ENV PYTHONUNBUFFERED=1
-
-# Create non-root user for security
-RUN useradd -m -u 1000 appuser \
-    && chown -R appuser:appuser /app
-
+EN
 USER appuser
 
 # Expose port
