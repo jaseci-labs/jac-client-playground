@@ -42,12 +42,6 @@ RUN pip install -e /tmp/jaseci/jac
 # The jac-client plugin uses .jac files that need jac's auto-import mechanism
 RUN pip install -e /tmp/jaseci/jac-client
 
-# Install jac plugins explicitly
-RUN jac install
-
-# Verify plugins are loaded
-RUN jac plugins
-
 # Install additional Python dependencies
 RUN pip install --no-cache-dir python-dotenv
 
@@ -56,6 +50,9 @@ COPY jac_playground /app
 
 # Install client-side npm dependencies
 RUN jac add --cl
+
+# Install project dependencies from jac.toml (this also ensures plugins are loaded)
+RUN jac install
 
 # Clean up unnecessary files but keep jac and jac-client sources
 # They contain .jac and .impl.jac files needed at runtime
