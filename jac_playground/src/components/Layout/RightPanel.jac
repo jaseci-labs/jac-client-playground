@@ -203,7 +203,7 @@ cl {
                     <div className="flex-1 overflow-y-auto p-3">
                         <div className="space-y-3">
                             <a 
-                                href="https://www.jac-lang.org/docs/" 
+                                href="https://docs.jaseci.org/getting-started/" 
                                 target="_blank"
                                 className="flex items-center gap-2 p-2 text-xs text-text-secondary hover:text-primary hover:bg-primary/5 rounded transition-all"
                             >
@@ -212,7 +212,7 @@ cl {
                                 <ExternalLink size={12} className="ml-auto" />
                             </a>
                             <a 
-                                href="https://www.jac-lang.org/docs/learn/jac-lang/" 
+                                href="https://docs.jaseci.org/language/" 
                                 target="_blank"
                                 className="flex items-center gap-2 p-2 text-xs text-text-secondary hover:text-primary hover:bg-primary/5 rounded transition-all"
                             >
