@@ -13,6 +13,8 @@ cl {
     glob languageRegistered = false;
     glob grammarLoaded = false;
     glob cachedGrammarConfig: any = null;
+    glob cachedRegistry: any = null;
+    glob cachedGrammarMap: any = null;
 
     async def: pub loadSyntax(monaco:any, editor:any) -> any | None {
         if (not languageRegistered) {
@@ -44,20 +46,27 @@ cl {
                     };
                 }
             }]);
+            cachedRegistry = registry;
 
             grammar = Reflect.construct(Map, []);
             grammar.set("jac", "source.jac");
-
-            await wireTmGrammars(monaco, registry, grammar, editor);
+            cachedGrammarMap = grammar;
             grammarLoaded = true;
         }
+
+        if (editor and cachedRegistry and cachedGrammarMap) {
+            await wireTmGrammars(monaco, cachedRegistry, cachedGrammarMap, editor);
+        }
+
         return cachedGrammarConfig;
     }
 
-    async def: pub configureTheme(monaco:any, grammarConfig:any) -> None {
+    async def: pub configureTheme(monaco:any, grammarConfig:any, isDark: bool = false) -> None {
         monaco.languages.setLanguageConfiguration("jac", grammarConfig);
+        baseTheme = isDark and "vs-dark" or "vs";
+
         monaco.editor.defineTheme("jac-theme", {
-            base: "vs",
+            base: baseTheme,
             inherit: true,
             rules: [
                 { token: "storage.type.class.jac", foreground: "569CD6" },
@@ -65,10 +74,10 @@ cl {
                 { token: "keyword.control.flow.jac", foreground: "C678DD" },
                 { token: "entity.name.type.class.jac", foreground: "3ac9b0" },
             ],
-            colors: {
-            },
+            colors: {},
         });
+
         monaco.editor.setTheme("jac-theme");
-        console.log("Jac language successfully registered");
+        console.log("Jac language successfully registered and theme applied (isDark=", isDark, ")");
     }
 }

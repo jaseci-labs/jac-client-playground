@@ -9,6 +9,12 @@ cl {
             console.log("Python Worker initialized");
             
             self.callbackLoaded = loadedCallback;
+            self.callbackStdout = null;
+            self.callbackStderr = null;
+            self.callbackConversionResult = null;
+            self.callbackBreakHit = null;
+            self.callbackExecEnd = null;
+            self.callbackJacGraph = null;
             self.pythonThread.onmessage = self.messageHandler.bind(self);
             self.pythonThread.postMessage({ "type": "initialize", "sharedBuffer": sharedBuffer });
         }

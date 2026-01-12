@@ -1,4 +1,4 @@
-cl import from react { useState, useRef, useCallback, forwardRef, useImperativeHandle }
+cl import from react { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle }
 cl import from "lucide-react" { Maximize2, Minimize2, Columns2, Code2, GitGraph }
 cl import from "..lib.utils" { cn }
 cl import from ".ui.Panel" { Panel }
@@ -36,19 +36,16 @@ cl {
         # Ref to always access the latest toggleBreakpoint function
         toggleBreakpointRef = useRef(None);
 
+        # Function to register Jac language and load syntax highlighting
         registerJacLanguage = useCallback(lambda monaco:any, editor:any -> None {
-            if (textMateLoadedRef.current) {
-                return;
-            }
-
             try {
                 grammarConfig = loadSyntax(monaco, editor);
-                configureTheme(monaco, grammarConfig);
+                configureTheme(monaco, grammarConfig, isDarkMode);
                 textMateLoadedRef.current = True;
             } except Exception as error {
                 console.error("Failed to register Jac language:", error);
             }
-        });
+        }, [isDarkMode]);
 
         async def handleEditorDidMount(editor:any, monaco:any) -> None {
             editorRef.current = editor;
@@ -58,16 +55,24 @@ cl {
                 await registerJacLanguage(monaco, editor);
             }
 
-            # Enable the left-side margin for breakpoint icons
             editor.updateOptions({ glyphMargin: true });
-
-            # Handle clicks on the glyph margin to toggle breakpoints
             editor.onMouseDown(lambda e:any -> None {
                 if (e.target.type == monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN) {
                     toggleBreakpointRef.current(e.target.position.lineNumber);
                 }
             });
         };
+
+        # Apply theme when isDarkMode changes
+        useEffect(lambda -> None {
+            async def applyTheme() {
+                if (monacoRef.current and editorRef.current) {
+                    grammarConfig = loadSyntax(monacoRef.current, editorRef.current);
+                    configureTheme(monacoRef.current, grammarConfig, isDarkMode);
+                }
+            }
+            applyTheme();
+        }, [isDarkMode]);
 
         toggleBreakpoint = useCallback(lambda line:int -> None {
             setBreakpoints(lambda prev:any -> any {
@@ -189,7 +194,7 @@ cl {
                                     language={language}
                                     value={value}
                                     onChange={onChange}
-                                    theme={props.editorTheme or "vs-light"}
+                                    theme={"jac-theme"}
                                     onMount={handleEditorDidMount}
                                     options={{
                                         "fontSize": 14,
