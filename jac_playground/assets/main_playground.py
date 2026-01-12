@@ -82,7 +82,7 @@ with contextlib.redirect_stdout(
             temp_jac.write(SAFE_CODE)
             temp_jac_path = temp_jac.name
 
-        code = "from jaclang.cli.cli import run\n" f"run('{temp_jac_path}')\n"
+        code = "from jaclang.cli.commands import execution\n" f"execution.run('{temp_jac_path}')\n"
         debugger.set_code(code=code, filepath=temp_jac_path)
         debugger.do_run()
         # Grab the graph output from the debugger

@@ -101,7 +101,7 @@ async function loadPyodideAndJacLang() {
     await pyodide.loadPackage("micropip");
     await pyodide.runPythonAsync(`
 import micropip
-await micropip.install(['pluggy', 'jaclang==0.9.6'])
+await micropip.install(['pluggy', 'jaclang'])
     `);
     const success = await checkJaclangLoaded(pyodide);
     // Run the debugger module.
@@ -122,7 +122,7 @@ async function loadPythonResources(pyodide) {
 
 async function checkJaclangLoaded(pyodide) {
   try {
-    await pyodide.runPythonAsync(`from jaclang.cli.cli import run`);
+    await pyodide.runPythonAsync(`from jaclang.cli.commands import execution`);
     console.log("JacLang is available.");
     return true;
   } catch (error) {

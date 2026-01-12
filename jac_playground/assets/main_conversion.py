@@ -44,8 +44,8 @@ with contextlib.redirect_stdout(
             try:
                 # Call jac2py with just the input file path (like run function)
                 code = (
-                    "from jaclang.cli.cli import jac2py\n"
-                    f"jac2py('{temp_jac_path}')\n"
+                    "from jaclang.cli.commands import transform\n"
+                    f"transform.jac2py('{temp_jac_path}')\n"
                 )
 
                 exec(code)
@@ -68,7 +68,7 @@ with contextlib.redirect_stdout(
             try:
                 # Call py2jac with just the input file path (like run function)
                 code = (
-                    "from jaclang.cli.cli import py2jac\n" f"py2jac('{temp_py_path}')\n"
+                    "from jaclang.cli.commands import transform\n" f"transform.py2jac('{temp_py_path}')\n"
                 )
 
                 exec(code)
