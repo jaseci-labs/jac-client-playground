@@ -172,7 +172,7 @@ cl {
         }
 
         def handleBreakpointsChange(breakpoints: list) -> None {
-            console.log("Breakpoints updated:", breakpoints);
+            breakpoints = breakpoints;
             if (pythonThread) {
                 setTimeout(lambda -> None {
                     pythonThread.setBreakpoints(breakpoints);
