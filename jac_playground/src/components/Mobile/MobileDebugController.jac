@@ -11,7 +11,6 @@ cl import from "lucide-react" {
     Bug,
     X
 }
-cl import from react { useState }
 
 cl {
     def: pub MobileDebugController(props: dict) -> any {
@@ -27,7 +26,7 @@ cl {
         onToggleDebug = props.onToggleDebug;
         className = props.className or "";
         
-        [isExpanded, setIsExpanded] = useState(false);
+        has isExpanded: bool = false;
         
         # If not in debug mode, show a simple toggle button
         if not isDebugging {
@@ -65,7 +64,7 @@ cl {
                                 Debug Mode
                             </span>
                             <button
-                                onClick={lambda -> None { setIsExpanded(false); }}
+                                onClick={lambda -> None { isExpanded = false; }}
                                 className="p-1 rounded-full hover:bg-background transition-colors"
                                 aria-label="Collapse"
                             >
@@ -141,7 +140,7 @@ cl {
                 
                 {(not isExpanded) and (
                     <button
-                        onClick={lambda -> None { setIsExpanded(true); }}
+                        onClick={lambda -> None { isExpanded = true; }}
                         className="w-10 h-10 rounded-xl bg-warning/20 flex items-center justify-center"
                         aria-label="Expand Debug Controls"
                     >

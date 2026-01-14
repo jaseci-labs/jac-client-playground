@@ -1,4 +1,3 @@
-cl import from "react" { useState }
 cl import from "..lib.utils" { cn }
 cl import from "lucide-react" { Search, Settings, User, HelpCircle, Github, Loader2, Check, X }
 cl import from ".ui.Badge" { Badge }
@@ -6,7 +5,7 @@ cl import from ".ui.ThemeToggle" { ThemeToggle }
 
 cl {
     def: pub TopBar(props:dict) -> any {
-        [tooltipDismissed, setTooltipDismissed] = useState(false);
+        has tooltipDismissed: bool = false;
         
         envReady = props.envReady or false;
         theme = props.theme or "light";
@@ -53,7 +52,7 @@ cl {
                             <div className={cn(
                                 "absolute top-full mt-2 right-0 w-64 text-xs bg-surface border border-border text-text-primary p-2 rounded shadow-sm tooltip-bubble z-50 pointer-events-auto"
                             )}>
-                                <button onClick={lambda -> None { setTooltipDismissed(true); }} className="absolute -top-2 -right-2 p-1.5 bg-surface rounded-full hover:bg-surface-hover text-text-secondary">
+                                <button onClick={lambda -> None { tooltipDismissed = True; }} className="absolute -top-2 -right-2 p-1.5 bg-surface rounded-full hover:bg-surface-hover text-text-secondary">
                                     <X className="w-3.5 h-3.5" />
                                 </button>
                                 Please wait — the environment is initializing. This may take a few seconds.

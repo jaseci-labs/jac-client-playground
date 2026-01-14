@@ -1,4 +1,4 @@
-cl import from react { useState, Suspense, lazy }
+cl import from react { Suspense, lazy }
 cl import from "lucide-react" { Waypoints, ZoomIn, ZoomOut, Maximize2, Loader2 }
 cl import from "....lib.utils" { cn }
 cl import from "...Visualizer" { Visualizer }
@@ -8,22 +8,22 @@ cl {
         graphData = props.graphData;
         className = props.className or "";
         isDarkMode = props.isDarkMode or false;
-        
-        [zoom, setZoom] = useState(1);
-        [isFullscreen, setIsFullscreen] = useState(false);
+
+        has zoom: float = 1.0;
+        has isFullscreen: bool = false; 
         
         hasGraph = graphData and graphData.nodes and graphData.nodes.length > 0;
         
         def handleZoomIn() -> None {
-            setZoom(Math.min(zoom + 0.25, 3));
+            zoom = Math.min(zoom + 0.25, 3);
         }
         
         def handleZoomOut() -> None {
-            setZoom(Math.max(zoom - 0.25, 0.5));
+            zoom = Math.max(zoom - 0.25, 0.5);
         }
         
         def handleFullscreen() -> None {
-            setIsFullscreen(not isFullscreen);
+            isFullscreen = not isFullscreen;
             # Could implement actual fullscreen API here
         }
         

@@ -1,4 +1,3 @@
-cl import from react { useState }
 cl import from "lucide-react" { FileCode, FileOutput, Play, Copy, Check, Loader2, Maximize2, Minimize2 }
 cl import from "....lib.utils" { cn }
 cl import from "@monaco-editor/react" { Editor }
@@ -12,10 +11,10 @@ cl {
         className = props.className or "";
         onRun = props.onRun;
         isRunning = props.isRunning or false;
-        
-        [copiedInput, setCopiedInput] = useState(false);
-        [copiedOutput, setCopiedOutput] = useState(false);
-        [expandedPanel, setExpandedPanel] = useState("none");  # "none" | "input" | "output"
+
+        has copiedInput: bool = false;
+        has copiedOutput: bool = false;
+        has expandedPanel: str = "none";  # "none" | "input" | "output"
         
         # Determine what to show based on mode
         isJacMode = mode == "jac";
@@ -30,14 +29,14 @@ cl {
         
         def handleCopyInput() -> None {
             navigator.clipboard.writeText(value);
-            setCopiedInput(true);
-            setTimeout(lambda -> None { setCopiedInput(false); }, 2000);
+            copiedInput = true;
+            setTimeout(lambda -> None { copiedInput = false; }, 2000);
         }
         
         def handleCopyOutput() -> None {
             navigator.clipboard.writeText(outputValue);
-            setCopiedOutput(true);
-            setTimeout(lambda -> None { setCopiedOutput(false); }, 2000);
+            copiedOutput = true;
+            setTimeout(lambda -> None { copiedOutput = false; }, 2000);
         }
         
         # Run input code based on mode
@@ -66,11 +65,11 @@ cl {
         
         # Toggle expand for input/output panels
         def toggleExpandInput() -> None {
-            setExpandedPanel(expandedPanel == "input" and "none" or "input");
+            expandedPanel = expandedPanel == "input" and "none" or "input";
         }
         
         def toggleExpandOutput() -> None {
-            setExpandedPanel(expandedPanel == "output" and "none" or "output");
+            expandedPanel = expandedPanel == "output" and "none" or "output";
         }
         
         # For Jac mode - full height editor (no run button, FAB handles it)

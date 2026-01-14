@@ -1,4 +1,3 @@
-cl import from react { useState }
 cl import from "lucide-react" { 
     PanelRightClose, 
     PanelRightOpen, 
@@ -24,9 +23,9 @@ cl {
         onSelectExample = props.onSelectExample;
         activeSection = props.activeSection or "examples";
         onSectionChange = props.onSectionChange;
-        
-        [searchQuery, setSearchQuery] = useState("");
-        [expandedCategories, setExpandedCategories] = useState({});
+
+        has searchQuery: str = "";
+        has expandedCategories: dict = {};
         
         # Filter examples by search
         filteredExamples = examples;
@@ -52,7 +51,7 @@ cl {
             newExpanded = {**expandedCategories};
             currentValue = true;
             newExpanded[cat] = not currentValue;
-            setExpandedCategories(newExpanded);
+            expandedCategories = newExpanded;
         }
         
         sections = [
@@ -141,7 +140,7 @@ cl {
                         #             type="text"
                         #             placeholder="Search examples..."
                         #             value={searchQuery}
-                        #             onChange={lambda e: any -> None { setSearchQuery(e.target.value); }}
+                        #             onChange={lambda e: any -> None { searchQuery = e.target.value; }}
                         #             className="w-full pl-8 pr-3 py-1.5 text-xs bg-background border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
                         #         />
                         #     </div>

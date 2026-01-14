@@ -1,4 +1,3 @@
-cl import from react { useState }
 cl import from "lucide-react" { Search, FileCode, ChevronRight, X, Eye, Plus }
 cl import from "....lib.utils" { cn }
 
@@ -8,9 +7,9 @@ cl {
         onSelectExample = props.onSelectExample;
         className = props.className or "";
         
-        [searchQuery, setSearchQuery] = useState("");
-        [selectedExample, setSelectedExample] = useState(None);
-        [showPreview, setShowPreview] = useState(false);
+        has searchQuery: str = "";
+        has selectedExample: dict = None;
+        has showPreview: bool = false;
         
         # Filter examples by search
         filteredExamples = examples;
@@ -32,21 +31,21 @@ cl {
         }
         
         def handleSelectExample(example: dict) -> None {
-            setSelectedExample(example);
-            setShowPreview(true);
+            selectedExample = example;
+            showPreview = true;
         }
         
         def handleInsert() -> None {
             if selectedExample and onSelectExample {
                 onSelectExample(selectedExample["id"]);
             }
-            setShowPreview(false);
-            setSelectedExample(None);
+            showPreview = false;
+            selectedExample = None;
         }
         
         def handleClosePreview() -> None {
-            setShowPreview(false);
-            setSelectedExample(None);
+            showPreview = false;
+            selectedExample = None;
         }
         
         return (
@@ -58,7 +57,7 @@ cl {
                 #             type="text"
                 #             placeholder="Search examples..."
                 #             value={searchQuery}
-                #             onChange={lambda e: any -> None { setSearchQuery(e.target.value); }}
+                #             onChange={lambda e: any -> None { searchQuery = e.target.value; }}
                 #             className="w-full pl-9 pr-3 py-2.5 text-sm bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
                 #         />
                 #     </div>
