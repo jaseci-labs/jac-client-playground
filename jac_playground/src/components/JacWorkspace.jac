@@ -1,4 +1,4 @@
-cl import from react { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle }
+cl import from react { useEffect, useRef, useCallback, forwardRef, useImperativeHandle }
 cl import from "lucide-react" { Maximize2, Minimize2, Columns2, Code2, GitGraph }
 cl import from "..lib.utils" { cn }
 cl import from ".ui.Panel" { Panel }
@@ -18,7 +18,7 @@ cl {
         onBreakpointsChange = props.onBreakpointsChange;
         
         # View state: "split" | "editor" | "graph"
-        [viewMode, setViewMode] = useState("split");
+        has viewMode: str = "split";
         
         showEditor = viewMode == "split" or viewMode == "editor";
         showGraph = viewMode == "split" or viewMode == "graph";
@@ -31,7 +31,7 @@ cl {
         breakpointDecorationsRef = useRef([]);
         executionDecorationRef = useRef([]);
 
-        [breakpoints, setBreakpoints] = useState([]); # Array of line numbers
+        has breakpoints: any = []; # Array of line numbers
 
         # Ref to always access the latest toggleBreakpoint function
         toggleBreakpointRef = useRef(None);
@@ -75,7 +75,7 @@ cl {
         }, [isDarkMode]);
 
         toggleBreakpoint = useCallback(lambda line:int -> None {
-            setBreakpoints(lambda prev:any -> any {
+            breakpoints = (lambda prev:any -> any {
                 isExisting = prev.includes(line);
                 newBreakpoints = prev.filter(lambda l:any -> any { return l != line; });
                 newBreakpoints = newBreakpoints if isExisting else prev.concat([line]);
@@ -169,7 +169,7 @@ cl {
                                 <div className="flex items-center gap-1">
                                     {viewMode == "editor" and (
                                         <button
-                                            onClick={lambda -> None { setViewMode("split"); }}
+                                            onClick={lambda -> None { viewMode = "split"; }}
                                             className="p-1.5 hover:bg-surface rounded text-text-secondary hover:text-text-primary transition-colors"
                                             title="Split View"
                                         >
@@ -178,7 +178,7 @@ cl {
                                     )}
                                     {viewMode != "editor" and (
                                         <button
-                                            onClick={lambda -> None { setViewMode("editor"); }}
+                                            onClick={lambda -> None { viewMode = "editor"; }}
                                             className="p-1.5 hover:bg-surface rounded text-text-secondary hover:text-text-primary transition-colors"
                                             title="Maximize Editor"
                                         >
@@ -221,7 +221,7 @@ cl {
                                 <div className="flex items-center gap-1">
                                     {viewMode == "graph" and (
                                         <button
-                                            onClick={lambda -> None { setViewMode("split"); }}
+                                            onClick={lambda -> None { viewMode = "split"; }}
                                             className="p-1.5 hover:bg-surface rounded text-text-secondary hover:text-text-primary transition-colors"
                                             title="Split View"
                                         >
@@ -230,7 +230,7 @@ cl {
                                     )}
                                     {viewMode != "graph" and (
                                         <button
-                                            onClick={lambda -> None { setViewMode("graph"); }}
+                                            onClick={lambda -> None { viewMode = "graph"; }}
                                             className="p-1.5 hover:bg-surface rounded text-text-secondary hover:text-text-primary transition-colors"
                                             title="Maximize Graph"
                                         >

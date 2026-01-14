@@ -8,7 +8,7 @@ cl {
         className = props.className or "";
         
         has searchQuery: str = "";
-        has selectedExample: dict = None;
+        has selectedExample: dict | None = None;
         has showPreview: bool = false;
         
         # Filter examples by search
