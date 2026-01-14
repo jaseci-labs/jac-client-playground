@@ -26,7 +26,7 @@ cl {
         has logs: str = "";
         
         # Examples data
-        has examples: list = [];
+        [examples, setExamples] = useState(props.examples or []);
         
         # Execution state
         has pythonThread: any = None;
@@ -102,7 +102,6 @@ cl {
             }
         }, [breakpoints, pythonThread]);
 
-        
         # ===========================================
         # HANDLERS - Business Logic
         # ===========================================
@@ -158,7 +157,7 @@ cl {
             };
             pythonThread.callbackExecEnd = lambda -> None {
                 isRunning = false;
-                console.log("***** Execution ended");
+                console.log("Execution ended");
                 editorRef.current?.clearExecutionHighlight();
             };
             pythonThread.callbackJacGraph = lambda graph_str: any -> None {
@@ -174,7 +173,6 @@ cl {
 
         def handleBreakpointsChange(breakpoints: list) -> None {
             console.log("Breakpoints updated:", breakpoints);
-            console.log("**** hitting this");
             if (pythonThread) {
                 setTimeout(lambda -> None {
                     pythonThread.setBreakpoints(breakpoints);
