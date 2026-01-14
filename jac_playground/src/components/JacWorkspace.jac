@@ -1,13 +1,16 @@
-cl import from react { useEffect, useRef, useCallback, forwardRef, useImperativeHandle }
-cl import from "lucide-react" { Maximize2, Minimize2, Columns2, Code2, GitGraph }
-cl import from "..lib.utils" { cn }
-cl import from ".ui.Panel" { Panel }
-cl import from "@monaco-editor/react" { Editor }
-cl import from ".Visualizer" { Visualizer }
-cl import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
-
 cl {
+    import from react { useEffect, useRef, useCallback, forwardRef, useImperativeHandle }
+    import from "lucide-react" { Maximize2, Minimize2, Columns2, Code2, GitGraph }
+    import from "..lib.utils" { cn }
+    import from ".ui.Panel" { Panel }
+    import from "@monaco-editor/react" { Editor }
+    import from ".Visualizer" { Visualizer }
+    import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
+
     glob: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> any {
+        # View state: "split" | "editor" | "graph"
+        has viewMode: str = "split";
+
         theme = props.theme or "light";
         language = props.language or "python";
         value = props.value or "";
@@ -16,9 +19,6 @@ cl {
         className = props.className or "";
         isDarkMode = props.isDarkMode or false;
         onBreakpointsChange = props.onBreakpointsChange;
-        
-        # View state: "split" | "editor" | "graph"
-        has viewMode: str = "split";
         
         showEditor = viewMode == "split" or viewMode == "editor";
         showGraph = viewMode == "split" or viewMode == "graph";
