@@ -1,4 +1,3 @@
-cl import from react { useState }
 cl import from "lucide-react" { Code2, Braces, FileCode, ChevronDown, X, Check }
 cl import from "...lib.utils" { cn }
 
@@ -7,8 +6,8 @@ cl {
         mode = props.mode or "jac";
         onModeChange = props.onModeChange;
         className = props.className or "";
-        
-        [isOpen, setIsOpen] = useState(false);
+
+        has isOpen: bool = false;
         
         modes = [
             { "id": "jac", "icon": Code2, "label": "Jac", "shortLabel": "Jac" },
@@ -23,13 +22,13 @@ cl {
             if onModeChange {
                 onModeChange(modeId);
             }
-            setIsOpen(false);
+            isOpen = false;
         }
         
         return (
             <div className={cn("relative", className)}>
                 <button
-                    onClick={lambda -> None { setIsOpen(not isOpen); }}
+                    onClick={lambda -> None { isOpen = not isOpen; }}
                     className={cn(
                         "flex items-center gap-1.5 px-2.5 py-1.5 rounded-full",
                         "bg-primary/10 border border-primary/20",
@@ -51,7 +50,7 @@ cl {
                     <>
                         <div 
                             className="fixed inset-0 z-[100]" 
-                            onClick={lambda -> None { setIsOpen(false); }}
+                            onClick={lambda -> None { isOpen = false; }}
                         />
                         
                         <div className="absolute top-full right-0 mt-2 z-[101] w-48 bg-surface border border-border rounded-xl shadow-xl overflow-hidden">

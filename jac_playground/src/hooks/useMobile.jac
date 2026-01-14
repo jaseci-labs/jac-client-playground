@@ -1,5 +1,4 @@
-
-cl import from react {useState, useEffect}
+cl import from react { useEffect }
 
 # Breakpoint constants
 # Mobile: <= 767px
@@ -11,11 +10,11 @@ cl {
     glob TABLET_BREAKPOINT = 1024;
     
     def: pub useIsMobile() -> bool {
-        [isMobile, setIsMobile] = useState(false);
+        has isMobile: bool = false;
 
         useEffect(lambda -> any {
             def checkMobile() -> None {
-                setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+                isMobile = window.innerWidth < MOBILE_BREAKPOINT;
             }
             
             # Check on mount
@@ -33,12 +32,12 @@ cl {
     }
     
     def: pub useIsTablet() -> bool {
-        [isTablet, setIsTablet] = useState(false);
+        has isTablet: bool = false;
 
         useEffect(lambda -> any {
             def checkTablet() -> None {
                 width = window.innerWidth;
-                setIsTablet(width >= MOBILE_BREAKPOINT and width < TABLET_BREAKPOINT);
+                isTablet = width >= MOBILE_BREAKPOINT and width < TABLET_BREAKPOINT;
             }
             
             checkTablet();
@@ -53,11 +52,11 @@ cl {
     }
     
     def: pub useIsDesktop() -> bool {
-        [isDesktop, setIsDesktop] = useState(true);
+        has isDesktop: bool = true;
 
         useEffect(lambda -> any {
             def checkDesktop() -> None {
-                setIsDesktop(window.innerWidth >= TABLET_BREAKPOINT);
+                isDesktop = window.innerWidth >= TABLET_BREAKPOINT;
             }
             
             checkDesktop();
@@ -72,17 +71,17 @@ cl {
     }
     
     def: pub useBreakpoint() -> str {
-        [breakpoint, setBreakpoint] = useState("desktop");
+        has breakpoint: str = "desktop";
 
         useEffect(lambda -> any {
             def checkBreakpoint() -> None {
                 width = window.innerWidth;
                 if width < MOBILE_BREAKPOINT {
-                    setBreakpoint("mobile");
+                    breakpoint = "mobile";
                 } elif width < TABLET_BREAKPOINT {
-                    setBreakpoint("tablet");
+                    breakpoint = "tablet";
                 } else {
-                    setBreakpoint("desktop");
+                    breakpoint = "desktop";
                 }
             }
             

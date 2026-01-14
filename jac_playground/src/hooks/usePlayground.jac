@@ -1,4 +1,4 @@
-cl import from react { useState, useEffect, useCallback, useRef }
+cl import from react { useEffect, useCallback, useRef }
 cl import from "..lib.python_thread" { PythonThread }
 
 cl {
@@ -9,46 +9,46 @@ cl {
         # ===========================================
         
         # Theme state
-        [theme, setTheme] = useState("light");
+        has theme: str = "light";
         
         # Mode state
-        [mode, setMode] = useState("jac");
+        has mode: str = "jac";
         
         # Code state
         editorRef = useRef(null);
-        [jacCode, setJacCode] = useState("");
-        [pythonCode, setPythonCode] = useState("");
-        [outputCode, setOutputCode] = useState("");
+        has jacCode: str = "";
+        has pythonCode: str = "";
+        has outputCode: str = "";
         
         # Output state (separated for console tabs)
-        [output, setOutput] = useState("");
-        [errors, setErrors] = useState("");
-        [logs, setLogs] = useState("");
+        has output: str = "";
+        has errors: str = "";
+        has logs: str = "";
         
         # Examples data
-        [examples, setExamples] = useState([]);
+        [examples, setExamples] = useState(props.examples or []);
         
         # Execution state
-        [pythonThread, setPythonThread] = useState(None);
-        [isRunning, setIsRunning] = useState(false);
-        [isConverting, setIsConverting] = useState(false);
-        [isDebugging, setIsDebugging] = useState(false);
-        [breakpoints, setBreakpoints] = useState([]);
+        has pythonThread: any = None;
+        has isRunning: bool = false;
+        has isConverting: bool = false;
+        has isDebugging: bool = false;
+        has breakpoints: list = [];
         
         # Desktop-specific UI state
-        [activityBarCollapsed, setActivityBarCollapsed] = useState(false);
-        [rightPanelOpen, setRightPanelOpen] = useState(true);
-        [rightPanelSection, setRightPanelSection] = useState("examples");
-        [consoleOpen, setConsoleOpen] = useState(true);
-        [consoleHeight, setConsoleHeight] = useState(200);
+        has activityBarCollapsed: bool = false;
+        has rightPanelOpen: bool = true;
+        has rightPanelSection: str = "examples";
+        has consoleOpen: bool = true;
+        has consoleHeight: int = 200;
         
         # Mobile-specific UI state
-        [activePanel, setActivePanel] = useState("code");
+        has activePanel: str = "code";
 
         # Graph data state
-        [graphData, setGraphData] = useState(None);
+        has graphData: dict | None = None;
         
-        [envReady, setEnvReady] = useState(props.envReady or false);
+        has envReady: bool = props.envReady or false;
         
         # ===========================================
         # DERIVED VALUES
@@ -90,9 +90,9 @@ cl {
         useEffect(lambda -> None {
             console.log("App mounted");
             newPythonThread = Reflect.construct(PythonThread, [lambda loaded: bool -> None {
-                setEnvReady(loaded);
+                envReady = loaded;
             }]);
-            setPythonThread(newPythonThread);
+            pythonThread = newPythonThread;
         }, []);
 
         useEffect(lambda -> None {
@@ -102,7 +102,6 @@ cl {
             }
         }, [breakpoints, pythonThread]);
 
-        
         # ===========================================
         # HANDLERS - Business Logic
         # ===========================================
@@ -112,31 +111,31 @@ cl {
             # Clear conversion inputs when switching between conversion modes
             # This prevents stale data from showing in the wrong input field
             if newMode == "py2jac" {
-                setOutputCode("");
-                setJacCode("");
-                setPythonCode("");  # Clear Python input when entering py2jac
+                outputCode = "";
+                jacCode = "";
+                pythonCode = "";  # Clear Python input when entering py2jac
             } 
             
-            setMode(newMode);
-            setOutput("");
-            setErrors("");
-            setOutputCode("");
+            mode = newMode;
+            output = "";
+            errors = "";
+            outputCode = "";
         }
         
         # Handle theme toggle
         def handleToggleTheme() -> None {
-            setTheme(theme == "dark" and "light" or "dark");
+            theme = theme == "dark" and "light" or "dark";
         }
         
         # Handle example selection
         def handleSelectExample(exampleId: str) -> None {
             for ex in examples {
                 if ex["id"] == exampleId {
-                    setJacCode(ex["code"]);
-                    setMode("jac");
-                    setLogs(f"✓ Loaded example: {ex['title']}");
+                    jacCode = ex["code"];
+                    mode = "jac";
+                    logs = f"✓ Loaded example: {ex['title']}";
                     # Navigate to code panel on mobile
-                    setActivePanel("code");
+                    activePanel = "code";
                 }
             }
         }
@@ -147,23 +146,23 @@ cl {
                 editorRef.current?.highlightExecutionLine(lineNumber);
             };
             pythonThread.callbackStdout = lambda outputText: str -> None {
-                setOutput(lambda prev: str -> str {
+                output = lambda prev: str -> str {
                     return prev + outputText;
-                });
+                };
             };
             pythonThread.callbackStderr = lambda errorText: str -> None {
-                setOutput(lambda prev: str -> str {
+                output = lambda prev: str -> str {
                     return prev + errorText;
-                });
+                };
             };
             pythonThread.callbackExecEnd = lambda -> None {
-                setIsRunning(false);
-                console.log("***** Execution ended");
+                isRunning = false;
+                console.log("Execution ended");
                 editorRef.current?.clearExecutionHighlight();
             };
             pythonThread.callbackJacGraph = lambda graph_str: any -> None {
                 graph = JSON.parse(graph_str);
-                setGraphData(graph);
+                graphData = graph;
             };
             try {
                 pythonThread.startExecution(jac_code);
@@ -173,9 +172,7 @@ cl {
         }
 
         def handleBreakpointsChange(breakpoints: list) -> None {
-            console.log("Breakpoints updated:", breakpoints);
-            setBreakpoints(breakpoints);
-            console.log("**** hitting this");
+            breakpoints = breakpoints;
             if (pythonThread) {
                 setTimeout(lambda -> None {
                     pythonThread.setBreakpoints(breakpoints);
@@ -185,14 +182,14 @@ cl {
 
         def runPythonCodes(python_code: str) -> None {
             pythonThread.callbackStdout = lambda outputText: str -> None {
-                setOutput(lambda prev: str -> str {
+                output = lambda prev: str -> str {
                     return prev + outputText;
-                });
+                };
             };
             pythonThread.callbackStderr = lambda errorText: str -> None {
-                setOutput(lambda prev: str -> str {
+                output = lambda prev: str -> str {
                     return prev + errorText;
-                });
+                };
             };
             try {
                 pythonThread.startPythonExecution(python_code);
@@ -203,9 +200,9 @@ cl {
 
         def performConversion(code: str, conversionType: str) -> None {
             pythonThread.callbackConversionResult = lambda result: str -> None {
-                setOutputCode(lambda prev: str -> str {
+                outputCode = lambda prev: str -> str {
                     return prev + result;
-                });
+                };
             };
             try {
                 pythonThread.startConversion(conversionType, code);
@@ -218,13 +215,13 @@ cl {
         async def handleRun(title: str = "") -> None {
             result = [];
             graph = [];
-            setIsRunning(true);
-            setOutput("");
-            setErrors("");
-            setGraphData(None);
+            isRunning = true;
+            output = "";
+            errors = "";
+            graphData = None;
             
             # Navigate to output panel on mobile for immediate feedback
-            setActivePanel("output");
+            activePanel = "output";
 
             if title == "Python Input" {
                 runPythonCodes(pythonCode);
@@ -241,25 +238,25 @@ cl {
             else {
                 runJacCodes(jacCode);
             }
-            setIsRunning(false);
+            isRunning = false;
         }
         
         # Convert code based on mode
         async def handleConvert() -> None {
-            setIsConverting(true);
-            setOutput("");
-            setOutputCode("");
+            isConverting = true;
+            output = "";
+            outputCode = "";
             
             if mode == "jac2py" {
-                setLogs("Converting Jac to Python...");
+                logs = "Converting Jac to Python...";
                 performConversion(jacCode, "jac2py");
-                setLogs("✓ Conversion complete.");
+                logs = "✓ Conversion complete.";
             } else {
-                setLogs("Converting Python to Jac...");
+                logs = "Converting Python to Jac...";
                 performConversion(pythonCode, "py2jac");
-                setLogs("✓ Conversion complete.");
+                logs = "✓ Conversion complete.";
             }
-            setIsConverting(false);
+            isConverting = false;
         }
         
         handleDebugAction = useCallback(lambda action: str -> None {
@@ -290,9 +287,9 @@ cl {
                         }
                     ]);
                 }
-                setOutput("");
+                output = "";
                 pythonThread.startExecution(jacCode);
-                setIsRunning(true);
+                isRunning = true;
             }
             elif (action == "stop") {
                 console.log("stop");
@@ -302,70 +299,70 @@ cl {
         
         # Reset editor
         def handleReset() -> None {
-            setJacCode("");
-            setPythonCode("");
-            setOutputCode("");
-            setOutput("");
-            setErrors("");
-            setLogs("");
+            jacCode = "";
+            pythonCode = "";
+            outputCode = "";
+            output = "";
+            errors = "";
+            logs = "";
         }
         
         # Toggle debug mode
         def handleDebug() -> None {
-            setIsDebugging(not isDebugging);
-            setLogs(isDebugging and "Debug mode disabled." or "Debug mode enabled. Set breakpoints in the editor.");
+            isDebugging = not isDebugging;
+            logs = isDebugging and "Debug mode disabled." or "Debug mode enabled. Set breakpoints in the editor.";
         }
         
         # Clear handlers
         def handleClearOutput() -> None {
-            setOutput("");
+            output = "";
         }
         
         def handleClearErrors() -> None {
-            setErrors("");
+            errors = "";
         }
         
         def handleClearLogs() -> None {
-            setLogs("");
+            logs = "";
         }
         
         # Code change handlers
         def handleJacCodeChange(v: any) -> None {
-            setJacCode(v);
+            jacCode = v;
         }
         
         def handlePythonCodeChange(v: any) -> None {
-            setPythonCode(v);
+            pythonCode = v;
         }
         
         # Desktop UI handlers
         def handleToggleActivityBar() -> None {
-            setActivityBarCollapsed(not activityBarCollapsed);
+            activityBarCollapsed = not activityBarCollapsed;
         }
         
         def handleToggleRightPanel() -> None {
-            setRightPanelOpen(not rightPanelOpen);
+            rightPanelOpen = not rightPanelOpen;
         }
         
         def handleToggleConsole() -> None {
-            setConsoleOpen(not consoleOpen);
+            consoleOpen = not consoleOpen;
         }
         
         # Mobile navigation handlers
         def handleNavigateToCode() -> None {
-            setActivePanel("code");
+            activePanel = "code";
         }
         
         def handleNavigateToOutput() -> None {
-            setActivePanel("output");
+            activePanel = "output";
         }
         
         def handleNavigateToGraph() -> None {
-            setActivePanel("graph");
+            activePanel = "graph";
         }
         
         def handleNavigateToExamples() -> None {
-            setActivePanel("examples");
+            activePanel = "examples";
         }
         
         # ===========================================

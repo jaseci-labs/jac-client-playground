@@ -1,7 +1,7 @@
 # Visualizer component - Graph visualization using react-graph-vis
 # Full Jac implementation
 
-cl import from react { useState, useEffect, useMemo, useCallback }
+cl import from react { useEffect, useMemo, useCallback }
 cl import from "lucide-react" { Waypoints }
 cl import from "react-graph-vis" { default as Graph }
 
@@ -156,15 +156,14 @@ cl {
         
         shouldShowHeader = showHeader != false;
         hasGraphData = graphData and graphData.nodes and graphData.nodes.length > 0;
-        
-        # Tooltip state
-        [tooltip, setTooltip] = useState({
+
+        has tooltip: dict = {
             "visible": false,
             "x": 0,
             "y": 0,
             "node": None
-        });
-        
+        };
+
         # Get theme-aware graph options
         graphOptions = useMemo(
             lambda -> dict { return getGraphOptions(isDarkMode); },
@@ -261,12 +260,12 @@ cl {
                         nodeId = event.node;
                         node = findNodeById(nodeId);
                         if node {
-                            setTooltip({
+                            tooltip = {
                                 "visible": true,
                                 "x": event.pointer.DOM.x,
                                 "y": event.pointer.DOM.y,
                                 "node": node
-                            });
+                            };
                         }
                     },
                     "blurNode": lambda event -> None {
@@ -274,7 +273,7 @@ cl {
                         if canvas {
                             canvas.style.cursor = "grab";
                         }
-                        setTooltip({ "visible": false, "x": 0, "y": 0, "node": None });
+                        tooltip = { "visible": false, "x": 0, "y": 0, "node": None };
                     },
                     "hoverEdge": lambda event -> None {
                         canvas = event.event?.target;

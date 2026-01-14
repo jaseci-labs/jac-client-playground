@@ -1,4 +1,4 @@
-cl import from react { useState, useMemo }
+cl import from react { useMemo }
 cl import from "lucide-react" { Terminal, AlertCircle, FileText, Eraser }
 cl import from "....lib.utils" { cn }
 
@@ -17,8 +17,8 @@ cl {
         onClearErrors = props.onClearErrors;
         onClearLogs = props.onClearLogs;
         className = props.className or "";
-        
-        [activeTab, setActiveTab] = useState("output");
+
+        has activeTab: str = "output";
         
         tabs = [
             { "id": "output", "icon": Terminal, "label": "Output", "content": output, "onClear": onClearOutput },
@@ -41,7 +41,7 @@ cl {
                             return (
                                 <button
                                     key={tab["id"]}
-                                    onClick={lambda -> None { setActiveTab(tab["id"]); }}
+                                    onClick={lambda -> None { activeTab = tab["id"]; }}
                                     className={cn(
                                         "flex items-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md transition-colors",
                                         isActive and "bg-background text-text-primary" or "text-text-secondary"

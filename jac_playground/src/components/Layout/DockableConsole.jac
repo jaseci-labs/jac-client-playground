@@ -1,4 +1,4 @@
-cl import from react { useState, useMemo }
+cl import from react { useMemo }
 cl import from "lucide-react" { 
     Terminal, 
     AlertCircle, 
@@ -33,10 +33,10 @@ cl {
         onClearOutput = props.onClearOutput;
         onClearErrors = props.onClearErrors;
         onClearLogs = props.onClearLogs;
-        
-        [activeTab, setActiveTab] = useState("output");
-        [isMaximized, setIsMaximized] = useState(false);
-        [isDragging, setIsDragging] = useState(false);
+
+        has activeTab: str = "output";
+        has isMaximized: bool = false;
+        has isDragging: bool = false;
         
         tabs = [
             { "id": "output", "icon": Terminal, "label": "Output", "content": output, "onClear": onClearOutput },
@@ -47,7 +47,7 @@ cl {
         activeTabData = tabs.find(lambda t: dict -> bool { return t["id"] == activeTab; });
         
         def handleMouseDown(e: any) -> None {
-            setIsDragging(true);
+            isDragging = true;
             startY = e.clientY;
             startHeight = height;
             
@@ -59,7 +59,7 @@ cl {
             }
             
             def onMouseUp() -> None {
-                setIsDragging(false);
+                isDragging = false;
                 document.removeEventListener("mousemove", onMouseMove);
                 document.removeEventListener("mouseup", onMouseUp);
             }
@@ -79,7 +79,7 @@ cl {
                         return (
                             <button
                                 key={tab["id"]}
-                                onClick={lambda -> None { setActiveTab(tab["id"]); onToggle(); }}
+                                onClick={lambda -> None { activeTab = tab["id"]; onToggle(); }}
                                 className="flex items-center gap-1.5 px-2 py-1 text-xs text-text-secondary hover:text-text-primary transition-colors"
                             >
                                 <Icon size={12} />
@@ -131,7 +131,7 @@ cl {
                             return (
                                 <button
                                     key={tab["id"]}
-                                    onClick={lambda -> None { setActiveTab(tab["id"]); }}
+                                    onClick={lambda -> None { activeTab = tab["id"]; }}
                                     className={cn(
                                         "flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-t transition-colors",
                                         isActive and "bg-background text-text-primary border-t-2 border-primary" or "text-text-secondary hover:text-text-primary"
@@ -161,7 +161,7 @@ cl {
                         )}
                         
                         <button
-                            onClick={lambda -> None { setIsMaximized(not isMaximized); }}
+                            onClick={lambda -> None { isMaximized = not isMaximized; }}
                             className="p-1 text-text-secondary hover:text-text-primary transition-colors"
                             title={isMaximized and "Restore" or "Maximize"}
                         >

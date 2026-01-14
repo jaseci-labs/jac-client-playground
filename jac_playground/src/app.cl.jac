@@ -1,14 +1,14 @@
 import ".global.css";
 import from .components.PlayGroundLayout { PlayGroundLayout }
-import from react { useState, useEffect }
+import from react { useEffect }
 
 def: pub app() -> None {
-    [examples, setExamples] = useState([]);
+    has examples: list = [];
 
     useEffect(lambda -> None {
         async def loadExamples() -> None {
-            examples = load_example_list() spawn root;
-            setExamples(examples.reports[0]);
+            response = load_example_list() spawn root;
+            examples = response.reports[0];
         }
         loadExamples();
     }, []);

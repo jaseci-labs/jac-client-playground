@@ -1,6 +1,5 @@
 cl import from "...lib.utils" { cn }
 cl import from "lucide-react" { Play, Copy, Check, Code2, FileCode, FileOutput }
-cl import from react { useState }
 
 cl {
     def: pub Panel(props: dict) -> any {
@@ -13,14 +12,14 @@ cl {
         onCopy = props.onCopy;
         codeValue = props.codeValue or "";
         icon = props.icon;
-        
-        [copied, setCopied] = useState(false);
+
+        has copied: bool = false;
         
         def handleCopy() -> None {
             if codeValue {
                 navigator.clipboard.writeText(codeValue);
-                setCopied(true);
-                setTimeout(lambda -> None { setCopied(false); }, 2000);
+                copied = true;
+                setTimeout(lambda -> None { copied = false; }, 2000);
             }
             if onCopy {
                 onCopy();

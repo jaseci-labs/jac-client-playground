@@ -1,4 +1,4 @@
-cl import from react { useState, useRef, useCallback }
+cl import from react { useRef, useCallback }
 
 cl {
     def: pub useEditor() -> dict {
@@ -10,7 +10,7 @@ cl {
         breakpointDecorationsRef = useRef([]);
         executionDecorationRef = useRef([]);
 
-        [breakpoints, setBreakpoints] = useState([]); # Array of line numbers
+        has breakpoints: any = []; # Array of line numbers
 
         # Ref to always access the latest toggleBreakpoint function
         toggleBreakpointRef = useRef(None);
@@ -31,13 +31,13 @@ cl {
         };
 
         toggleBreakpoint = useCallback(lambda line:int -> None {
-            setBreakpoints(lambda prev:any -> any {
+            breakpoints = lambda prev:any -> any {
                 isExisting = prev.includes(line);
                 newBreakpoints = prev.filter(lambda l:any -> any { return l != line; });
                 newBreakpoints = newBreakpoints if isExisting else prev.concat([line]);
                 updateBreakpointDecorations(newBreakpoints);
                 return newBreakpoints;
-            });
+            };
         }, []);
 
         # Keep the ref updated with the latest function
