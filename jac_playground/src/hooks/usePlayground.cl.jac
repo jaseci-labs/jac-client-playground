@@ -156,7 +156,9 @@ def: pub usePlayground(props: dict) -> dict {
         pythonThread.callbackExecEnd = lambda -> None {
             isRunning = false;
             console.log("Execution ended");
-            editorRef.current?.clearExecutionHighlight();
+            if (editorRef.current and editorRef.current.clearExecutionHighlight) {
+                editorRef.current.clearExecutionHighlight();
+            }
         };
         pythonThread.callbackJacGraph = lambda graph_str: any -> None {
             graph = JSON.parse(graph_str);
