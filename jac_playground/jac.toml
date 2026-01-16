@@ -1,7 +1,7 @@
 [project]
-name = "jac_playground"
+name = "jac-playground"
 version = "1.0.0"
-description = "Jac client application: jac_playground"
+description = "Jac client application: jac-playground"
 entry-point = "main.jac"
 
 [dependencies]
