@@ -1,4 +1,4 @@
-import ".global.css";
+import ".styles.global.css";
 import from .components.PlayGroundLayout { PlayGroundLayout }
 import from react { useEffect }
 

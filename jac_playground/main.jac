@@ -1,7 +1,7 @@
 import from pathlib { Path }
 
 walker load_example_list {
-    has example_path: str = "src/examples";
+    has example_path: str = "examples";
     has examples_list: list = [];
 
     def id_to_title(id_str: str) -> str {

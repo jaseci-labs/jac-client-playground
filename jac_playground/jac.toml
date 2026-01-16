@@ -1,16 +1,13 @@
 [project]
-name = "jac-playground"
+name = "jac_playground"
 version = "1.0.0"
-description = "Jac client application: jac-playground"
-entry-point = "src/app.jac"
+description = "Jac client application: jac_playground"
+entry-point = "main.jac"
 
-[serve]
-base_route_app = "app"
+[dependencies]
 
 [dependencies.npm]
-react = "^19.2.0"
-react-dom = "^19.2.0"
-react-router-dom = "^6.30.1"
+jac-client-node = "1.0.3"
 "@monaco-editor/react" = "^4.7.0"
 "@tailwindcss/vite" = "^4.1.17"
 clsx = "^2.1.1"
@@ -25,26 +22,15 @@ vis-data = "^8.0.3"
 vis-network = "^10.0.2"
 
 [dependencies.npm.dev]
-vite = "^6.4.1"
-"@babel/cli" = "^7.28.3"
-"@babel/core" = "^7.28.5"
-"@babel/preset-env" = "^7.28.5"
-"@babel/preset-react" = "^7.28.5"
-"@vitejs/plugin-react" = "^4.2.1"
-typescript = "^5.3.3"
-"@types/react" = "^18.2.45"
-"@types/react-dom" = "^18.2.18"
+"@jac-client/dev-deps" = "1.0.0"
 
-[dev-dependencies.npm]
-vite = "^6.4.1"
-"@babel/cli" = "^7.28.3"
-"@babel/core" = "^7.28.5"
-"@babel/preset-env" = "^7.28.5"
-"@babel/preset-react" = "^7.28.5"
-"@vitejs/plugin-react" = "^4.2.1"
-typescript = "^5.3.3"
-"@types/react" = "^18.2.45"
-"@types/react-dom" = "^18.2.18"
+[dev-dependencies]
+watchdog = ">=3.0.0"
+
+[serve]
+base_route_app = "app"
+
+[plugins.client]
 
 [plugins.client.vite]
 plugins = ["tailwindcss()"]
