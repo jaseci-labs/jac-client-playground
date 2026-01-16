@@ -31,7 +31,7 @@ conda activate jac-playground
 3. Install the required Python packages (specific versions):
 
 ```bash
-pip install jac-client==0.2.6 jaclang==0.9.6
+pip install jac-client jaclang
 ```
 
 4. Change into the playground folder and install web dependencies used by the client:
@@ -44,13 +44,13 @@ jac add --cl
 5. Start the local playground server:
 
 ```bash
-jac serve src/app.jac
+jac start
 ```
 
 6. Open the app in your browser:
 
 ```
-http://localhost:8000/page/app
+http://localhost:8000
 ```
 
 Notes:
