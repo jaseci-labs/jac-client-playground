@@ -9,7 +9,6 @@ walker load_example_list {
     }
     can execute with `root entry {
         root_path = Path(self.example_path);
-        
         for subfolder in root_path.iterdir() {
             if subfolder.is_dir() {
                 for jac_file in subfolder.glob("*.jac") {
