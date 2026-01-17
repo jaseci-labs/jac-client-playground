@@ -72,4 +72,4 @@ Add npm packages with the --cl flag:
 
 ```bash
 jac add --cl react-router-dom
-```
+``` 
