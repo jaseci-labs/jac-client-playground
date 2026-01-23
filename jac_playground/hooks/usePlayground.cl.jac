@@ -7,7 +7,7 @@ def: pub usePlayground(props: dict) -> dict {
     # ===========================================
     
     # Theme state
-    has theme: str = "light";
+    has theme: str = "dark";
     
     # Mode state
     has mode: str = "jac";

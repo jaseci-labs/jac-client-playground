@@ -5,6 +5,7 @@ packages/
 *.jir
 __jaccache__/
 .jaccache/
+.jac/
 
 # Python
 __pycache__/
