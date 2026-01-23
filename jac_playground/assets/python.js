@@ -98,6 +98,7 @@ async function readFileAsBytes(fileName) {
 async function loadPyodideAndJacLang() {
   try {
     // Install required packages via micropip
+    await pyodide.loadPackage("sqlite3");
     await pyodide.loadPackage("micropip");
     await pyodide.runPythonAsync(`
 import micropip
@@ -231,6 +232,33 @@ function callbackGraph(graph) {
 
 async function startExecution(safeCode) {
   console.log("*********Starting code execution.");
+
+  // Clear the .jac/data folder before each execution
+  // This prevents state from persisting between runs
+  await pyodide.runPythonAsync(`
+import os
+import shutil
+
+# Find and clear the .jac/data folder
+def clear_jac_data():
+    # Check common locations for .jac folder
+    possible_paths = [
+        '.jac/data',
+        os.path.expanduser('~/.jac/data'),
+        '/home/pyodide/.jac/data',
+        '/.jac/data'
+    ]
+
+    for jac_data_path in possible_paths:
+        if os.path.exists(jac_data_path) and os.path.isdir(jac_data_path):
+            try:
+                shutil.rmtree(jac_data_path)
+            except Exception as e:
+                pass
+
+clear_jac_data()
+  `);
+
   safeCode += `
 with entry {
     print("<==START PRINT GRAPH==>");
