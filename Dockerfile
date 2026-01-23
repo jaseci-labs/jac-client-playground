@@ -25,7 +25,7 @@ RUN pip install --no-cache-dir jaclang jac-client
 COPY jac_playground /app
 
 # Install client-side npm dependencies and project dependencies
-RUN jac add --cl && jac install
+RUN jac add --npm && jac install
 
 # Set environment variables
 ENV PORT=8000 \
