@@ -1,7 +1,7 @@
 import from "..lib.utils" { cn }
 import from ".ui.Panel" { Panel }
 import from "@monaco-editor/react" { Editor }
-import from "react" { useRef, useEffect }
+import from "react" { useRef }
 import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
 
 
@@ -29,7 +29,7 @@ def: pub ConversionEditor(props: dict) -> any {
         }
     }
 
-    useEffect(lambda -> None {
+    can with props.editorTheme entry {
         async def applyTheme(){
             if (not monacoRef.current) {
                 return;
@@ -46,7 +46,7 @@ def: pub ConversionEditor(props: dict) -> any {
             }
         }
         applyTheme();
-    }, [props.editorTheme]);
+    }
 
     return (
         <div className={cn("h-full w-full grid grid-cols-2 gap-3", className)}>

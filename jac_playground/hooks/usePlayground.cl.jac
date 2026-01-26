@@ -1,4 +1,4 @@
-import from react { useEffect, useCallback, useRef }
+import from react { useCallback, useRef }
 import from "..lib.python_thread" { PythonThread }
 
 def: pub usePlayground(props: dict) -> dict {
@@ -66,7 +66,7 @@ def: pub usePlayground(props: dict) -> dict {
     # ===========================================
     
     # Inject viewport meta tag for proper mobile rendering
-    useEffect(lambda -> None {
+    can with entry {
         existingViewport = document.querySelector("meta[name='viewport']");
         if not existingViewport {
             meta = document.createElement("meta");
@@ -74,31 +74,31 @@ def: pub usePlayground(props: dict) -> dict {
             meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
             document.head.appendChild(meta);
         }
-    }, []);
+    }
     
     # Apply theme class to document
-    useEffect(lambda -> None {
+    can with theme entry {
         if theme == "dark" {
             document.documentElement.classList.add("dark");
         } else {
             document.documentElement.classList.remove("dark");
         }
-    }, [theme]);
+    }
 
-    useEffect(lambda -> None {
+    can with entry {
         console.log("App mounted");
         newPythonThread = Reflect.construct(PythonThread, [lambda loaded: bool -> None {
             envReady = loaded;
         }]);
         pythonThread = newPythonThread;
-    }, []);
+    }
 
-    useEffect(lambda -> None {
+    can with (breakpoints, pythonThread) entry {
         if (pythonThread) {
             console.log("Syncing breakpoints to Python thread:", breakpoints);
             pythonThread.setBreakpoints(breakpoints);
         }
-    }, [breakpoints, pythonThread]);
+    }
 
     # ===========================================
     # HANDLERS - Business Logic
