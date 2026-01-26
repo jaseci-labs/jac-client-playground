@@ -1,5 +1,5 @@
 import from "lucide-react" { Waypoints }
-import from "react" { useState, useEffect, useMemo, useCallback, useRef }
+import from "react" { useState, useMemo, useCallback, useRef }
 import from "react-graph-vis" { * as GraphModule }
 
 glob Graph: GraphModule = GraphModule.default;
@@ -185,7 +185,7 @@ def: pub Visualizer(props: dict) -> any {
     }, [isDarkMode]);
 
     # Set default grab cursor on canvas after component mounts
-    useEffect(lambda -> any {
+    can with hasGraphData entry {
         timer = setTimeout(lambda -> None {
             canvas = document.querySelector("canvas");
             if canvas {
@@ -196,10 +196,10 @@ def: pub Visualizer(props: dict) -> any {
         return lambda -> None {
             clearTimeout(timer);
         };
-    }, [hasGraphData]);
+    }
 
     # Handle container resize
-    useEffect(lambda -> any {
+    can with hasGraphData entry {
         if not containerRef.current or not networkRef.current {
             return;
         }
@@ -217,11 +217,10 @@ def: pub Visualizer(props: dict) -> any {
         }]);
 
         resizeObserver.observe(containerRef.current);
-
         return lambda -> None {
             resizeObserver.disconnect();
         };
-    }, [hasGraphData]);
+    }
 
     # Transform data for react-graph-vis
     visGraph = useMemo(lambda -> any {

@@ -1,5 +1,3 @@
-import from react { useEffect }
-
 # Breakpoint constants
 # Mobile: <= 767px
 # Tablet: 768px - 1023px  
@@ -11,29 +9,26 @@ glob TABLET_BREAKPOINT = 1024;
 def: pub useIsMobile() -> bool {
     has isMobile: bool = false;
 
-    useEffect(lambda -> any {
+    can with entry {
         def checkMobile() -> None {
             isMobile = window.innerWidth < MOBILE_BREAKPOINT;
         }
-        
         # Check on mount
         checkMobile();
-        
+
         # Listen for resize
         window.addEventListener("resize", checkMobile);
-        
         return lambda -> None {
             window.removeEventListener("resize", checkMobile);
         };
-    }, []);
-
+    }
     return isMobile;
 }
 
 def: pub useIsTablet() -> bool {
     has isTablet: bool = false;
 
-    useEffect(lambda -> any {
+    can with entry {
         def checkTablet() -> None {
             width = window.innerWidth;
             isTablet = width >= MOBILE_BREAKPOINT and width < TABLET_BREAKPOINT;
@@ -41,11 +36,10 @@ def: pub useIsTablet() -> bool {
         
         checkTablet();
         window.addEventListener("resize", checkTablet);
-        
         return lambda -> None {
             window.removeEventListener("resize", checkTablet);
         };
-    }, []);
+    }
 
     return isTablet;
 }
@@ -53,18 +47,17 @@ def: pub useIsTablet() -> bool {
 def: pub useIsDesktop() -> bool {
     has isDesktop: bool = true;
 
-    useEffect(lambda -> any {
+    can with entry {
         def checkDesktop() -> None {
             isDesktop = window.innerWidth >= TABLET_BREAKPOINT;
         }
         
         checkDesktop();
         window.addEventListener("resize", checkDesktop);
-        
         return lambda -> None {
             window.removeEventListener("resize", checkDesktop);
         };
-    }, []);
+    }
 
     return isDesktop;
 }
@@ -72,7 +65,7 @@ def: pub useIsDesktop() -> bool {
 def: pub useBreakpoint() -> str {
     has breakpoint: str = "desktop";
 
-    useEffect(lambda -> any {
+    can with entry {
         def checkBreakpoint() -> None {
             width = window.innerWidth;
             if width < MOBILE_BREAKPOINT {
@@ -90,7 +83,7 @@ def: pub useBreakpoint() -> str {
         return lambda -> None {
             window.removeEventListener("resize", checkBreakpoint);
         };
-    }, []);
+    }
 
     return breakpoint;
 }

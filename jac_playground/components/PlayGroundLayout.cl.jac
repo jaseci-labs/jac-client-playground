@@ -1,5 +1,3 @@
-import from react { useEffect }
-
 import from "..hooks.useMobile" { useIsMobile }
 import from "..hooks.usePlayground" { usePlayground }
 
@@ -15,9 +13,9 @@ def: pub PlayGroundLayout(props: dict) -> any {
     # Check if mobile viewport
     isMobile = useIsMobile();
 
-    useEffect(lambda -> None {
+    can with props.examples entry {
         playground.setExamples(props.examples);
-    }, [props.examples]);
+    }
     
     # Render appropriate layout based on viewport
     if isMobile {

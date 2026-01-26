@@ -1,5 +1,5 @@
 cl {
-    import from react { useEffect, useRef, useCallback, forwardRef, useImperativeHandle }
+    import from react { useRef, useCallback, forwardRef, useImperativeHandle }
     import from "lucide-react" { Maximize2, Minimize2, Columns2, Code2, GitGraph }
     import from "..lib.utils" { cn }
     import from ".ui.Panel" { Panel }
@@ -64,7 +64,7 @@ cl {
         };
 
         # Apply theme when isDarkMode changes
-        useEffect(lambda -> None {
+        can with isDarkMode entry {
             async def applyTheme() {
                 if (monacoRef.current and editorRef.current) {
                     grammarConfig = loadSyntax(monacoRef.current, editorRef.current);
@@ -72,7 +72,7 @@ cl {
                 }
             }
             applyTheme();
-        }, [isDarkMode]);
+        }
 
         toggleBreakpoint = useCallback(lambda line:int -> None {
             breakpoints = (lambda prev:any -> any {
