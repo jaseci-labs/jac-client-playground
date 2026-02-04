@@ -39,3 +39,12 @@ lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
 [environments.response.headers]
 Cross-Origin-Opener-Policy = "same-origin"
 Cross-Origin-Embedder-Policy = "require-corp"
+
+[jacpack]
+name = "jacPlayground"
+description = "Official Jac Playground"
+jaclang = "0.9.14"
+
+[[jacpack.plugins]]
+name = "jac-client"
+version = "0.2.14"
