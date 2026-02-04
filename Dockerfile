@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     ca-certificates \
     python3-gdbm \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 20.x for client-side dependencies
