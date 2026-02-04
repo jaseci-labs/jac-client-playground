@@ -7,7 +7,7 @@ entry-point = "main.jac"
 [dependencies]
 
 [dependencies.npm]
-jac-client-node = "1.0.4"
+jac-client-node = "1.0.5"
 "@monaco-editor/react" = "^4.7.0"
 "@tailwindcss/vite" = "^4.1.17"
 clsx = "^2.1.1"
@@ -22,7 +22,7 @@ vis-data = "^8.0.3"
 vis-network = "^10.0.2"
 
 [dependencies.npm.dev]
-"@jac-client/dev-deps" = "1.0.0"
+"@jac-client/dev-deps" = "2.0.0"
 
 [dev-dependencies]
 watchdog = ">=3.0.0"
