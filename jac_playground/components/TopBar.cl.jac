@@ -4,7 +4,7 @@ import from ".ui.Badge" { Badge }
 import from ".ui.ThemeToggle" { ThemeToggle }
 
 
-def: pub TopBar(props:dict) -> any {
+def: pub TopBar(props:dict) -> JsxElement {
     has tooltipDismissed: bool = false;
     
     envReady = props.envReady or false;

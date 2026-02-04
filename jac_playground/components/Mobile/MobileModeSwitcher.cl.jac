@@ -1,7 +1,7 @@
 import from "lucide-react" { Code2, Braces, FileCode, ChevronDown, X, Check }
 import from "...lib.utils" { cn }
 
-def: pub MobileModeSwitcher(props: dict) -> any {
+def: pub MobileModeSwitcher(props: dict) -> JsxElement {
     mode = props.mode or "jac";
     onModeChange = props.onModeChange;
     className = props.className or "";

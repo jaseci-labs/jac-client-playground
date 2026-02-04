@@ -7,7 +7,7 @@ cl {
     import from ".Visualizer" { Visualizer }
     import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
 
-    glob: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> any {
+    glob: pub JacWorkspace = forwardRef(lambda props: dict, ref: any -> JsxElement {
         # View state: "split" | "editor" | "graph"
         has viewMode: str = "split";
 

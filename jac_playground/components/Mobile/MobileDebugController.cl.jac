@@ -12,7 +12,7 @@ import from "lucide-react" {
     X
 }
 
-def: pub MobileDebugController(props: dict) -> any {
+def: pub MobileDebugController(props: dict) -> JsxElement {
     onPlay = props.onPlay;
     onPause = props.onPause;
     onStepOver = props.onStepOver;

@@ -1,7 +1,7 @@
 import from "lucide-react" { Search, FileCode, ChevronRight, X, Eye, Plus }
 import from "....lib.utils" { cn }
 
-def: pub ExamplesPanel(props: dict) -> any {
+def: pub ExamplesPanel(props: dict) -> JsxElement {
     examples = props.examples or [];
     onSelectExample = props.onSelectExample;
     className = props.className or "";

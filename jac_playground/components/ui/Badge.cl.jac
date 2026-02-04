@@ -1,6 +1,6 @@
 import from "...lib.utils" { cn }
 
-def: pub Badge(props:dict) -> any {
+def: pub Badge(props:dict) -> JsxElement {
     children = props.children;
     variant = props.variant or "neutral";
     size = props.size or "md";

@@ -5,7 +5,7 @@ import from "react" { useRef }
 import from "..lib/syntax_highlighting" { loadSyntax, configureTheme }
 
 
-def: pub ConversionEditor(props: dict) -> any {
+def: pub ConversionEditor(props: dict) -> JsxElement {
     inputTitle = props.inputTitle or "Input";
     outputTitle = props.outputTitle or "Output";
     inputLanguage = props.inputLanguage or "python";

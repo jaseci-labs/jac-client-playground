@@ -156,7 +156,7 @@ def getEdgeLabel(label: str) -> str {
     return "";
 }
 
-def: pub Visualizer(props: dict) -> any {
+def: pub Visualizer(props: dict) -> JsxElement {
     # Props extraction
     graphData = props.graphData;
     loading = props.loading or false;

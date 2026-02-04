@@ -1,7 +1,7 @@
 
 import from "...lib.utils" { cn }
 
-def: pub Button(props:dict) -> any {
+def: pub Button(props:dict) -> JsxElement {
     variant = props.variant or "primary";
     size = props.size or "md";
     onClick = props.onClick;

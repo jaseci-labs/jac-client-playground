@@ -3,7 +3,7 @@ import from "lucide-react" { Waypoints, ZoomIn, ZoomOut, Maximize2, Loader2 }
 import from "....lib.utils" { cn }
 import from "...Visualizer" { Visualizer }
 
-def: pub GraphPanel(props: dict) -> any {
+def: pub GraphPanel(props: dict) -> JsxElement {
     graphData = props.graphData;
     className = props.className or "";
     isDarkMode = props.isDarkMode or false;

@@ -1,7 +1,7 @@
 import from "lucide-react" { Sun, Moon }
 import from "...lib.utils" { cn }
 
-def: pub ThemeToggle(props: dict) -> any {
+def: pub ThemeToggle(props: dict) -> JsxElement {
     theme = props.theme or "light";
     onToggle = props.onToggleTheme;
     className = props.className or "";
