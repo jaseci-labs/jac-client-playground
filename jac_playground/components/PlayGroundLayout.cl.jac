@@ -5,7 +5,7 @@ import from ".Layout.DesktopLayout" { DesktopLayout }
 import from ".Mobile.MobileLayout" { MobileLayout }
 
 
-def: pub PlayGroundLayout(props: dict) -> any {
+def: pub PlayGroundLayout(props: dict) -> JsxElement {
     # Single source of truth - ALL logic in one hook
     playground = usePlayground(props);
     examples = props.examples;

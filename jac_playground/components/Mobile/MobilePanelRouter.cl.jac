@@ -3,7 +3,7 @@ import from ".MobilePanels.GraphPanel" { GraphPanel }
 import from ".MobilePanels.OutputPanel" { OutputPanel }
 import from ".MobilePanels.ExamplesPanel" { ExamplesPanel }
 
-def: pub MobilePanelRouter(props: dict) -> any {
+def: pub MobilePanelRouter(props: dict) -> JsxElement {
     activePanel = props.activePanel or "code";
     mode = props.mode or "jac";
     editorTheme = props.editorTheme or "vs-light";

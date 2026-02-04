@@ -2,7 +2,7 @@ import from "lucide-react" { FileCode, FileOutput, Play, Copy, Check, Loader2, M
 import from "....lib.utils" { cn }
 import from "@monaco-editor/react" { Editor }
 
-def: pub CodePanel(props: dict) -> any {
+def: pub CodePanel(props: dict) -> JsxElement {
     mode = props.mode or "jac";
     value = props.value or "";
     onChange = props.onChange;

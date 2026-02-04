@@ -7,7 +7,7 @@ import from ".EditorToolbar" { EditorToolbar }
 import from ".RightPanel" { RightPanel }
 import from ".DockableConsole" { DockableConsole }
 
-def: pub DesktopLayout(props: dict) -> any {
+def: pub DesktopLayout(props: dict) -> JsxElement {
     # Theme
     theme = props.theme or "light";
     editorTheme = props.editorTheme or "vs-light";

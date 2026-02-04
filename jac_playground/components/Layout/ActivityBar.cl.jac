@@ -11,7 +11,7 @@ import from "lucide-react" {
 import from "...lib.utils" { cn }
 
 
-def: pub ActivityBar(props: dict) -> any {
+def: pub ActivityBar(props: dict) -> JsxElement {
     mode = props.mode or "jac";
     onModeChange = props.onModeChange;
     collapsed = props.collapsed or false;

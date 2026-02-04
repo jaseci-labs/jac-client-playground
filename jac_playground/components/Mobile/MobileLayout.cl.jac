@@ -7,7 +7,7 @@ import from ".MobileModeSwitcher" { MobileModeSwitcher }
 import from "..ui.ThemeToggle" { ThemeToggle }
 
 
-def: pub MobileLayout(props: dict) -> any {
+def: pub MobileLayout(props: dict) -> JsxElement {
     # Theme
     theme = props.theme or "light";
     editorTheme = props.editorTheme or "vs-light";

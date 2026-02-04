@@ -7,7 +7,7 @@ import from "lucide-react" {
 import from "...lib.utils" { cn }
 
 
-def: pub MobileBottomNav(props: dict) -> any {
+def: pub MobileBottomNav(props: dict) -> JsxElement {
     activePanel = props.activePanel or "code";
     onChange = props.onChange;
     outputBadge = props.outputBadge or 0;

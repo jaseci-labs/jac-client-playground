@@ -1,7 +1,7 @@
 import from .PlayGroundLayout { PlayGroundLayout }
 import "..styles.global.css";
 
-def: pub Index() -> None {
+def: pub Index() -> JsxElement {
     has examples: list = [];
 
     can with entry {

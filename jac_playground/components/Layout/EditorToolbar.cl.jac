@@ -9,7 +9,7 @@ import from "...lib.utils" { cn }
 import from "..Controllers.debug-control" { DebugController }
 
 
-def: pub EditorToolbar(props: dict) -> any {
+def: pub EditorToolbar(props: dict) -> JsxElement {
     mode = props.mode or "jac";
     onRun = props.onRun;
     onReset = props.onReset;

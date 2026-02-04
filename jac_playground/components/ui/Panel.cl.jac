@@ -1,7 +1,7 @@
 import from "...lib.utils" { cn }
 import from "lucide-react" { Play, Copy, Check, Code2, FileCode, FileOutput }
 
-def: pub Panel(props: dict) -> any {
+def: pub Panel(props: dict) -> JsxElement {
     title = props.title or "";
     subtitle = props.subtitle or "";
     className = props.className or "";

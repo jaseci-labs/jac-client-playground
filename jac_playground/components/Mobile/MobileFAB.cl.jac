@@ -1,7 +1,7 @@
 import from "lucide-react" { Play, ArrowRightLeft, Loader2 }
 import from "...lib.utils" { cn }
 
-def: pub MobileFAB(props: dict) -> any {
+def: pub MobileFAB(props: dict) -> JsxElement {
     mode = props.mode or "jac";
     activePanel = props.activePanel or "code";
     onRun = props.onRun;

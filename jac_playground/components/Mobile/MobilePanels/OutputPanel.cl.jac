@@ -2,7 +2,7 @@ import from react { useMemo }
 import from "lucide-react" { Terminal, AlertCircle, FileText, Eraser }
 import from "....lib.utils" { cn }
 
-def: pub OutputPanel(props: dict) -> any {
+def: pub OutputPanel(props: dict) -> JsxElement {
     original_output = props.output or "";
     
     output = useMemo(lambda -> str {

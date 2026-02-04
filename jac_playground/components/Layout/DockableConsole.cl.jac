@@ -13,7 +13,7 @@ import from "lucide-react" {
 import from "...lib.utils" { cn }
 
 
-def: pub DockableConsole(props: dict) -> any {
+def: pub DockableConsole(props: dict) -> JsxElement {
     isOpen = props.isOpen;
     if isOpen == None {
         isOpen = true;

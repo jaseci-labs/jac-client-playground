@@ -4,7 +4,7 @@ import from services.fetch_examples {
 
 cl import from .components.Index { Index }
 cl {
-    def: pub app() -> None {
+    def: pub app() -> JsxElement {
         return <Index />;
     }
 }

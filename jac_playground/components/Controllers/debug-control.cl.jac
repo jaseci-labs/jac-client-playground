@@ -10,7 +10,7 @@ import from "lucide-react" {
     StepBack
 }
 
-def: pub DebugButton(props: dict) -> any {
+def: pub DebugButton(props: dict) -> JsxElement {
     onClick = props.onClick;
     icon = props.icon;
     label = props.label or "";
@@ -40,7 +40,7 @@ def: pub DebugButton(props: dict) -> any {
     );
 }
 
-def: pub DebugController(props: dict) -> any {
+def: pub DebugController(props: dict) -> JsxElement {
     onContinue = props.onContinue;
     onStepOver = props.onStepOver;
     onStepIn = props.onStepIn;
