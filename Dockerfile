@@ -21,12 +21,15 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 # Install Jac packages from PyPI
 RUN pip install --no-cache-dir jaclang jac-client
 
+# Install Bun (required for jac client-side dependencies)
+RUN curl -fsSL https://bun.sh/install | bash && \
+    ln -s /root/.bun/bin/bun /usr/local/bin/bun
+
 # Copy application code
 COPY jac_playground /app
 
 # Install client-side npm dependencies and project dependencies
-# Use 'yes' to automatically answer prompts (like Bun installation)
-RUN yes | jac add --npm && yes | jac install
+RUN jac add --npm && jac install
 
 # Set environment variables
 ENV PORT=8000 \
