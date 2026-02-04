@@ -23,8 +23,10 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 RUN pip install --no-cache-dir jaclang jac-client
 
 # Install Bun (required for jac client-side dependencies)
+# Install to /usr/local so it's accessible to all users
 RUN curl -fsSL https://bun.sh/install | bash && \
-    ln -s /root/.bun/bin/bun /usr/local/bin/bun
+    mv /root/.bun/bin/bun /usr/local/bin/bun && \
+    chmod +x /usr/local/bin/bun
 
 # Copy application code
 COPY jac_playground /app
