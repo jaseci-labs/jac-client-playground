@@ -20,7 +20,8 @@ def: pub EditorToolbar(props: dict) -> JsxElement {
     isRunning = props.isRunning or false;
     isConverting = props.isConverting or false;
     isDebugging = props.isDebugging or false;
-    
+    envReady = props.envReady or false;
+
     isJacMode = mode == "jac";
     isConversionMode = mode == "jac2py" or mode == "py2jac";
     
@@ -31,12 +32,13 @@ def: pub EditorToolbar(props: dict) -> JsxElement {
                     <>
                         <button
                             onClick={onRun}
-                            disabled={isRunning}
+                            disabled={isRunning or not envReady}
                             className={cn(
                                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
-                                isRunning 
-                                    and "bg-primary/20 text-primary cursor-wait" 
-                                    or "bg-primary text-primary-foreground hover:bg-primary/90"
+                                (not envReady) and "bg-border text-text-secondary cursor-not-allowed opacity-50"
+                                    or (isRunning
+                                        and "bg-primary/20 text-primary cursor-wait"
+                                        or "bg-primary text-primary-foreground hover:bg-primary/90")
                             )}
                         >
                             {isRunning and (<Loader2 size={14} className="animate-spin" />) or (<Play size={14} />)}
@@ -45,7 +47,11 @@ def: pub EditorToolbar(props: dict) -> JsxElement {
                         
                         <button
                             onClick={onReset}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-text-secondary hover:bg-background transition-all"
+                            disabled={not envReady}
+                            className={cn(
+                                "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
+                                (not envReady) and "text-text-secondary opacity-50 cursor-not-allowed" or "text-text-secondary hover:bg-background"
+                            )}
                         >
                             <RotateCcw size={14} />
                             <span>Reset</span>
@@ -55,11 +61,13 @@ def: pub EditorToolbar(props: dict) -> JsxElement {
                         
                         <button
                             onClick={onDebug}
+                            disabled={not envReady}
                             className={cn(
                                 "flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
-                                isDebugging 
-                                    and "bg-warning/20 text-warning" 
-                                    or "text-text-secondary hover:bg-background"
+                                (not envReady) and "text-text-secondary opacity-50 cursor-not-allowed"
+                                    or (isDebugging
+                                        and "bg-warning/20 text-warning"
+                                        or "text-text-secondary hover:bg-background")
                             )}
                         >
                             <Bug size={14} />
@@ -78,12 +86,13 @@ def: pub EditorToolbar(props: dict) -> JsxElement {
                 {isConversionMode and (
                     <button
                         onClick={onConvert}
-                        disabled={isConverting}
+                        disabled={isConverting or not envReady}
                         className={cn(
                             "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all",
-                            isConverting 
-                                and "bg-primary/20 text-primary cursor-wait" 
-                                or "bg-primary text-primary-foreground hover:bg-primary/90"
+                            (not envReady) and "bg-border text-text-secondary cursor-not-allowed opacity-50"
+                                or (isConverting
+                                    and "bg-primary/20 text-primary cursor-wait"
+                                    or "bg-primary text-primary-foreground hover:bg-primary/90")
                         )}
                     >
                         {isConverting and (<Loader2 size={14} className="animate-spin" />) or (<ArrowRightLeft size={14} />)}

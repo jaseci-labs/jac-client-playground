@@ -11,6 +11,7 @@ def: pub Panel(props: dict) -> JsxElement {
     onCopy = props.onCopy;
     codeValue = props.codeValue or "";
     icon = props.icon;
+    envReady = props.envReady or false;
 
     has copied: bool = false;
     
@@ -58,8 +59,12 @@ def: pub Panel(props: dict) -> JsxElement {
                         <>
                             <button
                                 onClick={lambda -> None { onRun(props.title); }}
-                                className="p-1.5 hover:bg-surface rounded text-text-secondary hover:text-text-primary transition-colors"
-                                title="Run Code"
+                                disabled={not envReady}
+                                className={cn(
+                                    "p-1.5 rounded transition-colors",
+                                    (not envReady) and "text-text-secondary opacity-50 cursor-not-allowed" or "hover:bg-surface text-text-secondary hover:text-text-primary"
+                                )}
+                                title={envReady and "Run Code" or "Environment loading..."}
                             >
                                 <Play className="w-3.5 h-3.5" />
                             </button>

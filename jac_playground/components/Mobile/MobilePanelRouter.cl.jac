@@ -15,6 +15,7 @@ def: pub MobilePanelRouter(props: dict) -> JsxElement {
     outputCode = props.outputCode or "";
     onRun = props.onRun;
     isRunning = props.isRunning or false;
+    envReady = props.envReady or false;
     
     # Graph panel props
     graphData = props.graphData;
@@ -42,6 +43,7 @@ def: pub MobilePanelRouter(props: dict) -> JsxElement {
                 onRun={onRun}
                 isRunning={isRunning}
                 editorTheme={editorTheme}
+                envReady={envReady}
             />
         );
     }

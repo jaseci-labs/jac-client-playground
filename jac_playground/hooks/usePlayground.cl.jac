@@ -191,6 +191,9 @@ def: pub usePlayground(props: dict) -> dict {
                 return prev + errorText;
             };
         };
+        pythonThread.callbackExecEnd = lambda -> None {
+            isRunning = false;
+        };
         try {
             pythonThread.startPythonExecution(python_code);
         } except err {
@@ -203,11 +206,15 @@ def: pub usePlayground(props: dict) -> dict {
             outputCode = lambda prev: str -> str {
                 return prev + result;
             };
+            isConverting = false;
+            logs = "✓ Conversion complete.";
+            console.log("Conversion ended");
         };
         try {
             pythonThread.startConversion(conversionType, code);
         } except err {
             console.error("Error starting code conversion:", err);
+            isConverting = false;
         }
     }
     
@@ -238,7 +245,6 @@ def: pub usePlayground(props: dict) -> dict {
         else {
             runJacCodes(jacCode);
         }
-        isRunning = false;
     }
     
     # Convert code based on mode
@@ -246,17 +252,14 @@ def: pub usePlayground(props: dict) -> dict {
         isConverting = true;
         output = "";
         outputCode = "";
-        
+
         if mode == "jac2py" {
             logs = "Converting Jac to Python...";
             performConversion(jacCode, "jac2py");
-            logs = "✓ Conversion complete.";
         } else {
             logs = "Converting Python to Jac...";
             performConversion(pythonCode, "py2jac");
-            logs = "✓ Conversion complete.";
         }
-        isConverting = false;
     }
     
     handleDebugAction = useCallback(lambda action: str -> None {

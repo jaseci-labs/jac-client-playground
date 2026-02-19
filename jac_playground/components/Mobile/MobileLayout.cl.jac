@@ -1,4 +1,5 @@
 import from "...lib.utils" { cn }
+import from "lucide-react" { Loader2 }
 import from ".MobileBottomNav" { MobileBottomNav }
 import from ".MobileFAB" { MobileFAB }
 import from ".MobilePanelRouter" { MobilePanelRouter }
@@ -89,10 +90,18 @@ def: pub MobileLayout(props: dict) -> JsxElement {
                     />
                     
                     <div className={cn(
-                        "px-2 py-0.5 rounded-full text-xs font-medium",
-                        envReady and "bg-success/15 text-success" or "bg-border text-text-secondary"
+                        "px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1",
+                        (not envReady) and "bg-border text-text-secondary"
+                            or (isRunning and "bg-primary/15 text-primary" or "bg-success/15 text-success")
                     )}>
-                        {envReady and "Ready" or "..."}
+                        {(not envReady) and "..."}
+                        {(envReady and isRunning) and (
+                            <>
+                                <Loader2 className="w-3 h-3 animate-spin" />
+                                <span>Running</span>
+                            </>
+                        )}
+                        {(envReady and not isRunning) and "Ready"}
                     </div>
                 </div>
             </header>
@@ -119,6 +128,7 @@ def: pub MobileLayout(props: dict) -> JsxElement {
                     onNavigateToCode={onNavigateToCode}
                     editorTheme={editorTheme}
                     isDarkMode={theme == "dark"}
+                    envReady={envReady}
                 />
             </main>
             
@@ -143,6 +153,7 @@ def: pub MobileLayout(props: dict) -> JsxElement {
                 onConvert={onConvert}
                 isRunning={isRunning}
                 isConverting={isConverting}
+                envReady={envReady}
             />
             
             <MobileBottomNav

@@ -66,8 +66,9 @@ def: pub DesktopLayout(props: dict) -> JsxElement {
     
     return (
         <div className="h-screen flex flex-col bg-background text-text-primary">
-            <TopBar 
+            <TopBar
                 envReady={envReady}
+                isRunning={isRunning}
                 theme={theme}
                 onToggleTheme={onToggleTheme}
             />
@@ -91,6 +92,7 @@ def: pub DesktopLayout(props: dict) -> JsxElement {
                         isRunning={isRunning}
                         isConverting={isConverting}
                         isDebugging={isDebugging}
+                        envReady={envReady}
                     />
                     
                     <div className="flex-1 flex overflow-hidden">
@@ -123,6 +125,7 @@ def: pub DesktopLayout(props: dict) -> JsxElement {
                                         onInputChange={onJacCodeChange}
                                         onCodeRun={onRun}
                                         editorTheme={editorTheme}
+                                        envReady={envReady}
                                     />
                                 </div>
                             )}
@@ -139,6 +142,7 @@ def: pub DesktopLayout(props: dict) -> JsxElement {
                                         onInputChange={onPythonCodeChange}
                                         onCodeRun={onRun}
                                         editorTheme={editorTheme}
+                                        envReady={envReady}
                                     />
                                 </div>
                             )}

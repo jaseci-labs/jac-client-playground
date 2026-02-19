@@ -10,6 +10,7 @@ def: pub CodePanel(props: dict) -> JsxElement {
     className = props.className or "";
     onRun = props.onRun;
     isRunning = props.isRunning or false;
+    envReady = props.envReady or false;
 
     has copiedInput: bool = false;
     has copiedOutput: bool = false;
@@ -157,9 +158,9 @@ def: pub CodePanel(props: dict) -> JsxElement {
                         </button>
                         <button
                             onClick={handleRunInput}
-                            disabled={isRunning or not value}
+                            disabled={isRunning or not value or not envReady}
                             className="p-2 rounded-md text-text-secondary hover:bg-background transition-colors disabled:opacity-30"
-                            aria-label="Run input code"
+                            aria-label={envReady and "Run input code" or "Environment loading..."}
                         >
                             {isRunning and (<Loader2 className="w-4 h-4 animate-spin" />)}
                             {(not isRunning) and (<Play className="w-4 h-4" />)}
@@ -231,9 +232,9 @@ def: pub CodePanel(props: dict) -> JsxElement {
                         </button>
                         <button
                             onClick={handleRunOutput}
-                            disabled={isRunning or not hasOutput}
+                            disabled={isRunning or not hasOutput or not envReady}
                             className="p-2 rounded-md text-text-secondary hover:bg-background transition-colors disabled:opacity-30"
-                            aria-label="Run output code"
+                            aria-label={envReady and "Run output code" or "Environment loading..."}
                         >
                             {isRunning and (<Loader2 className="w-4 h-4 animate-spin" />)}
                             {(not isRunning) and (<Play className="w-4 h-4" />)}

@@ -15,7 +15,8 @@ def: pub ConversionEditor(props: dict) -> JsxElement {
     onInputChange = props.onInputChange;
     className = props.className or "";
     onCodeRun = props.onCodeRun;
-    
+    envReady = props.envReady or false;
+
     isDark = props.editorTheme == "vs-dark" or false;
 
     inputEditorRef = useRef(None);
@@ -50,12 +51,13 @@ def: pub ConversionEditor(props: dict) -> JsxElement {
 
     return (
         <div className={cn("h-full w-full grid grid-cols-2 gap-3", className)}>
-            <Panel 
-                title={inputTitle} 
+            <Panel
+                title={inputTitle}
                 className="h-full"
                 showActions={true}
                 codeValue={inputValue}
                 onRun={onCodeRun}
+                envReady={envReady}
             >
                 <Editor
                     height="100%"
@@ -75,12 +77,13 @@ def: pub ConversionEditor(props: dict) -> JsxElement {
                 />
             </Panel>
             
-            <Panel 
-                title={outputTitle} 
+            <Panel
+                title={outputTitle}
                 className="h-full"
                 showActions={true}
                 codeValue={outputValue}
                 onRun={onCodeRun}
+                envReady={envReady}
             >
                 <Editor
                     height="100%"

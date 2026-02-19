@@ -8,6 +8,7 @@ def: pub TopBar(props:dict) -> JsxElement {
     has tooltipDismissed: bool = false;
     
     envReady = props.envReady or false;
+    isRunning = props.isRunning or false;
     theme = props.theme or "light";
     onToggleTheme = props.onToggleTheme;
     onOpenSettings = props.onOpenSettings;
@@ -25,15 +26,10 @@ def: pub TopBar(props:dict) -> JsxElement {
             <div className="flex items-center gap-2">
                 <div className="relative" aria-live="polite">
                     <Badge
-                        variant={envReady and "success" or "warning"}
+                        variant={(not envReady) and "warning" or (isRunning and "info" or "success")}
                         size="sm"
                     >
-                        {envReady and (
-                            <span className="flex items-center gap-2">
-                                <Check className="w-4 h-4 text-success-foreground" />
-                                <span>Ready</span>
-                            </span>
-                        ) or (
+                        {(not envReady) and (
                             <span className="flex items-center gap-2">
                                 <Loader2 className="w-4 h-4 animate-spin" />
                                 <span className="flex items-center">
@@ -44,6 +40,18 @@ def: pub TopBar(props:dict) -> JsxElement {
                                         <span style={ { "animationDelay": "0.3s" } } className="dot" />
                                     </span>
                                 </span>
+                            </span>
+                        )}
+                        {(envReady and isRunning) and (
+                            <span className="flex items-center gap-2">
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <span>Running</span>
+                            </span>
+                        )}
+                        {(envReady and not isRunning) and (
+                            <span className="flex items-center gap-2">
+                                <Check className="w-4 h-4 text-success-foreground" />
+                                <span>Ready</span>
                             </span>
                         )}
                     </Badge>
