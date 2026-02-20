@@ -61,7 +61,7 @@ with entry {
     print("=== Friend Network Analysis ===");
 
     # 1. Find all nodes connected to Alice by a FriendsWith edge
-    alice_friends = [alice[0]->:FriendsWith:->(`?Person)];
+    alice_friends = [alice[0]->:FriendsWith:->(?:Person)];
     print(f"Alice's friends: {[f.name for f in alice_friends]}");
 
     # 2. Create an instance of our walker, telling it to compare against Alice

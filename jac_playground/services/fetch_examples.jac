@@ -1,13 +1,13 @@
 import from pathlib { Path }
 
-walker: pub load_example_list {
+walker:pub load_example_list {
     has example_path: str = "examples";
     has examples_list: list = [];
 
     def id_to_title(id_str: str) -> str {
         return " ".join(word.capitalize() for word in id_str.replace("_", " ").split());
     }
-    can execute with `root entry {
+    can execute with Root entry {
         root_path = Path(self.example_path);
         for subfolder in root_path.iterdir() {
             if subfolder.is_dir() {

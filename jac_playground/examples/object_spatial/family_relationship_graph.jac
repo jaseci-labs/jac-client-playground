@@ -20,7 +20,7 @@ with entry {
     child1 +>:FamilyRelation(relationship_type="sibling"):+> child2;
 
      # You can now ask questions about these relationships
-    children = [parent[0]->:FamilyRelation:relationship_type=="parent":->(`?Person)];
+    children = [parent[0]->:FamilyRelation:relationship_type=="parent":->(?:Person)];
 
     print(f"{parent[0].name} has {len(children)} children:");
     for child in children {
