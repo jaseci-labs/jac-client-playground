@@ -1,5 +1,5 @@
 walker Creator {
-    can create with `root entry;
+    can create with Root entry;
 }
 
 node node_a {
@@ -25,7 +25,7 @@ impl Creator.create {
 impl node_a.make_something {
     i = 0;
     while i < 5 {
-        print(f"wlecome to {self}");
+        print(f"Welcome to {self}");
         i += 1;
     }
 }

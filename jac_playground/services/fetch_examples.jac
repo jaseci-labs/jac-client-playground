@@ -1,6 +1,6 @@
 import from pathlib { Path }
 
-walker: pub load_example_list {
+walker:pub load_example_list {
     has example_path: str = "examples";
     has examples_list: list = [];
 
