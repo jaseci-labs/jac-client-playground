@@ -31,7 +31,7 @@ RUN python /tmp/bundle_jaclang.py -o /app/assets/jaclang.zip && \
     rm -f /tmp/bundle_jaclang.py
 
 # Install client-side npm and project dependencies
-RUN jac add --npm && jac install
+RUN jac clean -a -f && jac add --npm && jac install
 
 ENV PORT=8000 \
     HOST=0.0.0.0 \
