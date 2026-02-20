@@ -7,7 +7,7 @@ walker: pub load_example_list {
     def id_to_title(id_str: str) -> str {
         return " ".join(word.capitalize() for word in id_str.replace("_", " ").split());
     }
-    can execute with `root entry {
+    can execute with Root entry {
         root_path = Path(self.example_path);
         for subfolder in root_path.iterdir() {
             if subfolder.is_dir() {

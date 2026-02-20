@@ -3,12 +3,12 @@
 // ----------------------------------------------------------------------------
 var pyodide = null;
 var breakpoints_buff = [];
-var dbg = null;  // The debugger instance.
+var dbg = null;
 
 var sharedInts = null;
 var continueExecution = false;
 
-// Do not Remove or modify this path variable, it should be exactly as below for the deployment.
+// Do not remove or modify this path variable, it should be exactly as below for deployment.
 const PLAYGROUND_PATH = "";
 
 const LOG_PATH = "/tmp/logs.log";
@@ -47,27 +47,26 @@ onmessage = async (event) => {
     case 'startExecution':
       logMessage("Starting execution...");
       await startExecution(data.code);
-      logMessage(`Execution finished`);
+      logMessage("Execution finished");
       self.postMessage({ type: 'execEnd' });
       break;
 
     case 'convertCode':
       logMessage(`Starting ${data.conversionType} conversion...`);
       await convertCode(data.conversionType, data.inputCode);
-      logMessage(`Conversion finished`);
+      logMessage("Conversion finished");
       break;
 
     case 'executePython':
       logMessage("Starting Python execution...");
       await executePython(data.code);
-      logMessage(`Python execution finished`);
+      logMessage("Python execution finished");
       self.postMessage({ type: 'execEnd' });
       break;
 
     default:
       console.error("Unknown message type:", data.type);
   }
-
 };
 
 
@@ -80,32 +79,41 @@ function logMessage(message) {
 
 async function readFileAsString(fileName) {
   const response = await fetch(PLAYGROUND_PATH + fileName);
-  // const response = await fetch(fileName);
   return await response.text();
-};
+}
 
 async function readFileAsBytes(fileName) {
   const response = await fetch(PLAYGROUND_PATH + fileName);
-  // const response = await fetch(fileName);
   const buffer = await response.arrayBuffer();
   return new Uint8Array(buffer);
 }
 
 
 // ----------------------------------------------------------------------------
-// Jaclang Initialization
+// JacLang Initialization
 // ----------------------------------------------------------------------------
 async function loadPyodideAndJacLang() {
   try {
-    // Install required packages via micropip
     await pyodide.loadPackage("sqlite3");
-    await pyodide.loadPackage("micropip");
+
+    logMessage("Fetching jaclang.zip...");
+    const zipBytes = await readFileAsBytes("/static/assets/jaclang.zip");
+
+    logMessage("Extracting jaclang bundle...");
+    pyodide.globals.set("_zip_bytes", zipBytes);
     await pyodide.runPythonAsync(`
-import micropip
-await micropip.install(['pluggy', 'jaclang==0.9.11'])
+import sys, zipfile, io
+
+zip_data = _zip_bytes.to_py().tobytes()
+with zipfile.ZipFile(io.BytesIO(zip_data)) as zf:
+    zf.extractall('/tmp/jaclang_bundle')
+
+sys.path.insert(0, '/tmp/jaclang_bundle')
+sys.path.insert(0, '/tmp/jaclang_bundle/jaclang/vendor')
     `);
+    pyodide.globals.delete("_zip_bytes");
+
     const success = await checkJaclangLoaded(pyodide);
-    // Run the debugger module.
     await pyodide.runPythonAsync(
       await readFileAsString("/static/assets/debugger.py")
     );
@@ -115,10 +123,6 @@ await micropip.install(['pluggy', 'jaclang==0.9.11'])
     console.error("Error loading JacLang:", error);
     return false;
   }
-}
-
-async function loadPythonResources(pyodide) {
-  // No longer needed: JacLang is installed from PyPI
 }
 
 async function checkJaclangLoaded(pyodide) {
@@ -137,14 +141,13 @@ async function checkJaclangLoaded(pyodide) {
 // Execution
 // ----------------------------------------------------------------------------
 function callbackBreak(dbg, line) {
-
-  logMessage(`before ui: line=$${line}`);
+  logMessage(`before ui: line=${line}`);
   self.postMessage({ type: 'breakHit', line: line });
 
   continueExecution = false;
   while (!continueExecution) {
-    Atomics.wait(sharedInts, 0, 0); // Block until the UI responds.
-    sharedInts[0] = 0;  // Reset the shared memory.
+    Atomics.wait(sharedInts, 0, 0);
+    sharedInts[0] = 0;
 
     switch (sharedInts[1]) {
       case 1: // Clear breakpoints
@@ -162,7 +165,7 @@ function callbackBreak(dbg, line) {
         }
         break;
 
-      case 3: // Continue execution
+      case 3: // Continue
         dbg.do_continue();
         continueExecution = true;
         break;
@@ -191,23 +194,20 @@ function callbackBreak(dbg, line) {
         continueExecution = true;
         break;
 
-      case 7: // Terminate execution
+      case 7: // Terminate
         if (dbg) {
           try {
-            // Set a timeout for termination to avoid hanging
             setTimeout(() => {
               if (dbg) {
                 dbg = null;
                 logMessage("Forced cleanup after timeout.");
               }
             }, 1000);
-
             dbg.do_terminate();
             logMessage("Execution stopped.");
           } catch (error) {
             logMessage("Execution terminated (cleanup warning ignored).");
           } finally {
-            // Ensure cleanup
             dbg = null;
           }
         }
@@ -231,32 +231,13 @@ function callbackGraph(graph) {
 }
 
 async function startExecution(safeCode) {
-  console.log("*********Starting code execution.");
-
-  // Clear the .jac/data folder before each execution
-  // This prevents state from persisting between runs
+  // Clear .jac/data folder to prevent state persisting between runs
   await pyodide.runPythonAsync(`
-import os
-import shutil
+import os, shutil
 
-# Find and clear the .jac/data folder
-def clear_jac_data():
-    # Check common locations for .jac folder
-    possible_paths = [
-        '.jac/data',
-        os.path.expanduser('~/.jac/data'),
-        '/home/pyodide/.jac/data',
-        '/.jac/data'
-    ]
-
-    for jac_data_path in possible_paths:
-        if os.path.exists(jac_data_path) and os.path.isdir(jac_data_path):
-            try:
-                shutil.rmtree(jac_data_path)
-            except Exception as e:
-                pass
-
-clear_jac_data()
+for p in ['.jac/data', os.path.expanduser('~/.jac/data'), '/home/pyodide/.jac/data', '/.jac/data']:
+    if os.path.isdir(p):
+        shutil.rmtree(p, ignore_errors=True)
   `);
 
   safeCode += `
@@ -272,7 +253,6 @@ with entry {
   pyodide.globals.set('CB_STDOUT', callbackStdout);
   pyodide.globals.set('CB_STDERR', callbackStderr);
 
-  // Correctly instantiate the Debugger class from Pyodide
   let dbg = pyodide.globals.get('Debugger')();
   dbg.cb_break = callbackBreak;
   dbg.cb_graph = callbackGraph;
@@ -284,14 +264,12 @@ with entry {
     logMessage(`Breakpoint set at line ${bp}`);
   }
 
-  // Run the main script
   logMessage("Execution started.");
   try {
     await pyodide.runPythonAsync(
       await readFileAsString("/static/assets/main_playground.py")
     );
   } catch (error) {
-    // Handle any remaining execution errors
     if (error.message && (
         error.message.includes("DebuggerTerminated") ||
         error.message.includes("terminated") ||
@@ -301,7 +279,7 @@ with entry {
       logMessage("Execution terminated by user.");
     } else {
       logMessage(`Execution error: ${error.message}`);
-      throw error; // Re-throw if it's not a termination error
+      throw error;
     }
   }
   logMessage("Execution finished.");
@@ -315,7 +293,6 @@ async function convertCode(conversionType, inputCode) {
   pyodide.globals.set('CB_STDERR', callbackStderr);
   pyodide.globals.set('CB_RESULT', callbackConversionResult);
 
-  // Run the conversion script
   logMessage("Conversion started.");
   try {
     await pyodide.runPythonAsync(
@@ -323,7 +300,6 @@ async function convertCode(conversionType, inputCode) {
     );
   } catch (error) {
     logMessage(`Conversion error: ${error.message}`);
-    // Send error result back to main thread
     callbackConversionResult(`// Error during conversion:\n// ${error.message}`);
   }
   logMessage("Conversion finished.");
@@ -338,7 +314,6 @@ async function executePython(pythonCode) {
   pyodide.globals.set('CB_STDOUT', callbackStdout);
   pyodide.globals.set('CB_STDERR', callbackStderr);
 
-  // Run the Python execution script
   logMessage("Python execution started.");
   try {
     await pyodide.runPythonAsync(
@@ -346,7 +321,6 @@ async function executePython(pythonCode) {
     );
   } catch (error) {
     logMessage(`Python execution error: ${error.message}`);
-    // Send error to stderr callback
     callbackStderr(`Python execution error: ${error.message}`);
   }
   logMessage("Python execution finished.");
