@@ -6,7 +6,7 @@ and execute Jac code in a browser environment.
 Usage:
     python scripts/bundle_jaclang.py
     python scripts/bundle_jaclang.py /path/to/jaseci/jac
-    python scripts/bundle_jaclang.py -o jac_playground/assets/jaclang.zip
+    python scripts/bundle_jaclang.py -o assets/jaclang.zip
 """
 
 import argparse
@@ -186,7 +186,7 @@ def main() -> None:
         help="Path to JacLang source. If omitted, clones from GitHub.",
     )
     parser.add_argument(
-        "-o", "--output", default="jac_playground/assets/jaclang.zip",
+        "-o", "--output", default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "jaclang.zip"),
         help="Output zip path (default: jac_playground/assets/jaclang.zip)",
     )
     args = parser.parse_args()

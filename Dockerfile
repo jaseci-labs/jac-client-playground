@@ -22,13 +22,11 @@ RUN curl -fsSL https://bun.sh/install | bash && \
     mv /root/.bun/bin/bun /usr/local/bin/bun && \
     chmod +x /usr/local/bin/bun
 
-# Copy application code and build scripts
+# Copy application code (includes scripts/)
 COPY jac_playground /app
-COPY scripts/bundle_jaclang.py /tmp/bundle_jaclang.py
 
 # Build jaclang.zip for Pyodide (browser-side JacLang, no llvmlite/native)
-RUN python /tmp/bundle_jaclang.py -o /app/assets/jaclang.zip && \
-    rm -f /tmp/bundle_jaclang.py
+RUN python /app/scripts/bundle_jaclang.py -o /app/assets/jaclang.zip
 
 # Install client-side npm and project dependencies
 RUN jac clean -a -f && jac add --npm && jac install
