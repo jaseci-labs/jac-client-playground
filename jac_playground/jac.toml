@@ -48,3 +48,8 @@ jaclang = "0.9.14"
 [[jacpack.plugins]]
 name = "jac-client"
 version = "0.2.14"
+
+[plugins.client.app_meta_data]
+title = "Jac Playground"
+icon = ".assets/jaseci.png"
+author = "Jaseci"
