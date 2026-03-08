@@ -15,7 +15,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Jac packages from PyPI
-RUN pip install --no-cache-dir jaclang==0.11.0 jac-client==0.3.0 jac-scale==0.2.0
+RUN pip install --no-cache-dir jaclang==0.12.0 jac-client==0.3.4 jac-scale==0.2.4
 
 # Install Bun to /usr/local so it's accessible to all users
 RUN curl -fsSL https://bun.sh/install | bash && \
@@ -25,8 +25,10 @@ RUN curl -fsSL https://bun.sh/install | bash && \
 # Copy application code (includes scripts/)
 COPY jac_playground /app
 
-# Build jaclang.zip for Pyodide (browser-side JacLang, no llvmlite/native)
-RUN python /app/scripts/bundle_jaclang.py -o /app/assets/jaclang.zip
+# Build jaclang.zip from the installed jaclang package (matches pip version)
+RUN python /app/scripts/bundle_jaclang.py \
+    "$(python -c 'import jaclang, os; print(os.path.dirname(jaclang.__file__))')" \
+    -o /app/assets/jaclang.zip
 
 # Install client-side npm and project dependencies
 RUN jac clean -a -f && jac add --npm && jac install
