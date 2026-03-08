@@ -250,13 +250,13 @@ def: pub Visualizer(props: dict) -> JsxElement {
             };
         });
 
-        edges = graphData.edges.map(lambda edge: any, index: int -> dict {
+        edges = graphData.edges.map(lambda e: any, index: int -> dict {
             return {
                 "id": f"edge_{index}",
-                "from": edge.from.toString(),
-                "to": edge.to.toString(),
-                "label": getEdgeLabel(edge.label),
-                "title": edge.label or "connection",
+                "from": e.from.toString(),
+                "to": e.to.toString(),
+                "label": getEdgeLabel(e.label),
+                "title": e.label or "connection",
                 "arrows": "to"
             };
         });

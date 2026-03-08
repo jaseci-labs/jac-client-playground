@@ -23,7 +23,7 @@ onmessage = async (event) => {
 
     case 'initialize':
       sharedInts = new Int32Array(data.sharedBuffer);
-      importScripts("https://cdn.jsdelivr.net/pyodide/v0.28.0/full/pyodide.js");
+      importScripts("https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js");
       logMessage("Loading Pyodide...");
       pyodide = await loadPyodide();
       logMessage("Pyodide loaded.");
@@ -95,6 +95,12 @@ async function readFileAsBytes(fileName) {
 async function loadPyodideAndJacLang() {
   try {
     await pyodide.loadPackage("sqlite3");
+
+    await pyodide.loadPackage("micropip");
+    await pyodide.runPythonAsync(`
+import micropip
+await micropip.install('pluggy')
+    `);
 
     logMessage("Fetching jaclang.zip...");
     const zipBytes = await readFileAsBytes("/static/assets/jaclang.zip");
