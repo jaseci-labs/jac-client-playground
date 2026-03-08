@@ -25,10 +25,8 @@ RUN curl -fsSL https://bun.sh/install | bash && \
 # Copy application code (includes scripts/)
 COPY jac_playground /app
 
-# Build jaclang.zip from the installed jaclang package (matches pip version)
-RUN python /app/scripts/bundle_jaclang.py \
-    "$(python -c 'import jaclang, os; print(os.path.dirname(jaclang.__file__))')" \
-    -o /app/assets/jaclang.zip
+# Build jaclang.zip from the installed jaclang package (uses pip .jir files)
+RUN python /app/scripts/bundle_jaclang.py -o /app/assets/jaclang.zip
 
 # Install client-side npm and project dependencies
 RUN jac clean -a -f && jac add --npm && jac install

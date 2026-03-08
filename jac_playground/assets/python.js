@@ -24,11 +24,14 @@ onmessage = async (event) => {
     case 'initialize':
       sharedInts = new Int32Array(data.sharedBuffer);
       importScripts("https://cdn.jsdelivr.net/pyodide/v0.27.0/full/pyodide.js");
+
+      // Start fetching zip in parallel with Pyodide init
+      var zipPromise = readFileAsBytes("/static/assets/jaclang.zip");
+
       logMessage("Loading Pyodide...");
       pyodide = await loadPyodide();
       logMessage("Pyodide loaded.");
-      const success = await loadPyodideAndJacLang();
-      logMessage(`Pyodide and JacLang loaded: success=${success}`);
+      const success = await loadPyodideAndJacLang(zipPromise);
       self.postMessage({ type: 'initialized', success: success });
       break;
 
@@ -92,18 +95,16 @@ async function readFileAsBytes(fileName) {
 // ----------------------------------------------------------------------------
 // JacLang Initialization
 // ----------------------------------------------------------------------------
-async function loadPyodideAndJacLang() {
+async function loadPyodideAndJacLang(zipPromise) {
   try {
-    await pyodide.loadPackage("sqlite3");
-
-    await pyodide.loadPackage("micropip");
-    await pyodide.runPythonAsync(`
-import micropip
-await micropip.install('pluggy')
-    `);
-
-    logMessage("Fetching jaclang.zip...");
-    const zipBytes = await readFileAsBytes("/static/assets/jaclang.zip");
+    // Load sqlite3, micropip+pluggy, and await pre-fetched zip in parallel
+    const [,, zipBytes] = await Promise.all([
+      pyodide.loadPackage("sqlite3"),
+      pyodide.loadPackage("micropip").then(() =>
+        pyodide.runPythonAsync(`import micropip; await micropip.install('pluggy')`)
+      ),
+      zipPromise
+    ]);
 
     logMessage("Extracting jaclang bundle...");
     pyodide.globals.set("_zip_bytes", zipBytes);
@@ -123,6 +124,7 @@ sys.path.insert(0, '/tmp/jaclang_bundle/jaclang/vendor')
     await pyodide.runPythonAsync(
       await readFileAsString("/static/assets/debugger.py")
     );
+
     return success;
 
   } catch (error) {
