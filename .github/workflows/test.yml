@@ -1,0 +1,44 @@
+name: Test JAC Playground
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install Jac packages
+        run: pip install jaclang==0.12.0 jac-client==0.3.4 jac-scale==0.2.4
+
+      - name: Bundle jaclang.zip
+        run: python jac_playground/scripts/bundle_jaclang.py -o jac_playground/assets/jaclang.zip
+
+      - name: Install Jac project dependencies
+        working-directory: jac_playground
+        run: jac clean -a -f && jac add --npm && jac install
+
+      - name: Install test dependencies
+        run: |
+          pip install pytest pytest-playwright
+          playwright install chromium --with-deps
+
+      - name: Run E2E tests
+        run: pytest tests/e2e/ -v --timeout=300
