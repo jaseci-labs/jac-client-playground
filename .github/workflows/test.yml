@@ -37,7 +37,7 @@ jobs:
 
       - name: Install test dependencies
         run: |
-          pip install pytest pytest-playwright
+          pip install pytest pytest-playwright pytest-timeout
           playwright install chromium --with-deps
 
       - name: Run E2E tests
