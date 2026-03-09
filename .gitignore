@@ -1,0 +1,27 @@
+# Jac project
+packages/
+.jac_cache/
+*.jbc
+*.jir
+__jaccache__/
+.jaccache/
+.jac/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Node.js
+node_modules/
+
+# Jac Client
+.client-build/
+*.session
+*.session.*
