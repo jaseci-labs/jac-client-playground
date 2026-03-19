@@ -26,7 +26,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install Jac packages
-        run: pip install jaclang==0.12.0 jac-client==0.3.4 jac-scale==0.2.4
+        run: pip install jaclang==0.12.2 jac-client==0.3.6 jac-scale==0.2.6
 
       - name: Bundle jaclang.zip
         run: python jac_playground/scripts/bundle_jaclang.py -o jac_playground/assets/jaclang.zip

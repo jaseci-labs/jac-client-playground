@@ -15,7 +15,7 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Jac packages from PyPI
-RUN pip install --no-cache-dir jaclang==0.12.0 jac-client==0.3.4 jac-scale==0.2.4
+RUN pip install --no-cache-dir jaclang==0.12.2 jac-client==0.3.6 jac-scale==0.2.6
 
 # Install Bun to /usr/local so it's accessible to all users
 RUN curl -fsSL https://bun.sh/install | bash && \

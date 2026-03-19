@@ -4,10 +4,8 @@ version = "1.0.0"
 description = "Jac client application: jac-playground"
 entry-point = "main.jac"
 
-[dependencies]
-
 [dependencies.npm]
-jac-client-node = "1.0.5"
+jac-client-node = "1.0.7"
 "@monaco-editor/react" = "^4.7.0"
 "@tailwindcss/vite" = "^4.1.17"
 clsx = "^2.1.1"
@@ -30,11 +28,14 @@ watchdog = ">=3.0.0"
 [serve]
 base_route_app = "app"
 
-[plugins.client]
-
 [plugins.client.vite]
 plugins = ["tailwindcss()"]
 lib_imports = ["import tailwindcss from '@tailwindcss/vite'"]
+
+[plugins.client.app_meta_data]
+title = "Jac Playground"
+icon = ".assets/jaseci.png"
+author = "Jaseci"
 
 [environments.response.headers]
 Cross-Origin-Opener-Policy = "same-origin"
@@ -44,12 +45,4 @@ Cross-Origin-Embedder-Policy = "require-corp"
 name = "jacPlayground"
 description = "Official Jac Playground"
 jaclang = "0.9.14"
-
-[[jacpack.plugins]]
-name = "jac-client"
-version = "0.2.14"
-
-[plugins.client.app_meta_data]
-title = "Jac Playground"
-icon = ".assets/jaseci.png"
-author = "Jaseci"
+plugins = ["{'name': 'jac-client', 'version': '0.2.14'}"]
